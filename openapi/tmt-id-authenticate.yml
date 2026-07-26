@@ -1,0 +1,602 @@
+openapi: 3.0.3
+info:
+  title: TMT Authenticate API specs
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/authenticate_logo_png.png
+    altText: TMT Authenticate
+  version: 1.1.2
+servers:
+- url: https://auth-staging-api.tmtid.dev/v1
+  description: Pre-Production
+- url: https://auth-api.tmtanalysis.com/v1
+  description: Production Server
+schemes:
+- https
+paths:
+  /oauth/token:
+    post:
+      tags:
+      - Authenticate
+      summary: This phase is where the Customer requests authorization to perform an authentication for a given device.
+      description: 'This phase is where the Customer requests authorization to perform an authentication for a given device.
+
+
+        The Customer requests permission to make an Authentication query and receives a timebound token for that transaction. The Customer also must request which authentication technology is required for this transaction.'
+      operationId: getAccessToken
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Bad request:
+                  description: The value for the required field is missing or it is invalid
+                  value:
+                    error: invalid_request
+                    error_description: The required field is missing or it is invalid.
+                Invalid Grant:
+                  description: Invalid grant type requested by customer
+                  value:
+                    error: invalid_grant
+                    error_description: The requested grant type is invalid, unknown or malformed.
+                Invalid Scope:
+                  description: 'Multiple scopes were requested
+
+                    Invalid scope requested by customer
+
+
+                    '
+                  value:
+                    error: invalid_scope
+                    error_description: The requested scope is invalid, unknown or malformed.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Unauthorized:
+                  description: 'User failed to authenticate with bisector for authenticate scope
+
+
+                    User failed to authenticate for authenticate/otp service
+
+
+                    User tried to authenticate with a key in an environment not corresponding to the service requested
+
+
+                    '
+                  value:
+                    error: unauthorized_client
+                    error_description: Authentication required
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Service Unavailable:
+                  description: Bisector is down or not responding
+                  value:
+                    error: temporarily_unavailable
+                    error_description: Service is unavailable
+      security:
+      - basic: []
+  /get_config:
+    post:
+      tags:
+      - Authenticate
+      summary: The get_config endpoint will return specific instructions on how to begin the session with the relevant MNO and how to send the OTP message.
+      description: 'The get_config endpoint will return specific instructions on how to begin the session with the relevant MNO and how to send the OTP message.
+
+
+        The Customer requests the specific telephone number that requires authentication. In response to this stage TMT ID will return the specific uri that the handset must call for the Silent Authentication (where appropriate).'
+      operationId: getConfig
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetAuthUrl'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationUri'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Bad request:
+                  description: The value for the required field is missing or it is invalid
+                  value:
+                    error: invalid_request
+                    error_description: The required field is missing or it is invalid.
+                Invalid Callback URL:
+                  description: The callback_url from the query is not in the list of allowed callback_urls for the customer
+                  value:
+                    error: invalid_redirect_uri
+                    error_description: The redirect_uri provided is invalid.
+                Invalid Network:
+                  description: "Invalid CCID returned.\n\n Invalid SPID returned.\n\nCurrent network not found.\n\n"
+                  value:
+                    error: invalid_request
+                    error_description: Network provided is invalid
+                Invalid Request:
+                  description: "The phone number is invalid.\n\n The phone number requested is not supported.\n\n"
+                  value:
+                    error: invalid_request
+                    error_description: The provided request is invalid
+                Invalid Token:
+                  description: " The scope is not present in the token.\nThe scope is not valid in the token.\n\nThe customer is not present in the token. \n\n The customer is not valid in the token.\n\n"
+                  value:
+                    error: invalid_request
+                    error_description: The provided token is invalid.
+                Redirect URI not supported:
+                  description: The customer provided redirect_uri on get_config endpoint for a network that does not support callback on redirect_uri.
+                  value:
+                    error: invalid_request
+                    error_description: Network does not support callback on redirect_uri
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Unauthorized:
+                  description: 'Country access is not allowed
+
+
+                    '
+                  value:
+                    error: unauthorized_client
+                    error_description: Authentication required
+      security:
+      - paseto_token: []
+  /validate:
+    post:
+      tags:
+      - Authenticate
+      summary: The validate endpoint will return whether the phone number was validated successfully or not and the service used in order to achieve the authentication.
+      description: 'The validate endpoint will return whether the phone number was validated successfully or not and the service used in order to achieve the authentication.
+
+
+        Security mechanism that allows the Customer to check with TMT ID that a handset had correctly authenticated.'
+      operationId: validateUserSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetResult'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Invalid request. Received both 'payload' and 'code' in validate request.:
+                  value:
+                    error: invalid_request
+                    error_description: Invalid request. Received both 'payload' and 'code' in validate request.
+                The required field `code` is missing or is invalid.:
+                  value:
+                    error: invalid_request
+                    error_description: The required field `code` is missing or is invalid.
+                The required field `payload` is missing or is invalid.:
+                  value:
+                    error: invalid_request
+                    error_description: The required field `payload` is missing or is invalid.
+                The value for the required field is missing or it is invalid:
+                  value:
+                    error: invalid_request
+                    error_description: The required field is missing or it is invalid.
+      security:
+      - paseto_token: []
+  /authenticate:
+    get:
+      tags:
+      - Service
+      summary: Authenticate with Silent Network Authentication method
+      description: 'Authenticate with Silent Network Authentication method
+
+
+        The authenticate endpoint will execute the Silent Authentication against the Operator wherever this is supported.'
+      operationId: authenticateUserWithMNO
+      parameters:
+      - name: id_token
+        in: query
+        description: Provided in the get_config request
+        required: true
+        schema:
+          type: string
+        example: v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w...
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallBackResponse'
+        '302':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                Ok:
+                  description: Response with RedirectUri
+                  value: https://example.com/callback?code=f3c75c82-9f85-42ab-be67-36f9dceb891e&correlation_id=123456789
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Bad request:
+                  description: The value for the required field is missing or it is invalid.
+                  value:
+                    error: invalid_request
+                    error_description: The required field is missing or it is invalid.
+                Invalid Scope:
+                  description: Session token does not contain authenticate scope
+                  value:
+                    error: invalid_scope
+                    error_description: The requested scope is invalid, unknown or malformed.
+                Invalid Token:
+                  description: Session token does not contain redirect_uri claim.
+                  value:
+                    error: invalid_request
+                    error_description: The provided token is invalid.
+  /authenticate/otp:
+    get:
+      tags:
+      - Service
+      summary: Authenticate with  One-Time Password method
+      description: 'Authenticate with  One-Time Password method
+
+
+        This specific endpoint will be triggered by the Customer and in case of success a special form where the user needs to input the OTP code needs to be displayed in the Customer APP.'
+      operationId: authenticateUserWithOtp
+      parameters:
+      - name: id_token
+        in: query
+        description: Provided in the get_config request
+        required: true
+        schema:
+          type: string
+        example: v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w...
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallBackResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Bad Request:
+                  description: Maximum number of times a user can request the OTP was exceeded!
+                  value:
+                    error: invalid_request
+                    error_description: The required field is missing or it is invalid.
+                Exceeded Attempts:
+                  description: Maximum number of times a user can request the OTP was exceeded
+                  value:
+                    error: invalid_request
+                    error_description: Exceeded maximum number of retry attempts.
+                Invalid Code:
+                  description: Error parsing the payload received
+                  value:
+                    error: invalid_code
+                    error_description: The requested code is invalid, unknown or malformed.
+                Invalid Scope:
+                  description: 'Session token does not contain ''otp'' scope.
+
+
+                    Session token does not cointain ''authenticate'' scope.'
+                  value:
+                    error: invalid_scope
+                    error_description: The requested scope is invalid, unknown or malformed.
+                Invalid Status:
+                  description: Session token was used to authenticate and otp in less than 5 seconds.
+                  value:
+                    error: invalid scope
+                    error_description: OTP requested before Authenticate
+                Invalid Token:
+                  description: 'Session token does not contain claims.
+
+
+                    Vendor name is missing from the token
+
+
+                    Vendor name could not be parsed from the token
+
+
+                    '
+                  value:
+                    error: invalid_request
+                    error_description: The provided token is invalid
+                Retry Attempt:
+                  description: Session token was used to authenticate and otp in less than {} seconds
+                  value:
+                    error: invalid_request
+                    error_description: You have to wait a few second before trying to get otp sms again
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Service Unavailable:
+                  description: Sending OTP code failed
+                  value:
+                    error: temporarily_unavailable
+                    error_description: Service is unavailable
+components:
+  schemas:
+    AuthRequest:
+      type: object
+      required:
+      - scope
+      - grant_type
+      properties:
+        grant_type:
+          type: string
+          description: The value must be “client_credentials”.By passing this value the service will return an access_token for direct access to the services.
+          example: client_credentials
+        scope:
+          type: string
+          description: Scope must contain the requested services. It can be authenticate and/or otp concatenated with a “+”.
+          example: authenticate+otp
+    AuthResponse:
+      type: object
+      required:
+      - token_type
+      - access_token
+      - expires_in
+      properties:
+        access_token:
+          type: string
+          description: The access_token is a security token that contains Claims about the authenticated user and requested services.
+          example: v4.public.eyJzY29wZSI6ImF1dGgrb3RwIiwidXNlcl9pZ…
+        expires_in:
+          type: integer
+          format: int64
+          description: The time-to-live of the Access Token in seconds since the response was generated. The default value is 3600 (seconds)
+          example: '3600'
+          minimum: 0
+        token_type:
+          type: string
+          description: Always "Bearer"
+          example: Bearer
+    AuthenticateQuery:
+      type: object
+      required:
+      - id_token
+      properties:
+        id_token:
+          type: string
+          description: Provided in the get_config request
+    AuthorizationUri:
+      type: object
+      required:
+      - id_token
+      - expires_in
+      properties:
+        authorize:
+          allOf:
+          - $ref: '#/components/schemas/AuthorizeRequestConfig'
+          nullable: true
+        correlation_id:
+          type: string
+          description: Provided only if the correlation_id parameter was  submitted through in the /get_config request.
+          example: Noo7siol1Yj763XTRDidILTv96ly9kFS
+          nullable: true
+        expires_in:
+          type: integer
+          format: int64
+          description: The number of seconds that the session token will be valid
+          example: '600'
+          minimum: 0
+        id_token:
+          type: string
+          description: Security token that must be passed in subsequent requests in order to authenticate the users
+          example: v4.public.eyJqdGkiOiI3…
+        otp_authorization_uri:
+          type: string
+          description: The uri that needs to be called from a mobile device in order to initiate the OTP flow. This appears only if the configured scope contains otp and the device can call otp_authoization_uri if the Silent Authentication has not been completed (i.e. timed out).
+          example: https://auth-staging-api.tmtanalysis.com/v1/authenticate/otp?id_token=v4.public.eyJqdGkiOiI3ODExNDc5YS1lZjY1LT
+          nullable: true
+    AuthorizeRequestConfig:
+      oneOf:
+      - type: object
+        required:
+        - authorization_uri
+        - request_type
+        - ajax
+        properties:
+          ajax:
+            type: boolean
+            description: Flag  that confirm the request can be completed via ajax or not.
+            example: 'true'
+          authorization_uri:
+            type: string
+            description: The uri that needs to be called in order to identify the phone number.
+            example: http://example.com/session
+          request_config:
+            allOf:
+            - $ref: '#/components/schemas/VendorAuthorizationConfig'
+            nullable: true
+          request_type:
+            type: string
+            description: Provided in order to inform users how to configure the request with Mobile Network Operator.This can be GET or POST, the dafault is GET.
+            example: POST
+      - $ref: '#/components/schemas/ErrorResponse'
+    CallBackResponse:
+      type: object
+      required:
+      - session_id
+      properties:
+        session_id:
+          type: string
+          description: A session_id of the current user.
+          example: pYXQiOiIyMDIyLTEyLTEyVDEyOjI4Oj
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - error_description
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    GetAuthUrl:
+      type: object
+      required:
+      - msisdn
+      - client_ip
+      properties:
+        client_ip:
+          type: string
+          description: The IP of the user needed to be authenticated. This is required by some MNO’s for validation.
+          example: 11.22.33.44
+        correlation_id:
+          type: string
+          description: It is used to correlate the transaction across all components(authenticate, validate). It must be unique to the instance of the transaction.
+          example: Noo7siol1Yj763XTRDidILTv96ly9kFS
+          nullable: true
+        msisdn:
+          type: string
+          description: The phone number that needs to be authenticated by our system in E.164 format.
+          example: '+44770123456'
+        redirect_uri:
+          type: string
+          description: Predefined callback url to be used in the session and send the request back to the client
+          nullable: true
+    GetResult:
+      type: object
+      required:
+      - id_token
+      properties:
+        code:
+          type: string
+          description: Code obtained from the authenticate request on redirect_uri
+          example: 64a5b19-457a-4d30-a5c4-038c62dcssfg3
+          nullable: true
+        correlation_id:
+          type: string
+          description: The correlation_id submitted through the get_config request
+          example: Noo7siol1Yj763XTRDidILTv96ly9kFS
+          nullable: true
+        id_token:
+          type: string
+          description: Provided in the get_config request
+          example: v4.public.eyJ2ZW5kb3JfdHlwZSI6IkVFIiwianRp…
+        otp_code:
+          type: string
+          description: Provided only if we need to validate the user using the OTP service
+          example: '123456'
+          nullable: true
+        payload:
+          description: JSON Response obtained from the authenticate or otp request.
+          nullable: true
+    ValidateResponse:
+      type: object
+      required:
+      - authenticated
+      - service
+      properties:
+        authenticated:
+          type: boolean
+          description: This value will be true or false depending on if the user was successfully authenticated or not.
+          example: 'true'
+        correlation_id:
+          type: string
+          example: Noo7siol1Yj763XTRDidILTv96ly9kFS
+          nullable: true
+        service:
+          type: string
+          description: Value authenticate or otp depending on the type of authentication mechanism used
+          example: authenticate
+    VendorAuthorizationConfig:
+      type: object
+      properties:
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+  securitySchemes:
+    basic:
+      type: http
+      scheme: basic
+    paseto_token:
+      type: http
+      scheme: bearer
+tags:
+- description: '
+
+    TMT ID is a leading provider of data, intelligence and analytics, helping customers find extra value from the information they hold. Our team of technology and telecommunications specialists has a proven track record empowering companies, brands and agencies around the world to better understand their businesses and their customers. TMT ID has a suite of technology and telecommunications data available, for further information, please visit [www.tmtid.com](https://www.tmtid.com) or email info@tmtid.com.'
+  name: About TMT
+- name: Authenticate
+  description: Authenticate user with MNO or OTP. These endpoints can be directly called by the users.
+- name: Service
+  description: Service endpoints
+x-tagGroups:
+- name: Introduction
+  tags:
+  - About TMT
+- name: Service Specifications
+  tags:
+  - Authenticate
+  - Service

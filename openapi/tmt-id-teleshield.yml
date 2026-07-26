@@ -1,0 +1,956 @@
+openapi: 3.0.0
+info:
+  title: TMT Teleshield API specs
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/teleshield_logo_png.png
+    altText: TMT Teleshield
+  version: ''
+paths:
+  /r-teleshield/{number}:
+    post:
+      tags:
+      - HTTP API v2.0
+      summary: TeleShield Routing
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: Your apikey (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: Your apisecret (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format (includes the country code sufix).
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                TeleShield Routing Successful Command and Response Example:
+                  value:
+                    number: 40766610060
+                    cc: RO
+                    ocic: 4018760
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '226'
+                    omnc: '03'
+                    original_network: Telekom Romania Mobile (Cosmote)
+                    error: 0
+                    trxid: Pp2dxrl
+                TeleShield Routing Status Message for Invalid Credentials input (apikey/apisecret):
+                  value:
+                    number: 40721275636
+                    status_message: Service or destination not authorized
+                    status: 2
+                TeleShield Routing Error response for a number that belongs to a Denied Destination:
+                  value:
+                    number: 40721275636
+                    error: 254
+                    error_message: no auth
+                Input number has no Country Code match:
+                  value:
+                    number: 999999
+                    error: 1
+                    error_message: invalid number
+                Input number has the wrong length:
+                  value:
+                    number: 407225702400
+                    error: 2
+                    error_message: invalid number length
+                Input number is not part of an allocated range from the regulator:
+                  value:
+                    number: 40999123233
+                    error: 3
+                    error_message: invalid number range
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  oocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  omcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+  /f-teleshield/{number}:
+    post:
+      tags:
+      - HTTP API v2.0
+      summary: TeleShield Fraud
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: Your apikey (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: Your apisecret (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format (includes the country code sufix).
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                TeleShield Fraud Successful Command and Response Example:
+                  value:
+                    number: 247490XX
+                    cc: AC,
+                    ocic: 247501
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '658'
+                    omnc: '01'
+                    original_network: Sure South Atlantic
+                    iprn_number: true
+                    iprn_number_first_seen: '2023-02-07'
+                    iprn_number_last_seen: '2023-02-07'
+                    iprn_wildcard: true
+                    iprn_wildcard_first_seen: '2023-02-07'
+                    iprn_wildcard_last_seen: '2023-06-20'
+                    msrn: true
+                    msrn_first_seen: '2023-02-07'
+                    msrn_last_seen: '2023-02-07'
+                    ts: 25
+                    tl: M
+                    error: 0
+                    trxid: u621Kb3
+                TeleShield Fraud Status message for Invalid Credentials (apikey/apisecret):
+                  value:
+                    number: 40722570240
+                    status_message: Service or destination not authorized
+                    status: 2
+                TeleShield Fraud Error response for a number that belongs to a Denied Destination:
+                  value:
+                    number: 40722570240
+                    error: 254
+                    error_message: no auth
+                Input number has no Country Code match:
+                  value:
+                    number: 999999
+                    ts: 100
+                    tl: H
+                    error: 1
+                    error_message: invalid number
+                Input number has the wrong length:
+                  value:
+                    number: 4077
+                    ts: 100
+                    tl: H
+                    error: 2
+                    error_message: invalid number length
+                Input number is not part of an allocated range from the regulator:
+                  value:
+                    number: 40999123233
+                    ts: 100
+                    tl: H
+                    error: 3
+                    error_message: invalid number range
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  oocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  omcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  iprn_number:
+                    type: boolean
+                  iprn_number_first_seen:
+                    type: date
+                  iprn_number_last_seen:
+                    type: date
+                  iprn_wildcard:
+                    type: boolean
+                  iprn_wildcard_first_seen:
+                    type: date
+                  iprn_wildcard_last_seen:
+                    type: date
+                  msrn:
+                    type: boolean
+                  msrn_first_seen:
+                    type: date
+                  msrn_last_seen:
+                    type: date
+                  ts:
+                    type: number
+                  tl:
+                    type: string
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+  /e-teleshield/{number v2.0}:
+    post:
+      tags:
+      - HTTP API v2.0
+      summary: TeleShield Enhanced Fraud
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: Your apikey (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: Your apisecret (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format (includes the country code sufix).
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                TeleShield Fraud Successful Command and Response Example:
+                  value:
+                    number: 40766610060
+                    cc: RO
+                    ocic: 4018760
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '226'
+                    omnc: '03'
+                    original_network: Telekom Romania Mobile (Cosmote)
+                    ported: false
+                    ported_date: '2017-11-23'
+                    cic: 4018760
+                    ocn: ''
+                    mcc: 226
+                    mnc: 3
+                    network: Telekom Romania Mobile (Cosmote)
+                    present: 'yes'
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    ts: 0
+                    tl: L
+                    error: 0
+                    trxid: Q4iRYrT
+                TeleShield Enhanced Fraud Status message for Invalid Credentials (apikey/apisecret):
+                  value:
+                    number: 40722570240
+                    status_message: Service or destination not authorized
+                    status: 2
+                TeleShield Enhanced Fraud Error response for a number that belongs to a Denied Destination:
+                  value:
+                    number: 40722570240
+                    error: 254
+                    error_message: no auth
+                Input number has no Country Code match:
+                  value:
+                    number: 999999
+                    ts: 100
+                    tl: H
+                    error: 1
+                    error_message: invalid number
+                Input number has the wrong length:
+                  value:
+                    number: 4077
+                    ts: 100
+                    tl: H
+                    error: 2
+                    error_message: invalid number length
+                Input number is not part of an allocated range from the regulator:
+                  value:
+                    number: 40999123233
+                    ts: 100
+                    tl: H
+                    error: 3
+                    error_message: invalid number range
+                Available Number Portability (np) / Unavailable Presence:
+                  value:
+                    number: 23470100000xx
+                    cc: NG
+                    ocic: 234500
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '621'
+                    omnc: '20'
+                    original_network: Airtel
+                    ported: true
+                    ported_date: '2020-10-11'
+                    cic: 234503
+                    ocn: null
+                    mcc: 621
+                    mnc: 60
+                    network: 9Mobile (ETISALAT/Emerging Markets)
+                    present: na
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    ts: 5
+                    tl: L
+                    error: 4
+                    error_message: presence not available
+                    trxid: BiiN7LJ
+                Unavailable Number Portability (np) / Unavailable Presence:
+                  value:
+                    number: 9230440783xx
+                    cc: PK
+                    ocic: 92500
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '410'
+                    omnc: '01'
+                    original_network: Jazz (Mobilink)
+                    cic: 92500
+                    ocn: null
+                    mcc: 410
+                    mnc: 1
+                    network: Jazz (Mobilink)
+                    present: na
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    ts: 0
+                    tl: L
+                    error: 5
+                    error_message: presence not available
+                    trxid: pximuMp
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  oocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  omcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  ported:
+                    type: boolean
+                  ported_date:
+                    type: date
+                  cic:
+                    type: number
+                  ocn:
+                    type: string
+                  mcc:
+                    type: number
+                  mnc:
+                    type: number
+                  network:
+                    type: string
+                  present:
+                    type: string
+                  iprn_number:
+                    type: boolean
+                  iprn_wildcard:
+                    type: boolean
+                  msrn:
+                    type: boolean
+                  ts:
+                    type: number
+                  tl:
+                    type: string
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+  /teleshield/{number}:
+    post:
+      tags:
+      - HTTP API v1.3
+      summary: POST method Teleshield
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: The API key (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: The API secret (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format.
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                Successful response format:
+                  value:
+                    number: 376321407
+                    cc: AD
+                    ocic: 376500
+                    ocn: null
+                    itype: 1
+                    etype: 10
+                    mcc: 213
+                    omnc: 3
+                    original_network: Mobiland
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    error: 0
+                    trxid: d42wkyt
+                Invalid number response format:
+                  value:
+                    number: 9999721275636
+                    error: 1
+                    error_message: invalid number
+                Invalid number length response format:
+                  value:
+                    number: 4072127563699
+                    error: 2
+                    error_message: invalid number length
+                Invalid number range response format:
+                  value:
+                    number: 590691369999
+                    error: 3
+                    error_message: invalid number range
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  ocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  mcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  iprn_number:
+                    type: boolean
+                  iprn_wildcard:
+                    type: boolean
+                  msrn:
+                    type: boolean
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+  /e-teleshield/{number v1.3}:
+    post:
+      tags:
+      - HTTP API v1.3
+      summary: POST method E-Teleshield
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: The API key (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: The API secret (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format.
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                Successful response format:
+                  value:
+                    number: 376321407
+                    cc: AD
+                    ocic: 376500
+                    ocn: null
+                    itype: 1
+                    etype: 10
+                    mcc: 213
+                    omnc: 3
+                    original_network: Mobiland
+                    ported: false
+                    cic: 376500
+                    mnc: 3
+                    network: Mobiland
+                    present: 'yes'
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    error: 0
+                    trxid: XryJIIw
+                Invalid number response format:
+                  value:
+                    number: 9999721275636
+                    error: 1
+                    error_message: invalid number
+                Invalid number length response format:
+                  value:
+                    number: 4072127563699
+                    error: 2
+                    error_message: invalid number length
+                Invalid number range response format:
+                  value:
+                    number: 590691369999
+                    error: 3
+                    error_message: invalid number range
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  ocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  mcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  ported:
+                    type: boolean
+                  cic:
+                    type: number
+                  mnc:
+                    type: string
+                  network:
+                    type: string
+                  present:
+                    type: string
+                  iprn_number:
+                    type: boolean
+                  iprn_wildcard:
+                    type: boolean
+                  msrn:
+                    type: boolean
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+tags:
+- description: "\n<h1><strong>v1.0</strong> <em>- September 2021</em></h1>\n\n  ---\n\n  * Baseline\n\n\n<h1><strong>v1.1</strong> <em>- February 2022</em></h1>\n\n  ---\n\n  * Coverage update\n\n\n<h1><strong>v1.2</strong> <em>- April 2022</em></h1>\n\n  ---\n\n  * Data enhancement to provide flag and first seen date for suspicious international premium and mobile station roaming numbers, and associated number ranges\n\n\n<h1><strong>v1.3</strong> <em>- May 2022</em></h1>\n\n  ---\n\n  * Inclusion of last seen date for suspicious international premium and mobile station roaming numbers, and associated suspicious number ranges\n\n\n<h1><strong>v2.0</strong> <em>- August 2023</em></h1>\n\n  ---\n\n  * Update of the TeleShield queries available to include Routing, Fraud and Enhanced Fraud use cases.\n\n  * Introduction of TeleShield Score and TeleShield Level Assessment in Fraud and Enhanced Fraud query responses.\n\n  * Added error 254 for querying destinations banned on customer’s demand.\n\n  * Added OOCN, OMCC to all plan packages.\n\n  * Applicable to TeleShield Enhanced only: addition of errors 4, 5 (related to the Number Portability and Subscriber Status coverage)."
+  name: Version history
+- description: '
+
+    TMT ID is a leading provider of data, intelligence and analytics, helping customers find extra value from the information they hold. Our team of technology and telecommunications specialists has a proven track record empowering companies, brands and agencies around the world to better understand their businesses and their customers. TMT ID has a suite of technology and telecommunications data available, for further information, please visit [www.tmtid.com](https://www.tmtid.com) or email info@tmtid.com.'
+  name: About TMT
+- description: "\n<p>Telecommunications fraud is a global issue that has become even more pervasive with the growth in IP telephony and Voice over IP (VoIP) providers. It costs service providers and their customers billions of dollars annually. The TMT TeleShield service enables companies to take control of their strategy to win against fraudsters.</p>\n<p>With our TeleShield products, companies can ‘shield’ themselves from incurring losses from telephony fraud schemes. TMT provides unique access to real-time data through a robust network of suppliers combined with its own SS7 infrastructure enabling us to provide responses when other suppliers may be blocked by a network operator.</p>\n<p>TeleShield provides intelligence on telephone numbers which can identify suspicious activity and enable service providers to make informed decisions to avoid financial impact or negative customer experience. For example, TeleShield provides information on:</p>\n\n  - Has the number been made available for service by the regulator?\n\n  - Does the number have a suspicious service type, for example is it a premium rate, satellite or VoIP?\n\n  - Has the number been assigned to a subscriber by a service provider?\n\n  - Has the number been ported?\n\n<h3>Key features</h3>\n\n  - Coverage for more than 240 countries/territories worldwide\n  - Flexible access methods to support your needs (e.g., ENUM, HTTP, Batch)\n  - Real-time and porting information available as an option\n  - Geographically redundant query sites\n  - Continuously updated data - number range and portability information\n\n<h3>TeleShield Query Types:</h3>\nTo address market needs, the TeleShield service provides 3 query types to support defined use cases:\n\n- __Routing__ Use Case - provides information to determine whether a telehpone number is invalid so a call/message should not be sent to a telephone number:\n\n  - Identify valid numbers - number is part of a range that has been allocated to a service provider and is the correct format/length,\n\n  - Confirm detailed service type (e.g., mobile/fixed) and up to 30+ additional service clarifications (e.g., premium, VoIP, satellite, M2M, free phone, toll free, etc.).\n\n- __Fraud__ Use Case – in addition to the information provided in the Routing query response, provides information designed to determine if a number has a proposentity to be use in a fraud scheme.. It is designed for price-sensitive fraud use case solutions and includes telephone number attributes to:\n\n  - Identify International Premium Rate Numbers (IPRNs)\n\n  - Identify suspicious number ranges\n\n  - Provide TeleShield Score and TeleShield Level Assessment for a number to have a propensity to be fraudulent\n\n- __Enhanced__ Fraud Use Case – includes the attributes returned from the Routing and Fraud use case responses plus information from real-time network queries that provides data to:\n\n  - Confirm if the number has been assigned to a subscriber\n\n  - Identify current service provider\n\n  - IndIcate if the number has been ported\n\n  - Confirm last port date where available\n\n\n<table> <tr><th> Parameter </th><th> TeleShield Routing </th><th> TeleShield Fraud </th><th> TeleShield Enhanced Fraud </th></tr>\n<tr><td> Identification if a number is valid </td><td><center>x</center></td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> Identification if a number has a valid length </td><td><center>x</center></td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> Identification if a number is part of an allocated range </td><td><center>x</center></td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> Identification if a number is Mobile or Fixed (itype) </td><td><center>x</center></td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> Additional number identification type (etype) </td><td><center>x</center></td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> Country Code (CC) </td><td><center>x</center></td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> Original Carrier MNC, MCC, OCN, CIC, Name </td><td><center>x</center></td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> TeleShield Score assessment (TS) </td><td> </td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> TeleShield Level assessment (TL) </td><td> </td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> International Premium Rated Number (IPRN) Flag </td><td> </td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> First and Last time a number was seen in the IPRN list </td><td> </td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> International Premium Rated Number Suspicious Range Flag </td><td> </td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> The First and the Last time a number was included in a suspicious range </td><td> </td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> Mobile Station Roaming Number (MSRN) Flag </td><td> </td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> First and Last time a number was seen in MSRN list </td><td> </td><td><center>x</center></td><td><center>x</center></td></tr>\n<tr><td> Subscriber Status / Presence </td><td> </td><td><center> </center></td><td><center>x</center></td></tr>\n<tr><td> Identification if a number was ported </td><td> </td><td><center> </center></td><td><center>x</center></td></tr>\n<tr><td> Ported Date </td><td> </td><td><center> </center></td><td><center>x</center></td></tr>\n<tr><td> Current Carrier Data (MNC, MCC, OCN, CIC, Name) </td><td> </td><td><center> </center></td><td><center>x</center></td></tr> </table>"
+  name: TMT TeleShield v2.0 Overview
+- description: '
+
+    <h3>Output Data description</h3>
+
+    <table> <tr><th ROWSPAN = "2"> Field Name<br>(Http api) </th><th ROWSPAN = "2"> Field Name<br>(Enum) </th><th> HTTP API Response </th><th ROWSPAN = "2"> Description </th></tr>
+
+    <tr><td>ENUM Response</td></tr>
+
+
+    <tr><td> cc </td><td> cc </td><td> ISO 2 code </td><td> Two (2) letter code as defined in ISO 3166-1, part of the ISO 3166 standard published by the International Organization for Standardization, to represent countries, dependent territories and special areas of geographical interest. </td></tr>
+
+    <tr><td> cic </td><td> cic </td><td> Integer value </td><td> Current Carrier Identification Code. It Identifies the current network owner of the queried number. Mapping of the code to a network name is provided by TMT </td></tr>
+
+    <tr><td> error </td><td> err </td><td> Values: 0, 1, 2, 3, 4, 5, 254 </td><td> ‘0’ – no error, valid number (correct number length, in an allocated range)<br>''1'' – no country code match<br>''2'' – input number has the wrong length<br>''3'' – input number is not part of a range allocated to a service provider by the regulator<br>''4'' – input number presence is not available, other attributes will be provided where available<br>''5'' – (presence not available) input number presence and portability are not available. Ported and Ported date fields will be hidden in query response.<br>''254'' – (no auth) queried destination was blocked as customer requested. </td></tr>
+
+    <tr><td ROWSPAN = "2"> error_message </td><td ROWSPAN = "2"> msg </td><td> invalid number<br> invalid number length<br> invalid number range<br> presence not available<br> no auth </td><td ROWSPAN = "2"> Text information for the error codes.ENUM queries are filtered by firewalls. </td></tr>
+
+    <tr><td> invalid_number<br> invalid_number_length<br> invalid_number_range </td></tr>
+
+    <tr><td> etype </td><td> et </td><td> Values: [1 – 33] </td><td> Code that further identifies the service type for the number range e.g., Premium rate, VoIP Telephony. List provided as Attachment 2. </td></tr>
+
+    <tr><td> itype </td><td> it </td><td> 1 – mobile<br>2 – landline (fixed) </td><td> Service type for the range in which the telephone number is included. </td></tr>
+
+    <tr><td ROWSPAN = "2"> iprn_number </td><td ROWSPAN = "2"> iprnn </td><td> yes / no </td><td ROWSPAN = "2"> Value that indicates if the input phone number has been detected as flagged for use to test access. </td></tr>
+
+    <tr><td> 1 / 0 </td></tr>
+
+    <tr><td ROWSPAN = "2"> iprn_number_first_seen </td><td ROWSPAN = "2"> iprnnd </td><td> yyyy/mm/dd </td><td ROWSPAN = "2"> Date that the IPRN number was first included in a list of suspicious numbers </td></tr>
+
+    <tr><td> yyyymmdd </td></tr>
+
+    <tr><td ROWSPAN = "2"> iprn_number_last_seen </td><td ROWSPAN = "2"> iprnnl </td><td> yyyy/mm/dd </td><td ROWSPAN = "2"> Date that the IPRN number was last included in a list of suspicious numbers </td></tr>
+
+    <tr><td> yyyymmdd </td></tr>
+
+    <tr><td ROWSPAN = "2"> iprn_wildcard </td><td ROWSPAN = "2"> iprnr </td><td> true / false </td><td ROWSPAN = "2"> Code that indicates if the input TN has been detected as being part of the number range that has the potential to be used for fraud (e.g., Wangiri, IRSF) </td></tr>
+
+    <tr><td> 1 / 0 </td></tr>
+
+    <tr><td ROWSPAN = "2"> iprn_wildcard_first_seen </td><td ROWSPAN = "2"> iprnrd </td><td> yyyy/mm/dd </td><td ROWSPAN = "2"> First date that a number in the range was flagged as suspicious </td></tr>
+
+    <tr><td> yyyymmdd </td></tr>
+
+    <tr><td ROWSPAN = "2"> iprn_wildcard_last_seen </td><td ROWSPAN = "2"> iprnrl </td><td> yyyy/mm/dd </td><td ROWSPAN = "2"> Last date that the number was noted as being available for testing access </td></tr>
+
+    <tr><td> yyyymmdd </td></tr>
+
+    <tr><td> mcc </td><td> mcc </td><td> 3 – digit number </td><td> Current Carrier Mobile Country Code.The MCC identifies the country which a mobile subscriber belongs to. In combination with the Mobile Network Code (MNC), it uniquely identifies a mobile network operator. </td></tr>
+
+    <tr><td> mnc </td><td> mnc </td><td> 2 – 3-digit number used to identify a mobile network carrier </td><td> Current Carrier Mobile Network Code.Code assigned by the country regulator to identify a mobile network operator in a specific country. </td></tr>
+
+    <tr><td ROWSPAN = "2"> msrn </td><td ROWSPAN = "2"> msrn </td><td> true / false </td><td ROWSPAN = "2"> Mobile Station Roaming Number.Flag for premium rate number that has been advertised as available to use for calls roaming from their home country. </td></tr>
+
+    <tr><td> 1 / 0 </td></tr>
+
+    <tr><td ROWSPAN = "2"> msrn_number_first_seen </td><td ROWSPAN = "2"> msrnd </td><td> yyyy/mm/dd </td><td ROWSPAN = "2"> Date that the MSRN number was first included in a list of suspicious numbers </td></tr>
+
+    <tr><td> yyyymmdd </td></tr>
+
+    <tr><td ROWSPAN = "2"> msrn_number_last_seen </td><td ROWSPAN = "2"> msrnl </td><td> yyyy/mm/dd </td><td ROWSPAN = "2"> Date that the MSRN number was last included in a list of suspicious numbers </td></tr>
+
+    <tr><td> yyyymmdd </td></tr>
+
+    <tr><td> network </td><td> nsn </td><td> Alpha-numeric value </td><td> Current Network Short Name </td></tr>
+
+    <tr><td> number </td><td> n/a </td><td> Input from customer </td><td> Queried phone number </td></tr>
+
+    <tr><td> ocic </td><td> ocic </td><td> Integer value </td><td> Original Carrier Identification Code. It Identifies the original network owner of the queried number. Mapping of the code to a network name is provided by TMT. </td></tr>
+
+    <tr><td> ocn </td><td> ocn </td><td> Integer value </td><td> Current Carrier Operating Company Number.Four (4) character ID for North American phone companies. </td></tr>
+
+    <tr><td> omcc </td><td> omcc </td><td>  </td><td>  </td></tr>
+
+    <tr><td> omnc </td><td> omnc </td><td> 2 – 3 digit number </td><td> Code assigned by the country regulator to identify a mobile network operator in a specific country. </td></tr>
+
+    <tr><td> oocn </td><td> oocn </td><td>  </td><td> Current Carrier Operating Company Number.Four (4) character ID for North American phone companies. </td></tr>
+
+    <tr><td> original network </td><td> onsn </td><td> Alpha-numeric value </td><td> Original Network Short Name </td></tr>
+
+    <tr><td ROWSPAN = "2"> ported </td><td ROWSPAN = "2"> np </td><td> true / false / null </td><td ROWSPAN = "2"> Provides indication of whether the number has been ported </td></tr>
+
+    <tr><td> 1 / 0 </td></tr>
+
+    <tr><td ROWSPAN = "2"> ported_date </td><td ROWSPAN = "2"> pd </td><td> yyyy-mm-dd </td><td ROWSPAN = "2"> Date of last known port if applicable </td></tr>
+
+    <tr><td> yyyymmdd </td></tr>
+
+    <tr><td ROWSPAN = "2"> present </td><td ROWSPAN = "2"> ss </td><td> yes / no / na </td><td ROWSPAN = "2"> Field that indicates whether the subscriber is present in the network e.g., is that a number has been assigned by the network operator range holder to a subscriber. </td></tr>
+
+    <tr><td> 1 / 0 / na </td></tr>
+
+    <tr><td> status </td><td>  </td><td> 2 </td><td> Status 2 Is received for wrong input of apikey or apisecret. </td></tr>
+
+    <tr><td> status_message </td><td>  </td><td> Service or destination not authorized. </td><td> Text information for the status. </td></tr>
+
+    <tr><td> tl </td><td> tl </td><td> L<br>M<br>H<br> </td><td> <strong>TeleShield Level</strong><br>Field that converts the TeleShield Score into an assessment level for the number to have a propensity to be used in a fraud scheme: <ul><li> L (Low) <20</li><li> M (Medium) >=20 & <50</li><li> H (High) >= 50</li></ul> </td></tr>
+
+    <tr><td> ts </td><td> ts </td><td> Values: [0 – 100] </td><td> <strong>TeleShield Score</strong><br>The result of the application of a consistent set of rules to publicly available number intelligence data. The relevant attributes are assigned a number that reflects the possibility for it to be fraudulent e.g., number format, suspicious number type, suspicious IPRN/MSRN number instance, suspicious range, port attributes and subscriber status. </td></tr>
+
+    <tr><td> trxid </td><td>  </td><td> 7 character code </td><td> Transaction ID <br>Internally generated number for tracking of transactions. </td></tr>
+
+    <tr><td> XXXXXX </td><td> xxxxxx </td><td> Alphanumeric values </td><td> Anonymized information </td></tr> </table>
+
+
+
+    <h3>Etypes values description</h3>
+
+
+    | Service Type | i type | e type | Description |
+
+    | --- | --- | --- | --- |
+
+    | Audio Text | 2 | 1 | A specific category of Interactive Voice Response (IVR) services to provide incoming callers with information and services using an automated script. |
+
+    | Calling Cards | 2 | 2 | Numbers that are associated with providers of pre-paid domestic and international calling cards. In many countries these may fall into other categories such as non-geographic numbers, but some countries created specific numbering ranges for their use. |
+
+    | Electronic Services | 2 | 3 |  – A type that is only used in a small number of countries, and for a variety of use cases. For example, in Italy this type is assigned to ‘SMS/MMS and data transmission services’ whilst in Mozambique and Nigeria the regulator describes Electronic Services as electronic fax services. |
+
+    | Freephone | 2 | 4 | Tollfree, number where the called party pays for the cost of the call not the calling party (e.g., 1-800 numbers). |
+
+    | Geographic | 2 | 5 | Most generic consumer landline/wireline services are described as geographic, where typically an area code is used for specific regions. |
+
+    | Intermodal Numbers (FIX<->MOB porting) | 2 | 6 | – These number ranges are reserved for \ support of porting of fixed numbers to mobile. |
+
+    | Internet Service Provider | 2 | 7 | Numbers reserved for ISPs who may historically have offered services such as ‘one number’ or ‘personal number’ type services where a number would often be terminated over an Internet connection and the provider can sell voice, data, and broadband to the customer as a ‘triple play’ proposition. |
+
+    | Local Rate | 2 | 8 | Numbers that can be assigned non-geographically but are always billed to the calling party at the same rate as a local call, regardless of the location of the calling party in that country. |
+
+    | Machine to Machine  | 1 | 9 | Any network device communication to another network device over mobile or landline numbers. Number ranges that are reserved for Internet of Things (IoT) types of services to denote that they do not belong to human subscribers. |
+
+    | Mobile | 1 | 10 | Standard code to signify most mobile telephones on a global basis to support wireless communication. |
+
+    | Mobile (CDMA) | 1 | 11 | Used in some countries where certain network operators use the Code Division Multiple Access technology for 2G and 3G wireless as opposed to the more common GSM (Global System for Mobiles) technology. Type 11 and Type 10 should be considered interchangeable in terms of functionality experienced by the subscriber. |
+
+    | Mobile to Mobile | 1 | 12 | Same as type 9. Electronic services for automated applications. |
+
+    | National Geographic | 2 | 13 | Another variation of Type 6 numbers where specific codes denotes geographical regions. |
+
+    | National Rate | 2 | 14 | Non-geographically coded landline numbers that are charged as a national call regardless of the location of the calling party. |
+
+    | Non intermodal CC (Portability =Y) | 2 | 15 | Blocks can be fixed or mobile, but porting between fixed and mobile numbers is not supported. |
+
+    | Paging | 1 | 16 | Number ranges specifically allocated to paging devices. |
+
+    | Payphone | 2 | 17 | Many countries simply use standard landline geographical numbers (e.g., Type 5) for payphone kiosks however some countries choose to allocate specific ranges for them. |
+
+    | Personal | 1 | 18 | Number ranges specifically reserved for service providers who offer some kind of personal numbering service (i.e., one single number that can be assigned to landline, mobile or IP node). |
+
+    | MSRN | 1 | 19 | Mobile Station Roaming Number |
+
+    | Premium Rate | 2 | 20 | Landline numbers where the calling party pays more than standard local or national rates, often with a proportion of the costs going to the registered owner of the number. Depending upon the country various price bands may exist within the allocated Premium rate ranges. |
+
+    | Routing Code | 2 | 21 | This is a designation given by the global authorities but there are no ranges in the source data currently allocated this type. |
+
+    | Satellite | 1 | 22 | Number ranges reserved for Satellite telephones. |
+
+    | Shared Cost | 2 | 23 | Specific landline ranges where the cost of making the call is shared between the calling and called party. This can operate in the same way as Local or National rate numbers, or the share of the cost may be different. |
+
+    | Short Codes Commercial | 2 | 24 | Specific numbers that are shorter than the regular dial plan ranges and are specifically sold to businesses that require either a more memorable number (such as NHS 111 in the UK) or easy-to-use number. Not available in all countries. |
+
+    | Specialized Mobile Radio | 1 | 25 | Number ranges reserved for specialized mobile radio (SMR) devices. |
+
+    | Telegram | 2 | 26 | Number ranges used as part of the long-distance telegraphy network. Almost none are still in use today. |
+
+    | Universal Access | 2 | 27 | Number ranges reserved for Universal Access initiatives (often to increase penetration of phone usage in underdeveloped countries). |
+
+    | Videotex | 2 | 28 | Similar in nature to Type 1 but with the additional capability to share images and video messaging. |
+
+    | Virtual Private Network | 2 | 29 | Number ranges that are allocated to providers of VPN services. |
+
+    | Voicemail (geographic) | 2 | 30 | Number ranges allocated to voicemail providers for hosting their mailboxes. Geographic voicemail tends to be associated with landline services (such as remote call forwarding and answering/concierge services). |
+
+    | Voicemail (mobile) | 1 | 31 | Number ranges for voicemail operators that offer automatic forwarding, answering and message retrieval services for mobile voicemail. |
+
+    | VoIP Telephony | 2 | 32 | Specific ranges for providers of VoIP services to allow incoming calls from the regular telephony network. Where they exist VoIP number ranges are typically assigned to fixed networks, since they can then provide compliance with geographical rules on emergency services provision etc. |
+
+    | Wireless geographic | 1 | 33 | Special category of mobile telephone numbers that are coded based upon their region. |'
+  name: Data Dictionary v2.0
+- description: "\nENUM TeleShield __Routing__ Successful Command and Answer:\n\n    Command:\n    dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 0.6.0.0.1.6.6.6.7.0.4.r-teleshield.tmtid.com\n\n    Answer:\n    10 100 \"u\" \"E2U+pstn:tel\"\n    \"!^(.*)$!tel:\\\\1;cc=ro;ocic=4018760;oocn=;it=1;et=10;omcc=226;omnc=03;onsn=COSM;err=0\n\nENUM TeleShield Routing error response for invalid number formats:\n\n  1. Input number has __no Country Code match__.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 9.9.9.9.9.9.r-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;err=1;msg=invalid_number!\".\n\n  2. Input number has the __wrong length__.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 4.2.0.7.5.2.2.7.0.4.r-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;err=2;msg=invalid_number_length!\".\n\n  3. Input number is <strong>not part of an allocated range from the regulator.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 7.3.8.5.7.8.5.9.9.0.4.r-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;err=3;msg=invalid_number_range!\".\n\nENUM – TeleShield __Routing__ error response for Unauthorized Access\n> The output status is NXDOMAIN and the answer section is blank."
+  name: ENUM TeleShield Routing v2.0
+- description: "\nENUM TeleShield __Fraud__ Successful Command and Answer:\n\n    Command:\n    dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 7.2.7.6.5.2.3.5.4.3.1.f-teleshield.tmtid.com\n\n    Answer:\n    10 100 \"u\" \"E2U+pstn:tel\"\n    \"!^(.*)$!tel:\\\\1;cc=ky;ocic=1345505;oocn=;it=1;et=10;omcc=346;omnc=050;onsn=DIGICEL;ts=15;tl=L;iprnn=1;iprnnd=20221006;iprnnl=20230620;iprnr=1;iprnrd=20221006;iprnrl=20230620;msrn=0;msrnd=;msrnl=;err=0!\"\n\nENUM TeleShield Fraud error response for invalid number formats:\n\n  The TeleShield Score and TeleShield Level of assessment for the number to be part of a fraud scheme are set to the highest level. See examples below:\n\n  1. Input number has __no Country Code match__.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 9.9.9.9.9.9.f-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;ts=100;tl=H;err=1;msg=invalid_number!\".\n\n  2. Input number has the __wrong length__.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 4.2.0.7.5.2.2.7.0.4.f-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;ts=100;tl=H;err=2;msg=invalid_number_length!\".\n\n  3. Input number is __not part of an allocated range__ from the regulator.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 7.3.8.5.7.8.5.9.9.0.4.f-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;ts=100;tl=H;err=3;msg=invalid_number_range!\".\n\nENUM – TeleShield __Fraud__ error response for Unauthorized Access\n> The output status is NXDOMAIN and the answer section is blank."
+  name: ENUM TeleShield Fraud v2.0
+- description: "\nENUM TeleShield __Enhanced Fraud__ Successful Command and Answer:\n\n    Command:\n    dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 7.2.7.6.5.2.3.5.4.3.1.e-teleshield.tmtid.com\n\n    Answer:\n    10 100 \"u\" \"E2U+pstn:tel\"\n    \"!^(.*)$!tel:\\\\1;cc=ro;ocic=4018760;oocn=;it=1;et=10;omcc=226;omnc=03;onsn=COSM;np=no;pd=20171123;cic=4018760;ocn=;mcc=226;mnc=03;nsn=COSM;ss=yes;ts=0;tl=L;iprnn=0;iprnnd=;iprnnl=;iprnr=0;iprnrd=;iprnrl=;msrn=0;msrnd=;msrnl=;err=0!\"\n\nENUM TeleShield Enhanced Fraud error response for invalid number formats:\n\n  The TeleShield Score and TeleShield Level of assessment for the number to be part of a fraud scheme are set to the highest level. See examples below:\n\n  1. Input number has __no Country Code match__.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 9.9.9.9.9.9.e-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;ts=100;tl=H;err=1;msg=invalid_number!\".\n\n  2. Input number has the __wrong length__.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 4.2.0.7.5.2.2.7.0.4.e-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;ts=100;tl=H;err=2;msg=invalid_number_length!\".\n\n  3. Input number is __not part of an allocated range__ from the regulator.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 7.3.8.5.7.8.5.9.9.0.4.e-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;ts=100;tl=H;err=3;msg=invalid_number_range!\".\n\n> NOTE: Two additional Error scenarios are possible based on the availability of the two supplementary real-time network calls (NP and Presence).\n* Available Number Portability (np) / Unavailable Presence.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 4.4.0.0.0.0.0.1.0.7.4.3.2.e-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;cc=uz;ocic=998505;oocn=;it=1;et=11;omcc=434;omnc=08;onsn=UZBEKTELE;np=no;pd=;cic=998505;ocn=;mcc=434;mnc=08;nsn=UZBEKTELE;ss=na;ts=0;tl=L;iprnn=0;iprnnd=;iprnnl=;iprnr=0;iprnrd=;iprnrl=;msrn=0;msrnd=;msrnl=;err=4!\"\n\n* Unavailable Number Portability (np) / Unavailable Presence.\n\n  > Note: In this case Ported and Ported Date fields are hidden.\n\n          Command:\n          dig +short +noedns +tries=1 +time=7 -t NAPTR @195.181.168.240 2.0.3.8.7.0.4.4.0.3.2.9.e-teleshield.tmtid.com\n\n          Answer:\n          10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;cc=pk;ocic=92500;oocn=;it=1;et=10;omcc=410;omnc=01;onsn=JAZZ-MOBILINK;np=na;pd=;cic=92500;ocn=;mcc=410;mnc=01;nsn=JAZZ-MOBILINK;ss=na;ts=0;tl=L;iprnn=0;iprnnd=;iprnnl=;iprnr=0;iprnrd=;iprnrl=;msrn=0;msrnd=;msrnl=;err=5!\".\n\nENUM – TeleShield __Enhanced Fraud__ error response for Unauthorized Access\n> The output status is NXDOMAIN and the answer section is blank."
+  name: ENUM TeleShield Enhanced Fraud v2.0
+- description: '
+
+    TMT can provide support for SIP access in addition to ENUM and HTTP. The TMT SIP Redirect server provides TMT customers with real-time NP data by redirecting SIP.'
+  name: SIP Redirect
+- description: "\nIn addition to ENUM, HTTP and SIP query access, if you have a large volume of queries to process you can upload them via the Viteza Customer Portal and process them using the batch functionality. <br> The batch process is automated and can be accessed by clicking BATCH QUERY (here) and uploading the file that contains the numbers to be processed. The Batch limit size for TeleShield service is: 300,000 numbers/file. <br> Once a batch of numbers has been processed you will be notified via email that processing is completed and how to get the results. <br> If there are any issues with processing of the file, that will also be provided in an email response. <br> Responses will be provided in JSON format in a comma separated txt file. The fields returned are listed below:\n\n      [\n      { \"number\": 24749060, \"cc\": \"AC\", \"ocic\": 247501, \"oocn\": null, \"itype\": 1, \"etype\": 10, \"omcc\": \"658\",\n      \"omnc\": \"01\", \"original_network\": \"Sure South Atlantic\", \"iprn_number\": true,\n      \"iprn_number_first_seen\": \"2023-02-07\", \"iprn_number_last_seen\": \"2023-02-07\", \"iprn_wildcard\":\n      true, \"iprn_wildcard_first_seen\": \"2023-02-07\", \"iprn_wildcard_last_seen\": \"2023-06-20\", \"msrn\":\n      true, \"msrn_first_seen\": \"2023-02-07\", \"msrn_last_seen\": \"2023-02-07\", \"ts\": 25, \"tl\": \"M\", \"error\": 0,\n      \"trxid\": \"u621Kb3\"}\n      { \"number\": 9999721275636, \"ts\": 100, \"tl\": \"H\", \"error\": 1, \"error_message\": \"invalid number\"}\n      { \"number\": 4072127563699, \"ts\": 100, \"tl\": \"H\", \"error\": 2, \"error_message\": \"invalid number length\"}\n      { \"number\": 590691369999, \"ts\": 100, \"tl\": \"H\", \"error\": 3, \"error_message\": \"invalid number range\"}\n      ]"
+  name: Batch Service – Portal access
+- description: "\nGlobal coverage for 240 countries/territories is provided. For each country, an operators file is provided during the provisioning process via email. <br> The up-to-date coverage files are updated in the Viteza Customer Portal\n\n * network_id – unique across the system (assigned by TMTID). You will find this in the download files as well as in the CIC field of the ENUM response. You should use this field for mapping to our system.\n * ocn – (only for US/Canada files) – Operating Company Name is the carrier’s Company Code. It is assigned by the National Exchange Carrier Association. You should use this field for mapping to our system.\n * network – carriers’ short name. Unique per country. You will find this in the download files as well as in the CN field of the ENUM response. This field is for quickly identifying networks during operator-assisted tests.\n * full_name – the full name of the operator/carrier.\n * mcc – the mobile country code of the operator/carrier.\n * mnc – mobile network code for the operator/carrier.\n\n\n  Example:\n\n    filename SK_operators.csv\n\n      4219920;SKOTW;O2 Slovakia;231;06\n      4219910;SKOGE;Orange Slovakia;231;01\n      4219900;SKTEL;Slovak Telekom;231;02\n      4219903;SKSWA;Swan 4KA Slovakia;231;03\n      4219930;SKZSR;ZSR Slovakia;231;99"
+  name: Operator files
+- description: '
+
+    | Field Name | Data | Response | Description |
+
+    | -- | -- | -- | --|
+
+    | cc | ISO Country Code | ISO 2 code | Two (2) letter code as defined in ISO 3166-1, part of the ISO 3166 standard published by the International Organization for Standardization, to represent countries, dependent territories and special areas of geographical interest. |
+
+    | cic | Carrier Identification Code | Integer value | Code that identifies the current network owner of the queried number. Mapping of the code to a network name is provided by TMT. |
+
+    | error or err | Error Code | 1 digit code:<br>‘0’ – No error<br>‘1’ – Invalid number<br>‘2’ – Invalid number length<br>‘3’ – Invalid number range<br>‘4’ – presence attribute not available | ‘0’ – no error, valid number (correct number length, in an allocated range)<br>‘1’ – no country code match<br>‘2’ – input number has the wrong length<br>‘3’ – input number is not part of a range allocated to a service provider by the regulator<br>‘4'' – input number presence is not available, other attributes will be provided where available |
+
+    | error_message or msg | Error explanation | - invalid number<br>- invalid number length<br>- invalid number range<br>- presence not available | Text information for the error code |
+
+    | etype or et | Enhanced Number Type | 1 or 2 digit code | Code that further identifies the service type for the number range e.g., Premium rate, VoIP Telephony. List provided as Attachment 2. |
+
+    | iprnn | International Premium Rate Number (IPRN) flag | 1 digit code:<br>‘1’ – Yes<br>‘0’ - No | Code that indicates if the input TN has been detected as flagged for use to test access. |
+
+    | iprn_number | Suspicious IPRN flag | True/False | Flag that indicates if the input TN has been detected as flagged for use to test access to an IPRN |
+
+    | iprn_number_first_seen | Date | yyyy/mm/dd | Date that the IPRN number was first included in a list of suspicious numbers |
+
+    | iprn_number_last_seen | Date | yyyy/mm/dd | Date that the IPRN number was last included in a list of suspicious numbers |
+
+    | iprnnd | Date | yyyymmdd | First date that the number was noted as being available for testing access |
+
+    | iprnnl | Date | yyyymmdd | Last date that the number was noted as being available for testing access |
+
+    | iprnr | Suspicious IPRN range | 1 digit code:<br>‘1’ – Yes<br>‘0’ - No | Code that indicates if the input TN has been detected as being part of the number range that has the potential to be used for fraud (e.g., Wangiri, IRSF) |
+
+    | iprnrd | Date | yyyymmdd | First date that a number in the range was flagged as suspicious |
+
+    | iprnrl | Date | yyyymmdd | Last date that a number in the range was flagged as suspicious |
+
+    | iprn_wildcard | Suspicous range flag | True/False | Code that indicates if the input TN has been detected as being part of the number range that has the potential to be used for fraud (e.g.,Wangiri, IRSF) |
+
+    | iprn_wildcard_first_seen | Date | yyyy/mm/dd | Date that an IPRN number was first included in a suspicious range |
+
+    | iprn_wildcard_last_seen | Date | yyyy/mm/dd | Last date that a number in the range was noted as suspicious |
+
+    | itype or it | Number Type | 1 digit code:<br>‘1’ – Mobile<br>‘2’ - Landline | Service type for the range in which the telephone number is included. |
+
+    | mcc | Mobile Country Code | 3 digit country code | A three-digit code assigned to a country that is the first part of the identity as defined in the ITU E.212 Recommendation "Land Mobile Numbering Plan". The MCC identifies the country which a mobile subscriber belongs to. In combination with the Mobile Network Code (MNC), it uniquely identifies a mobile network operator. |
+
+    | mnc | Mobile Network Code | 2 – 3 digit number used to identify a mobile network carrier | Code assigned by the country regulator to identify a mobile network operator in a specific country. |
+
+    | msrn | Mobile Station Roaming Number (MSRN) flag | 1 digit code:<br>‘1’ – Yes<br>‘0’ – No<br>Or Ture/False | Flag for premium rate number that has been advertised as available to use for calls roaming from their home country |
+
+    | msrn_number_first_seen | Date | yyyy/mm/dd | Date that the MSRN number was first included in a list of suspicious numbers |
+
+    | msrn_number_last_seen | Date | yyyy/mm/dd | Date that the MSRN number was last included in a list of suspicious numbers |
+
+    | msrnd | Date | yyyymmdd | First date a number was identified as being available for use as an MSRN |
+
+    | msrnl | Date | yyyymmdd | Last date a number was identified as being available for use as an MSRN |
+
+    | network | Current Carrier name | Alpha-numeric value | Human-readable name of the current network |
+
+    | nsn | Network Short Name | Alpha-numeric value | Human-readable name of the current network |
+
+    | number | Telephone number | Input from customer | Telephone number in domain name format |
+
+    | ocic | Original Carrier Identification Code | Integer value | Code that identifies the original network owner of the number range in which the queried number was found. Mapping of the code to a network name is provided by TMT. |
+
+    | ocn | Operating Company Number | Company Number | Four (4) character ID for North American phone companies. |
+
+    | omnc | Original Mobile Network Code | 2 – 3 digit number used to identify a mobile network carrier | Code assigned by the country regulator to identify a mobile network operator in a specific country. |
+
+    | original network or onsn | Original Network Short name | Alpha-numeric value | Human-readable name of the original network |
+
+    | ported or np | Port indicator | True/False/null | Provides indication of whether the number has been ported |
+
+    | ported_date or pd | Port date | yyyy-mm-dd | Date of last known port if applicable |
+
+    | ss or present | Indication of whether a number is active | Yes/No/na (Not available) | Field that indicates whether the subscriber is present in the network e.g., is that a number has been assigned by the network operator range holder to a subscriber. |
+
+    | trxid | Transaction id | 7 character code | Internally generated number for tracking of transactions |
+
+    | XXXXXX | Random field value | alphanumeric code | Random field name and value to support easy implementation of additional attributes |'
+  name: Data Dictionary v1.3
+- description: "\nThe TeleShield ENUM service includes two different response formats, each of them is accessed via a different domain. The first is based upon the standard TMT ID format and the second is aligned to the SIP schema. The following sub-sections describe each in detail.\n<h1>TEL URI ENUM – Standard Query Example</h1>\n<h3>ENUM Parameters</h3>\nThe parameters for the communication are:\n\n  - Record-Type: NAPTR\n\n  - Domain: teleshield.tmtid.com\n\n  - IPs for the service: To be provided during provisioning, referred below as TMTIP\n\n  - Port: 53\n\n<h3>ENUM Query format</h3>\nENUM resolution operates in the same way as a reverse DNS lookup. To perform the lookup, the E.164 number must be transformed as follows:\n\n  - Remove non-numeric characters such as spaces, +, dashes, etc. (e.g., number “+40766-610060” needs transforming to “40766610060”).\n\n  - Reverse the digits and add a dot between every digit (e.g., 40766610060 becomes 0.6.0.0.1.6.6.6.7.0.4)\n\n  - Add suffix domain teleshield.tmtvelocity.com (e.g., the number now becomes 0.6.0.0.1.6.6.6.7.0.4.teleshield.tmtvelocity.com\n\nAfter transforming the number, perform a DNS lookup looking for NAPTR records.\n\n<h3>TEL URI ENUM Successful response format – Standard Query Example</h3>\nA successful query will return a NAPTR Record with a tel-uri format.\nExample of query + result for a valid / allocated number:\n\n    $ dig +short -trace +noedns +tries=1 +time=7 -t NAPTR@TMTIP 8.1.5.2.0.4.8.7.7.6.teleshield.tmtid.com\n\n    ;; ANSWER SECTION\n\n    10 100 \"u\" \"E2U+pstn:tel\"\n    \"!^(.*)$!tel:\\\\1;cc=sb;ocic=677501;ocn=;it=1;et=10;mcc=540;omnc=02;onsn=BMOBILE;iprnn=1;iprnnd=20211207;iprnnl=20220219;iprnr=1;iprnrd=20200305;iprnrl=20220406;msrn=0;msrnd=;msrnl=;err=0!\".\n\n\n<h3>TEL URI ENUM - Enhanced Query Example</h3>\n\n    $ dig +short -trace +noedns +tries=1 +time=7 -t NAPTR @TMTIP 6.3.6.5.7.2.1.2.7.0.4.eteleshield.tmtid.com\n\n    10 100 \"u\" \"E2U+pstn:tel\"\n    \"!^(.*)$!tel:\\\\1;cc=ro;ocic=4018720;ocn=;it=1;et=10;mcc=226;omnc=01;onsn=VODA;np=yes;pd=20130121;cic=4018760;mnc=03;nsn=COSM;ss=na;iprnn=0;iprnnd=;iprnnl=;iprnr=0;iprnrd=;iprnrl=;msrn=0;msrnd=;msrnl;err=4!\" .\n\n\n<h3>TEL URI ENUM – Unsuccessful Query Example</h3>\n\n    $ dig +short -trace +noedns +tries=1 +time=7 -t NAPTR @TMTIP 6.3.6.5.7.2.1.2.7.9.9.9.9.teleshield.tmtid.com\n\n      10 100 \"u\" \"E2U+pstn:tel\"\n      \"!^(.*)$!tel:\\\\1;err=1;msg=invalid_number!\" .\n\n\n    $ dig +short -trace +noedns +tries=1 +time=7 -t NAPTR @TMTIP 9.9.6.3.6.5.7.2.1.2.7.0.4.teleshield.tmtid.com\n\n      10 100 \"u\" \"E2U+pstn:tel\"\n      \"!^(.*)$!tel:\\\\1;err=2;msg=invalid_number_length!\" .\n\n\n    $ dig +short -trace +noedns +tries=1 +time=7 -t NAPTR @TMTIP 9.9.9.9.6.3.1.9.6.0.9.5.teleshield.tmtid.com\n\n      10 100 \"u\" \"E2U+pstn:tel\"\n      \"!^(.*)$!tel:\\\\1;err=3;msg=invalid_number_range!\" ."
+  name: ENUM Services v1.3
+x-tagGroups:
+- name: Introduction
+  tags:
+  - Version history
+  - About TMT
+- name: Service Specifications v2.0
+  tags:
+  - TMT TeleShield v2.0 Overview
+  - Data Dictionary v2.0
+  - HTTP API v2.0
+  - ENUM TeleShield Routing v2.0
+  - ENUM TeleShield Fraud v2.0
+  - ENUM TeleShield Enhanced Fraud v2.0
+- name: Service Specifications v1.3
+  tags:
+  - Data Dictionary v1.3
+  - HTTP API v1.3
+  - ENUM Services v1.3
+- name: Other Specifications
+  tags:
+  - SIP Redirect
+  - Batch Service – Portal access
+  - Operator files
+servers:
+- url: https://api.tmtid.com
+components: {}

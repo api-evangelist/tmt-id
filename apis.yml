@@ -1,0 +1,219 @@
+aid: tmt-id
+url: https://raw.githubusercontent.com/api-evangelist/tmt-id/refs/heads/main/apis.yml
+name: TMT ID
+kind: company
+description: >-
+  TMT ID (trading name of TMT Analysis Limited, London) is a United Kingdom mobile
+  number intelligence and anti-fraud data provider that sits between the mobile network
+  operators and the businesses that need to trust a phone number. Founded in 2017 as
+  TMT Analysis, it acquired Phronesis Technologies in 2023 and rebranded to TMT ID in
+  2024. It does not own network infrastructure; it aggregates operator, numbering-plan
+  and ENUM data and resells it as real-time REST lookups — number validity and
+  reachability, current network and portability, SIM-swap and device-change events,
+  subscriber-data matching, risk scoring, telephony-fraud and routing intelligence, and
+  silent network authentication as an alternative to SMS OTP. Its API posture is
+  genuinely open by telecom standards: seven product APIs are documented publicly as
+  ReDoc-rendered OpenAPI 3.0 documents at tmtid.com/developer with no login, and the
+  Viteza portal offers self-serve signup with 500 free queries. Credentials for the
+  production APIs are still issued through a commercial onboarding conversation rather
+  than instant key generation. TMT ID states on its own site that it is a GSMA Open
+  Gateway member, but it publishes no CAMARA-conformant API — its SIM-swap and
+  network-authentication products ship under TMT ID's own proprietary schemas, which is
+  the honest position of most of the identity-and-antifraud layer of this market.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Telecommunications
+- United Kingdom
+- Identity Verification
+- Mobile Identity
+- SIM Swap
+- Anti-Fraud
+- Number Intelligence
+- Silent Network Authentication
+- GSMA Open Gateway
+- Network APIs
+- ENUM
+- KYC
+created: '2026-07-25'
+modified: '2026-07-25'
+specificationVersion: '0.19'
+apis:
+- aid: tmt-id:tmt-id-verify
+  name: TMT Verify API
+  description: >-
+    Real-time verification of a mobile number against mobile network operator data.
+    A single POST returns the requested datapoints for a number — subscriber name and
+    address match, account type and tenure, market segment, roaming state, portability,
+    and a simswap block giving the elapsed time since the last recorded SIM change.
+  humanURL: https://tmtid.com/developer/tmt_verify_v1.html
+  baseURL: https://api.tmtverify.com
+  tags:
+  - Identity Verification
+  - SIM Swap
+  - KYC
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-verify.yml
+  - type: Documentation
+    url: https://tmtid.com/verify/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_verify_v1.html
+- aid: tmt-id:tmt-id-velocity
+  name: TMT Velocity API
+  description: >-
+    Global mobile number lookup that returns the network operator currently serving a
+    number, including ported numbers, using live HLR/ENUM sourced data. Delivered as a
+    single GET with the API key and secret carried in the URL path.
+  humanURL: https://tmtid.com/developer/tmt_velocity_v1.html
+  baseURL: https://api.tmtvelocity.com
+  tags:
+  - Number Lookup
+  - Portability
+  - ENUM
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-velocity.yml
+  - type: Documentation
+    url: https://tmtid.com/velocity/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_velocity_v1.html
+- aid: tmt-id:tmt-id-live
+  name: TMT Live API
+  description: >-
+    Checks whether a mobile number is currently assigned and in active use on a network,
+    for data cleansing, deliverability and pre-send validation. Offered over HTTPS and
+    over ENUM/NAPTR against live.tmtvelocity.com for carrier-side integrations.
+  humanURL: https://tmtid.com/developer/tmt_live_v1.html
+  baseURL: https://api.tmtvelocity.com/live
+  tags:
+  - Number Validation
+  - Reachability
+  - ENUM
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-live.yml
+  - type: Documentation
+    url: https://tmtid.com/live/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_live_v1.html
+- aid: tmt-id:tmt-id-teleshield
+  name: TMT TeleShield API
+  description: >-
+    Telephony fraud and routing intelligence. Five documented POST operations cover
+    TeleShield Routing, TeleShield Fraud and Enhanced Fraud in both the v1.3 and v2.0
+    data dictionaries, returning number-range validity, allocation, service type and
+    fraud propensity for wangiri, IRSF, CLI spoofing and origin-based rating abuse.
+  humanURL: https://tmtid.com/developer/tmt_teleshield_v1.html
+  baseURL: https://api.tmtid.com
+  tags:
+  - Telephony Fraud
+  - Routing
+  - Numbering Plan
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-teleshield.yml
+  - type: Documentation
+    url: https://tmtid.com/teleshield/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_teleshield_v1.html
+- aid: tmt-id:tmt-id-score
+  name: TMT Score API
+  description: >-
+    Returns a credibility score for a phone number, derived from the age, stability and
+    behaviour of the number across TMT ID's operator data, for risk decisioning at
+    onboarding, login and transaction time.
+  humanURL: https://tmtid.com/developer/tmt_score_v1.html
+  baseURL: https://api.tmtid.com
+  tags:
+  - Risk Scoring
+  - Anti-Fraud
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-score.yml
+  - type: Documentation
+    url: https://tmtid.com/score/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_score_v1.html
+- aid: tmt-id:tmt-id-authenticate
+  name: TMT Authenticate API
+  description: >-
+    Silent Network Authentication and OTP fallback. The client exchanges HTTP Basic
+    credentials at /oauth/token for a PASETO bearer token, calls /get_config to learn how
+    the relevant mobile network operator wants the session opened, then runs
+    /authenticate for the silent network flow or /authenticate/otp, and confirms the
+    outcome with /validate. Documented against a staging host as well as production.
+  humanURL: https://tmtid.com/developer/tmt_authenticate_v1.html
+  baseURL: https://auth-api.tmtanalysis.com/v1
+  tags:
+  - Authentication
+  - Silent Network Authentication
+  - OTP
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-authenticate.yml
+  - type: Documentation
+    url: https://tmtid.com/authenticate/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_authenticate_v1.html
+- aid: tmt-id:tmt-id-network-biometrics
+  name: Network Biometrics API
+  description: >-
+    The Phronesis-derived flagship, a single POST that assembles a configurable set of
+    mobile network signals about a number and device — SIM swap and device change
+    look-back windows, GSMA device blacklist status, reachability, roaming, account
+    type and tenure, and personal-data matching — plus the deprecated v2 Number
+    Assurance operations for assured registration and assured age.
+  humanURL: https://tmtid.com/developer/network_biometrics.html
+  baseURL: https://api.phronesis.tech
+  tags:
+  - Mobile Identity
+  - SIM Swap
+  - Device Intelligence
+  - Age Assurance
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-network-biometrics.yml
+  - type: Documentation
+    url: https://tmtid.com/developers/
+  - type: APIReference
+    url: https://tmtid.com/developer/network_biometrics.html
+common:
+- type: Website
+  url: https://tmtid.com/
+- type: Documentation
+  url: https://tmtid.com/developers/
+- type: Portal
+  url: https://viteza.tmtanalysis.com/register
+- type: SignUp
+  url: https://viteza.tmtanalysis.com/register
+- type: Products
+  url: https://tmtid.com/products/
+- type: Blog
+  url: https://tmtid.com/news/
+- type: TermsOfService
+  url: https://tmtid.com/terms-and-conditions/
+- type: PrivacyPolicy
+  url: https://tmtid.com/privacy-policy/
+- type: AcceptableUsePolicy
+  url: https://tmtid.com/acceptable-use-policy/
+- type: TrustCenter
+  url: https://tmtid.com/trust-centre/
+- type: VulnerabilityDisclosure
+  url: https://tmtid.com/responsible-vulnerability-disclosure-policy/
+- type: Support
+  url: https://tmtid.com/contact-us/
+- type: FAQ
+  url: https://tmtid.com/faq/
+- type: Glossary
+  url: https://tmtid.com/glossary/
+- type: CaseStudies
+  url: https://tmtid.com/case-studies/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/tmtid/
+- type: Twitter
+  url: https://twitter.com/tmtid_limited
+- type: YouTube
+  url: https://www.youtube.com/channel/UCFSippD9W0TL_rNfk8ETCmQ
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

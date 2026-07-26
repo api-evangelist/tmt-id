@@ -1,0 +1,196 @@
+openapi: 3.0.0
+info:
+  title: TMT Velocity API specs
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/velocity_logo_png.png
+    altText: TMT Standard
+  version: ''
+paths:
+  /standard/{format}/{key}/{secret}/{number}:
+    get:
+      parameters:
+      - name: format
+        in: path
+        description: JSON CSV
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: API credentials – delivered to you via email
+        required: true
+        schema:
+          type: string
+      - name: secret
+        in: path
+        description: API credentials – delivered to you via email
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        description: The number in E.164 format (includes the country code sufix)
+        required: true
+        schema:
+          type: string
+      tags:
+      - HTTP API
+      responses:
+        '200':
+          headers: {}
+          content:
+            JSON:
+              examples:
+                Successful response format:
+                  value:
+                    number: 40721275636
+                    current_carrier:
+                      lrn: null
+                      mcc: 226
+                      mnc: 3
+                      name: Telekom Romania Mobile (Cosmote)
+                      spid: 4018760
+                    ocn: null
+                    original_carrier:
+                      mcc: 226
+                      mnc: 1
+                      name: Vodafone Romania
+                      spid: 4018720
+                      ocn: null
+                    ported: true
+                    status: 0
+                    status_message: Success
+                    type: mobile
+                Unsuccessful response format:
+                  value:
+                    number: 40721275699999
+                    status_message: Invalid Number
+                    status: 1
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The queried number
+                  current_carrier:
+                    type: object
+                    decription: Information related to the current carrier / network operator.
+                  original_carrier:
+                    type: object
+                    decription: Information related to the original carrier / network operator.
+                  lrn:
+                    type: number
+                    description: Local Routing Number - a LRN number is returned only if a USA/Canada number was ported. Otherwise, the value will be Null.
+                  mcc:
+                    type: number
+                    description: Mobile Country Code
+                  mnc:
+                    type: number
+                    description: Mobile Network Code
+                  name:
+                    type: string
+                    description: Carriers’ short name
+                  spid:
+                    type: number
+                    description: Unique Network ID - assigned by TMTANALYSYS.
+                  ocn:
+                    type: string
+                    description: Operating Company Name = Company Code for US, Canada.
+                  ported:
+                    type: string
+                    description: Indicates if the queried phone number was ported. - True = number was ported - False = number was not ported
+                  status:
+                    type: number
+                    description: Query status - 0 = success - query success - 1 = invalid number - incomplete number/wrong number format. - 2 = Service or destination not authorized - this message is received if the API credentials are wrong or for your API the destination is not authorized.
+                  status_message:
+                    type: string
+                    description: Query status message - success - query success - invalid number - incomplete number/wrong format. - Service or destination not authorized. - this message is received if the API credentials are wrong or for your API the destination is not authorized.
+                  type:
+                    type: number
+                    description: Queried phone number type - mobile - fixed (landline)
+                required:
+                - number
+            CSV:
+              examples:
+                Successful response format:
+                  value: '155166633xx;0;Success;152049;6529;T-Mobile US-SVR-10X/2;310;260;9739789917;1;no;152049;6529;T-Mobile US-SVR-10X/2;310;260
+
+                    CSV Response format
+
+                    number;status;status_message;current_carrier_spid;current_carrier_name;current_carrier_mcc;current_carrier_mnc;lrn;type;ported_status;ocn;original_carrier_name;original_carrier_mcc;original_carrier_mnc'
+                Unsuccessful response format:
+                  value: 40766610060999;1;Invalid Number
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The queried number
+                  current_carrier:
+                    type: object
+                    decription: Information related to the current carrier / network operator.
+                  original_carrier:
+                    type: object
+                    decription: Information related to the original carrier / network operator.
+                  lrn:
+                    type: number
+                    description: Local Routing Number - a LRN number is returned only if a USA/Canada number was ported. Otherwise, the value will be Null.
+                  mcc:
+                    type: number
+                    description: Mobile Country Code
+                  mnc:
+                    type: number
+                    description: Mobile Network Code
+                  name:
+                    type: string
+                    description: Carriers’ short name
+                  spid:
+                    type: number
+                    description: Unique Network ID - assigned by TMTANALYSYS.
+                  ocn:
+                    type: string
+                    description: Operating Company Name = Company Code for US, Canada.
+                  ported:
+                    type: string
+                    description: Indicates if the queried phone number was ported. - True = number was ported - False = number was not ported
+                  status:
+                    type: number
+                    description: Query status - 0 = success - query success - 1 = invalid number - incomplete number/wrong number format. - 2 = Service or destination not authorized - this message is received if the API credentials are wrong or for your API the destination is not authorized.
+                  status_message:
+                    type: string
+                    description: Query status message - success - query success - invalid number - incomplete number/wrong format. - Service or destination not authorized. - this message is received if the API credentials are wrong or for your API the destination is not authorized.
+                  type:
+                    type: number
+                    description: Queried phone number type - mobile - fixed (landline)
+                required:
+                - number
+          description: ''
+      summary: GET method
+      operationId: GET
+      description: ''
+tags:
+- description: '
+
+    TMT ID is a leading provider of data, intelligence and analytics, helping customers find extra value from the information they hold. Our team of technology and telecommunications specialists has a proven track record empowering companies, brands and agencies around the world to better understand their businesses and their customers. TMT ID has a suite of technology and telecommunications data available, for further information, please visit [www.tmtid.com](https://www.tmtid.com) or email info@tmtid.com.'
+  name: About TMT
+- description: "\n\n## ENUM TEL-URI\n\n  ### Query Format\n\n  dig -t naptr @**NodeIP** *Phone_number_in_enum_format*.live.tmtvelocity.com\n\n  ### Query Parameter Description\n\n\n  | Record-Type | NAPTR |\n  | ----------- | ----------- |\n  | Node IPs | x.x.x.x |\n  | Phone Number in enum format | The E.164 number needs to be transformed as follows (eg. for: +40/766610060): <ul><li>Remove all special characters: +40/766610060 becomes 40766610060. </li><li> Reverse all digits from the number: 40766610060 becomes 06001666704. </li><li> Add Dots between all digits: 06001666704 becomes 0.6.0.0.1.6.6.6.7.0.4. </li></ul> |\n  | Domain | e164enum.tmtvelocity.com |\n  | Port | 53 |\n\n  ### Output Data\n\n\n  | Field | Description |\n  | ----------- | ----------- |\n  | tel | Queried phone number |\n  | npdi | Number Portability Dip Indicator (indicates to any downstream systems a portability lookup has been performed) |\n  | rn | Routing Number (LRN for USA/Canada) |\n  | cic | Carrier Identification Code (list provided by TMT). |\n  | ocn | Operating Company Name is the carrier’s Company Code - only for USA / Canada |\n  | cc | Country Code |\n  | cn | Carrier short name (list provided by TMT) |\n  | nt | Number type<br>Values: <ul><li>mobile</li><li>fixed.</li></ul> |\n  | mcc | Mobile Country Code of the carrier |\n  | mnc | Mobile Network Code of the carrier |\n  | np | Indicates the portability status. It is a custom field that can be added upon request.<br>Values:<ul><li>yes = ported</li><li>no = not ported</li></ul> |\n\n  ### ENUM – Successful Query & Response\n\n    Command:\n    $ dig +yaml -t naptr @176.9.67.8 9.8.9.3.5.2.2.2.7.0.4.e164enum.tmtvelocity.com\n    -\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      QUESTION_SECTION:\n      - 9.8.9.3.5.2.2.2.7.0.4.e164enum.tmtvelocity.com. IN NAPTR\n      ANSWER_SECTION:\n      - 9.8.9.3.5.2.2.2.7.0.4.e164enum.tmtvelocity.com. 3600 IN NAPTR 10 100 \"u\" \"E2U+pstn:tel\"\"!^(.*)$!tel:1;npdi;np=no;rn=;cic=4018720;ocn=;cc=ro;cn=VODA;nt=mobile;mcc=226;mnc=01!\" .\n\n  ### ENUM – Unsuccessful Query & Response\n\n  > In the example below an invalid phone number was queried. The output status is NXDOMAIN and the answer section is blank.\n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 4.3.2.1.0.4.e164enum.tmtvelocity.com\n    -\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      query_time: !!timestamp 2023-03-27T15:34:53.879Z\n      response_time: !!timestamp 2023-03-27T15:34:53.879Z\n      {..}\n      response_address: 176.9.67.8\n      response_port: 53\n      query_address: 0.0.0.0\n      [..]\n      opcode: QUERY\n      status: NXDOMAIN\n      id: 13664\n      flags: qr aa rd\n      QUESTION: 1\n      ANSWER: 0\n      AUTHORITY: 0\n      ADDITIONAL: 0"
+  name: ENUM Service
+- description: "\nVelocity coverage is constantly changing. Each update is uploaded on the Viteza Customer Portal. Users can download all files at once (zip archive) or country by country (CSV file).  \nFor each country, an operators file is provided during the provisioning process via Email. The up-to-date coverage files are updated in the Viteza Customer Portal.  \n  - network_id – unique across the system (assigned by TMTID). You will find this in the download files as well as in the CIC field of the ENUM response. You should use this field for mapping to our system.\n  - ocn – (only for US/Canada files) – Operating Company Name is the carrier’s Company Code. It is assigned by the National Exchange Carrier Association. You should use this field for mapping to our system.\n  - network – carriers’ short name. Unique per country. You will find this in the download files as well as in the CN field of the ENUM response. This field is for quickly identifying networks during operator-assisted tests.\n  - full_name – the full name of the operator/carrier.\n  - mcc – the mobile country code of the operator/carrier.\n  - mnc – mobile network code for the operator/carrier.\n\nExample: \n\n    filename SK_operators.csv\n      4219920;SKOTW;O2 Slovakia;231;06\n      4219910;SKOGE;Orange Slovakia;231;01\n      4219900;SKTEL;Slovak Telekom;231;02\n      4219903;SKSWA;Swan 4KA Slovakia;231;03\n      4219930;SKZSR;ZSR Slovakia;231;99"
+  name: Service Coverage
+x-tagGroups:
+- name: Introduction
+  tags:
+  - About TMT
+- name: Service Specifications
+  tags:
+  - HTTP API
+  - ENUM Service
+  - Service Coverage
+servers:
+- url: https://api.tmtvelocity.com
+components: {}

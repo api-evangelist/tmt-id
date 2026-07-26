@@ -1,0 +1,248 @@
+openapi: 3.0.0
+info:
+  title: TMT Live API specs
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/live_logo_png.png
+    altText: TMT Live
+  version: ''
+paths:
+  /{format}/{key}/{secret}/{number}:
+    get:
+      tags:
+      - HTTP API
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: Queried phone number
+                  cic:
+                    type: string
+                    description: Carrier Identification Code
+                  error:
+                    type: number
+                    description: 0 (zero) = ok. Other values than “0” are detailed in ERROR codes section
+                  imsi:
+                    type: string
+                    description: First 5 digits from the International Mobile Subscriber Identity code
+                  mcc:
+                    type: string
+                    description: Mobile Country Code of the current carrier
+                  mnc:
+                    type: string
+                    description: Mobile Network Code of the current carrier
+                  network:
+                    type: string
+                    description: Current carrier name
+                  ocn:
+                    type: string
+                    description: Operating Company Number (only for Canada & USA).
+                  ported:
+                    type: boolean
+                    description: Indicates if the queried phone number was ported.<br> <ul><li>True = number was ported</li> <li>False = number was not ported</li></ul>
+                  present:
+                    type: string
+                    description: Indicates if the subscriber is present in the network.<br> <ul><li>yes = present</li> <li>no = not present</li></ul>
+                  status:
+                    type: number
+                    description: <ul><li>0 = success – query success</li> <li>1 = invalid number – incomplete number/wrong format.</li> <li>2 = Service or destination not authorized – this message is received if the API credentials are wrong or for your API the destination is not authorized.</li> <li>3 = congestion – timeout threshold exceeded.</li></ul>
+                  status_message:
+                    type: string
+                    description: <ul><li>success – query success</li> <li>invalid number – incomplete number/wrong format.</li> <li>service or destination not authorized – wrong API credentials or your API has no access to the destination service or country.</li> <li>congestion – timeout threshold exceeded.</li></ul>
+                  type:
+                    type: string
+                    description: Queried phone number type:<br> <ul><li>mobile</li> <li>fixed (landline)</li></ul>
+                  trxid:
+                    type: string
+                    description: A unique transaction reference number to aid billing and technical support.
+                required:
+                - number
+              examples:
+                Successful response format:
+                  value:
+                    '40722570240':
+                      cic: '4018740'
+                      error: 0
+                      imsi: 22610XXXXXXXXXX
+                      mcc: '226'
+                      mnc: '10'
+                      network: Orange Romania
+                      number: 40722570240
+                      ported: true
+                      present: 'yes'
+                      status: 0
+                      status_message: Success
+                      type: mobile,
+                      trxid: XoMQ3dF
+                Response Example for Invalid Number:
+                  value:
+                    '40722570240999':
+                      number: 40722570240999
+                      status: 1
+                      status_message: Invalid Number
+                      error: 0
+                Error Code 191 Response Example:
+                  value:
+                    '2347010000044':
+                      cic: '234503'
+                      error: 191
+                      imsi: 62160XXXXXXXXXX
+                      mcc: '621'
+                      mnc: '60'
+                      network: 9Mobile(ETISALAT)
+                      number: 2347010000044
+                      ported: true
+                      present: na
+                      status: 0
+                      status_message: Success
+                      type: mobile
+                      trxid: viMn_p9
+                Error Code 192 Response Example:
+                  value:
+                    '923044078302':
+                      cic: '92500'
+                      error: 192
+                      imsi: 41001XXXXXXXXXX
+                      mcc: '410'
+                      mnc: '01'
+                      network: Jazz (Mobilink)
+                      number: 923044078302
+                      present: na
+                      status: 0
+                      status_message: Success
+                      type: mobile
+                      trxid: mA0O2Mw
+                Error Code 193 Response Example:
+                  value:
+                    '33387840133':
+                      cic: '33511'
+                      error: 193
+                      imsi: null
+                      cc: null
+                      mnc: null
+                      network: Orange
+                      number: 33387840133
+                      ported: false
+                      present: na
+                      status: 0
+                      status_message: Success
+                      type: fixed
+                      trxid: AD0uuKo
+          description: ''
+      summary: GET method
+      operationId: GET
+      description: ''
+      parameters:
+      - name: format
+        in: path
+        description: JSON
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: API credentials – delivered to you via email
+        required: true
+        schema:
+          type: string
+      - name: secret
+        in: path
+        description: API credentials – delivered to you via email
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        description: The number in E.164 format (includes the country code sufix)
+        required: true
+        schema:
+          type: string
+tags:
+- description: '
+
+    TMT ID is a leading provider of data, intelligence and analytics, helping customers find extra value from the information they hold. Our team of technology and telecommunications specialists has a proven track record empowering companies, brands and agencies around the world to better understand their businesses and their customers. TMT ID has a suite of technology and telecommunications data available, for further information, please visit [www.tmtid.com](https://www.tmtid.com) or email info@tmtid.com.'
+  name: About TMT
+- description: "\n\n## ENUM TEL-URI\n\n  ### Query Format\n\n  dig -t naptr @**NodeIP** *Phone_number_in_enum_format*.live.tmtvelocity.com\n\n  ### Query Parameter Description\n\n\n  | Record-Type | NAPTR |\n  | ----------- | ----------- |\n  | Node IPs | x.x.x.x |\n  | Phone Number in enum format | The E.164 number needs to be transformed as follows (eg. for: +40/766610060): <ul><li>Remove all special characters: +40/766610060 becomes 40766610060. </li><li> Reverse all digits from the number: 40766610060 becomes 06001666704. </li><li> Add Dots between all digits: 06001666704 becomes 0.6.0.0.1.6.6.6.7.0.4. </li></ul> |\n  | Domain | live.tmtvelocity.com |\n\n\n  ### Output Data\n\n\n  | Field | Description |\n  | ----------- | ----------- |\n  | tel | The original number queried |\n  | npdi | Number Portability Dip Indicator (indicates to any downstream systems a portability lookup has been performed) |\n  | np | Indicates if the number was ported.<br>Values: yes / no / na. |\n  | rn | Routing Number (LRN for USA/Canada) |\n  | cic | Carrier Identification Code (list provided by TMT). |\n  | cc | Country Code |\n  | cn | Carrier short name (list provided by TMT) |\n  | nt | Indicates the type of the Number Type.<br>Values: mobile / fixed. |\n  | ocn | Operating Company Number (only for Canada & USA) |\n  | mcc | Mobile Country Code of the current network (if nt = mobile) |\n  | mnc | Mobile Network Code of the network (if nt = mobile). |\n  | imsi | First 5 digits of the International Mobile Subscriber Identity number |\n  | pres | Indicates if the subscriber is present in the network.<br>Values: yes / no / na |\n  | e | Error indicator – 0 (zero) = ok. Other values than “0” are detailed in ERROR codes section |\n  | roaming, rcic, rocn, rmnc, rmcc | Not provided data |\n\n\n  ### Successful Query & Response\n\n  A successful query will return a NAPTR Record with a tel-uri format.\n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 9.8.9.3.5.2.2.2.7.0.4.live.tmtvelocity.com\n\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      ANSWER: 1\n      [..]\n      10 100 \"u\" \"E2U+pstn:tel\"\"!^(.*)$!tel:\\\\1;npdi;np=no;rn=;cic=4018720;ocn=;cc=ro;cn=Vodafone Romania;nt=mobile;mcc=226;mnc=01;oname=Vodafone Romania;imsi=22601XXXXXXXXXX;pres=yes;roaming=na;rcic=;rocn=;rmcc=;rmnc=;e=0!\"\n\n  > Please note that all parameters, including null or N/A values, are currently provided in the response by default. If you require the removal of null parameters, please contact us at support@tmtid.com. Our team will configure this change for you.\n\n  ### Response example for Invalid Number\n\n  The output status is NXDOMAIN and the answer section is blank.  \n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 4.3.2.1.0.4.live.tmtvelocity.com\n      -\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NXDOMAIN\n      id: 13664\n      flags: qr aa rd\n      QUESTION: 1\n      ANSWER: 0\n      AUTHORITY: 0\n      ADDITIONAL: 0\n\n  ### Error Code 191 Response Example\n\n  191 error Is returned when the queried destination is not covered by the Live service. The service will return MNC, MCC, and the Name for the Current Carrier.  \n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 4.4.0.0.0.0.0.1.0.7.4.3.2.live.tmtvelocity.com\n\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      ANSWER: 1\n      [..]\n      10 100 \"u\" \"E2U+pstn:tel\"\"!^(.*)$!tel:\\\\1;np=yes;rn=;cic=234503;ocn=;cc=ng;cn=9Mobile(ETISALAT);nt=mobile;mcc=621;mnc=60;oname=Airtel;imsi=62160XXXXXXXXXX;pres=na;roaming=na;rcic=;rocn=;rmcc=;rmnc=;e=191!\"\n\n  ### Error Code 192 Response Example\n\n  192 error is returned when the queried destination is not covered by the services. The service will return MNC, MCC, and the Name for the Origin Carrier.  \n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 2.0.3.8.7.0.4.4.0.3.2.9.live.tmtvelocity.com\n\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      ANSWER: 1\n      [..]\n      10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;np=na;rn=;cic=92500;ocn=;cc=pk;cn=Jazz (Mobilink);nt=mobile;mcc=410;mnc=01;oname=Jazz (Mobilink);imsi=41001XXXXXXXXXX;pres=na;roaming=na;rcic=;rocn=;rmcc=;rmnc=;e=192!\"\n\n  ### Error Code 193 Response Example\n\n  193 error is returned when the queried destination is a fixed line. Indicates that the queried number represents a fixed line (Landline).  \n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 3.3.1.0.4.8.7.8.3.3.3.live.tmtvelocity.com\n\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      ANSWER: 1\n      [..]\n      10 100 \"u\" \"E2U+pstn:tel\" \"!^(.*)$!tel:\\\\1;np=no;rn=;cic=33511;ocn=;cc=fr;cn=Orange;nt=fixed;mcc=;mnc=;oname=Orange;imsi=;pres=na;roaming=na;rcic=;rocn=;rmcc=;rmnc=;e=193!\"\n\n## ENUM SIP-URI\n\n  ### Query Format\n\n  dig -t naptr @**NodeIP** *Phone_number_in_enum_format*.live.tmtvelocity.com\n\n  ### Query Parameter Description\n\n\n  | Record-Type | NAPTR |\n  | ----------- | ----------- |\n  | Node IPs | x.x.x.x |\n  | Phone Number in enum format | The E.164 number needs to be transformed as follows (eg. for: +40/766610060): <ul><li>Remove all special characters: +40/766610060 becomes 40766610060. </li><li> Reverse all digits from the number: 40766610060 becomes 06001666704. </li><li> Add Dots between all digits: 06001666704 becomes 0.6.0.0.1.6.6.6.7.0.4. </li></ul> |\n  | Domain | live-sip.tmtvelocity.com |\n\n\n  ### Output Data\n\n\n  | Field | Description |\n  | ----------- | ----------- |\n  | tel | The original number queried |\n  | npdi | Number Portability Dip Indicator (indicates to any downstream systems a portability lookup has been performed) |\n  | np | Indicates if the number was ported.<br>Values: yes / no / na. |\n  | rn | Routing Number (LRN for USA/Canada) |\n  | cic | Carrier Identification Code (list provided by TMT). |\n  | cc | Country Code |\n  | cn | Carrier short name (list provided by TMT) |\n  | nt | Indicates the type of the Number Type.<br>Values: mobile / fixed. |\n  | ocn | Operating Company Number (only for Canada & USA) |\n  | mcc | Mobile Country Code of the current network (if nt = mobile) |\n  | mnc | Mobile Network Code of the network (if nt = mobile). |\n  | imsi | First 5 digits of the International Mobile Subscriber Identity number |\n  | pres | Indicates if the subscriber is present in the network.<br>Values: yes / no / na |\n  | e | Error indicator – 0 (zero) = ok. Other values than “0” are detailed in ERROR codes section |\n  | roaming, rcic, rocn, rmnc, rmcc | Not provided data |\n\n\n  ### Successful Query & Response\n\n  A successful query will return a NAPTR Record with SIP-URI in the format sip:+msisdn@ims.mnc.mcc.3gppnetwork.org.  \n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 9.8.9.3.5.2.2.2.7.0.4.live-sip.tmtvelocity.com\n\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      ANSWER: 1\n      [..]\n      10 100 \"u\" \"E2U+sip\" \"!^.*$!sip:+40722253989@ims.mnc01.mcc226.3gppnetwork.org;npdi;np=no;rn=;cic=4018720;ocn=;cc=ro;cn=Vodafone Romania;nt=mobile;mcc=226;mnc=01;oname=Vodafone Romania;imsi=22601XXXXXXXXXX;pres=yes;roaming=na;rcic=;rocn=;rmcc=;rmnc=;e=0!\"\n\n  > Please note that all parameters, including null or N/A values, are currently provided in the response by default. If you require the removal of null parameters, please contact us at support@tmtid.com. Our team will configure this change for you.\n\n  ### Response example for Invalid Number\n\n  The output status is NXDOMAIN and the answer section is blank.  \n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 4.3.2.1.0.4.live-sip.tmtvelocity.com\n      -\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NXDOMAIN\n      id: 13664\n      flags: qr aa rd\n      QUESTION: 1\n      ANSWER: 0\n      AUTHORITY: 0\n      ADDITIONAL: 0\n\n  ### Error Code 191 Response Example\n\n  191 error Is returned when the queried destination is not covered by the Live service. The service will return MNC, MCC, and the Name for the Current Carrier.  \n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 4.4.0.0.0.0.0.1.0.7.4.3.2.live-sip.tmtvelocity.com\n\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      ANSWER: 1\n      [..]\n      10 100 \"u\" \"E2U+sip\" \"!^.*$!sip:+2347010000044@ims.mnc60.mcc621.3gppnetwork.org;np=yes;cic=234503;cc=ng;cn=9Mobile(ETISALAT);nt=mobile;mcc=621;mnc=60;oname=Airtel;imsi=62160XXXXXXXXXX;pres=na;roaming=na;e=191!\"\n\n  ### Error Code 192 Response Example\n\n  192 error is returned when the queried destination is not covered by the service. The service will return MNC, MCC, and the Name for the Origin Carrier.\n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 2.0.3.8.7.0.4.4.0.3.2.9.live-sip.tmtvelocity.com\n\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      ANSWER: 1\n      [..]\n      10 100 \"u\" \"E2U+sip\" \"!^.*$!sip:+923044078302@ims.mnc01.mcc410.3gppnetwork.org;np=na;cic=92500;cc=pk;cn=Jazz (Mobilink);nt=mobile;mcc=410;mnc=01;oname=Jazz (Mobilink);imsi=41001XXXXXXXXXX;pres=na;roaming=na;e=192!\"\n\n  ### Error Code 193 Response Example\n\n  193 error is returned when the queried destination is a fixed line. Indicates that the queried number represents a fixed line (Landline).\n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 3.3.1.0.4.8.7.8.3.3.3.live-sip.tmtvelocity.com\n\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      ANSWER: 1\n      [..]\n      10 100 \"u\" \"E2U+sip\" \"!^.*$!sip:+33387840133@ims.mnc.mcc.3gppnetwork.org;np=no;cic=33511;cc=fr;cn=Orange;nt=fixed;oname=Orange;pres=na;roaming=na;e=193!\""
+  name: ENUM Services
+- description: '
+
+
+    | Code (dec) | Code (hex) | Presence | Description |
+
+    |--|--|--|--|
+
+    | 1 | 0x1 | no | Unknown subscriber: The number is not allocated. |
+
+    | 2 | 0x2 | no | The owning network cannot be reached. |
+
+    | 3 | 0x3 | no | The network cannot reach the number. |
+
+    | 4 | 0x4 | no | The location of the number is not known to the network. |
+
+    | 5 | 0x5 | no | The number, as published in HLR, in not known to the MSC. |
+
+    | 6 | 0x6 | no | The number is absent for SM. |
+
+    | 7 | 0x7 | no | Unknown equipment. |
+
+    | 8 | 0x8 | no | Roaming not allowed. |
+
+    | 9 | 0x9 | no | Illegal subscriber. |
+
+    | 10 | 0xA | no | Bearer service not provisioned. |
+
+    | 11 | 0xB | no | Tele-service not provisioned. |
+
+    | 12 | 0xC | no | Illegal equipment. |
+
+    | 13 | 0xD | no | Call barred. |
+
+    | 21 | 0x15 | no | Facility not supported. |
+
+    | 27 | 0x1B | no | Phone switched off. |
+
+    | 28 | 0x1C | no | Incompatible terminal. |
+
+    | 31 | 0x1F | no | The subscriber is busy. |
+
+    | 32 | 0x20 | no | The delivery of the SM has failed. |
+
+    | 33 | 0x21 | n/a | A congestion (a full waiting list) occurred. |
+
+    | 34 | 0x22 | n/a | System failure. |
+
+    | 35 | 0x23 | no | Missing data. |
+
+    | 36 | 0x24 | no | Data error. |
+
+    | 191 | 0xBF | n/a | Unsupported network for which TMT offers portability status. |
+
+    | 192 | 0xC0 | n/a | Unsupported network for which TMT offers the Origin Network. |
+
+    | 193 | 0xC1 | n/a | Landline / Fixed network (not covered) |'
+  name: Error Codes
+- description: "\nVelocity coverage is constantly changing. Each update is uploaded on the Viteza Customer Portal. Users can download all files at once (zip archive) or country by country (CSV file).  \nFor each country, an operators file is provided during the provisioning process. The up-to-date coverage files are updated in the Viteza Customer Portal.  \n\n  - network_id – unique across the system (assigned by TMTID). You will find this in the download files as well as in the CIC field of the ENUM response. You should use this field for mapping to our system.\n  - ocn – (only for US/Canada files) – Operating Company Name is the carrier’s Company Code. It is assigned by the National Exchange Carrier Association. You should use this field for mapping to our system.\n  - full_name – the full name of the operator/carrier.\n  - mcc – the mobile country code of the operator/carrier.\n  - mnc – mobile network code for the operator/carrier.\n  - Live_coverage – indicates if the destination is covered at present time:\n    - true (covered)\n    - false (not covered)\n\n\nExample:\n\n    filename United Arab Emirates_live_operators.csv\n\n      971500;Emirates Telecom Corp-ETISALAT;424;02;true\n      971501;Emirates Integrated Telecommunications Company PJSC (DU);424;03;true\n      971502;All landline United Arab Emirates;424;;false"
+  name: Service Coverage
+x-tagGroups:
+- name: Introduction
+  tags:
+  - About TMT
+- name: Service Specifications
+  tags:
+  - HTTP API
+  - ENUM Services
+  - Error Codes
+  - Service Coverage
+servers:
+- url: https://api.tmtvelocity.com/live
+components: {}

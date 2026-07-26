@@ -1,0 +1,146 @@
+openapi: 3.0.0
+info:
+  title: TMT Score API specs
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/score_logo_png.png
+    altText: TMT Standard
+  version: ''
+paths:
+  /score/{number}:
+    get:
+      parameters:
+      - name: number
+        in: path
+        description: The Phone Number in internationally recognized E.164 format with the country code.
+        required: true
+        schema:
+          type: string
+      tags:
+      - HTTP API
+      responses:
+        '200':
+          headers:
+            x-tmt-key:
+              description: The API key received from TMT
+              schema:
+                type: string
+            x-tmt-secret:
+              description: The API secret received from TMT
+              schema:
+                type: string
+          content:
+            JSON:
+              examples:
+                Successful query:
+                  value:
+                    number: 23470100000xx
+                    tmt_score: 60
+                    status: 0
+                    status_message: Success
+                    trxid: lT.zkhd
+                Invalid API key or secret:
+                  value:
+                    status: 2
+                    status_message: You are not authorized to access the service.
+                Invalid Number:
+                  value:
+                    number: 99999
+                    tmt_score: 0
+                    status: 1
+                    status_message: Invalid number
+                    trxid: Fc.NhwG
+                MSISDN is not valid:
+                  value:
+                    number: 0
+                    tmt_score: 0
+                    status: 1
+                    status_message: MSISDN format is not valid.
+                    trxid: jyvPUkn
+                Unauthorized Destination:
+                  value:
+                    number: 40722570240
+                    tmt_score: -1
+                    status: 3
+                    status_message: The service is not available for this country.
+                    trxid: 00fj3iA
+                Internal serval error:
+                  value:
+                    number: 40722570240
+                    tmt_score: -1
+                    status: 5
+                    status_message: An internal server error occurred.
+                    trxid: LnvUSjP
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: string
+                    description: 'input number = equals with the queried number.
+
+                      - 0 = If the input number is composed solely of letters, the service will return a value of 0 (zero)'
+                  tmt_score:
+                    type: integer
+                    description: '- [0...100] = the service will return a number ranging from 0 and 100 representing the trustworthiness of the given phone number. The higher the number higher the level of trust. A tmt_score value of 0 (zero) is the implicit value for invalid numbers.
+
+                      - -1 = indicated some type of authorization issue or internal server error (see status messages in the next row)'
+                  status:
+                    type: integer
+                    description: '- 0 = success (HTTP Status 200)
+
+                      - 1 = Invalid Number (HTTP Status 200) / MSISDN is not Valid (http status 400)
+
+                      - 2 = Unauthorized (HTTP Status 401)
+
+                      - 3 = Forbidden (HTTP Status 403)
+
+                      - 4 = Bad Request (HTTP Status 400)
+
+                      - 5 = Internal server error (HTTP Status 500)'
+                  status_message:
+                    type: string
+                    description: '- Success = The query was resolved successfully.
+
+                      - Invalid number = The input number is not valid due to an unknown country code or incorrect length/format.
+
+                      - MSISDN is not Valid = the inquired number consists only of letters.
+
+                      - You are not authorized to access the service = Invalid API key or secret.
+
+                      - The service is not available for this country = The target number belongs to a country where the TMT Score service is not available.
+
+                      - Key header missing = The key header is absent or incorrectly formatted.
+
+                      - Secret header missing = The secret header is absent or incorrectly formatted.
+
+                      - Key and Secret headers missing = The Key and Secret headers are absent or incorrectly formatted.
+
+                      - Invalid request. Please contact support = contact support@tmtid.com
+
+                      - Internal server error = contact support@tmtid.com'
+                  trxid:
+                    type: string
+                    description: Represents the transaction ID, which aids in identifying transactions for purposes including customer inquiry resolution and troubleshooting.
+          description: ''
+      summary: GET method
+      operationId: GET
+      description: ''
+tags:
+- description: '
+
+    TMT ID is a leading provider of data, intelligence and analytics, helping customers find extra value from the information they hold. Our team of technology and telecommunications specialists has a proven track record empowering companies, brands and agencies around the world to better understand their businesses and their customers. TMT ID has a suite of technology and telecommunications data available, for further information, please visit [www.tmtid.com](https://www.tmtid.com) or email info@tmtid.com.'
+  name: About TMT
+x-tagGroups:
+- name: Introduction
+  tags:
+  - About TMT
+- name: Service Specifications
+  tags:
+  - HTTP API
+servers:
+- url: https://api.tmtid.com
+components: {}

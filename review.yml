@@ -1,0 +1,381 @@
+aid: tmt-id
+name: TMT ID
+review:
+  question: >-
+    Does TMT ID publish a real, self-serve public developer surface with downloadable
+    OpenAPI, and what is its CAMARA / GSMA Open Gateway posture?
+  answer: true
+  date: '2026-07-25'
+  reviewer: API Evangelist
+  homeMarket: United Kingdom
+findings:
+  summary: |
+    TMT ID (TMT Analysis Limited, 33 Queen St, London EC4R 1BR, with offices in
+    Ploiesti, Romania and Wilmington, Delaware) is a mobile number intelligence and
+    anti-fraud data aggregator, not a carrier. Founded 2017 as TMT Analysis, acquired
+    Phronesis Technologies in 2023, rebranded TMT ID in 2024.
+
+    The developer surface is REAL and OPEN, which puts TMT ID on the API-native side of
+    the telecom split rather than the partner-gated carrier side. https://tmtid.com/developers/
+    returns HTTP 200 with no login and links seven product reference pages, each of which
+    is a ReDoc-rendered OpenAPI 3.0 document served as static HTML at
+    https://tmtid.com/developer/<product>.html (all seven returned HTTP 200 on
+    2026-07-25). The Viteza portal at https://viteza.tmtanalysis.com/register (HTTP 200)
+    offers self-serve signup with 500 free queries against Live, Velocity and TeleShield.
+
+    The one honest qualification: the documentation is ungated, but production API keys
+    and secrets are described in the specs as "provided to you during the onboarding
+    process" — read, try in the portal, but talk to sales for production credentials.
+    There is no instant API-key issuance from the docs and no public sandbox host.
+  developerPortal:
+    url: https://tmtid.com/developers/
+    httpStatus: 200
+    kind: real self-serve documentation hub
+    loginWall: false
+    note: >-
+      Public, no login, links every product API reference. A separate self-serve
+      transactional portal (Viteza) exists at https://viteza.tmtanalysis.com/register
+      (HTTP 200) with 500 free queries on signup.
+    gated: false
+    gatedQualifier: >-
+      Docs and portal signup are open; production API credentials are issued through a
+      commercial onboarding conversation, not generated from the docs.
+  probes:
+  - url: https://tmtid.com/developers/
+    status: 200
+  - url: https://tmtid.com/developer/
+    status: 200
+  - url: https://developer.tmtid.com
+    status: 000
+    note: does not resolve
+  - url: https://developers.tmtid.com
+    status: 000
+    note: does not resolve
+  - url: https://docs.tmtid.com
+    status: 000
+    note: does not resolve
+  - url: https://api.tmtid.com
+    status: 000
+    note: >-
+      no response to an anonymous browser request; api.tmtid.com is nonetheless the
+      documented base URL for TeleShield and Score
+  - url: https://tmtid.com/api
+    status: 404
+  - url: https://tmtid.com/api-documentation
+    status: 404
+  - url: https://viteza.tmtanalysis.com/register
+    status: 200
+  - url: https://tmtanalysis.com
+    status: 200
+  - url: https://api.tmtanalysis.com
+    status: 503
+  - url: https://api.tmtverify.com/
+    status: 503
+    note: root path only; documented operation is POST /v3/
+  - url: https://api.tmtvelocity.com/
+    status: 503
+    note: root path only
+  - url: https://auth-api.tmtanalysis.com/v1/
+    status: 404
+  - url: https://api.phronesis.tech/
+    status: 404
+  - url: https://ea.api.phronesis.tech/
+    status: 404
+  - url: https://api.tmtid.com/openapi.json
+    status: 000
+  - url: https://api.tmtid.com/swagger.json
+    status: 000
+  - url: https://api.phronesis.tech/openapi.json
+    status: 404
+  - url: https://tmtid.com/.well-known/openid-configuration
+    status: 404
+  - url: https://api.phronesis.tech/.well-known/openid-configuration
+    status: 404
+  - url: https://auth-api.tmtanalysis.com/v1/.well-known/openid-configuration
+    status: 404
+  openapi:
+    downloadable: true
+    downloadLinkPublished: false
+    count: 7
+    method: >-
+      No "Download OpenAPI" link and no standalone .json/.yaml spec URL is published.
+      Each reference page is a ReDoc bundle that carries the complete OpenAPI 3.0
+      document inline in its __redoc_state.spec.data payload. Each document was
+      extracted verbatim from that payload and serialised JSON to YAML with no content
+      added, removed or edited. All seven parse as OpenAPI 3.0.
+    specs:
+    - file: openapi/tmt-id-verify.yml
+      title: TMT Verify API specs
+      openapi: 3.0.0
+      paths: 1
+      servers: [https://api.tmtverify.com]
+      sourceURL: https://tmtid.com/developer/tmt_verify_v1.html
+      sourceStatus: 200
+      fetched: '2026-07-25'
+    - file: openapi/tmt-id-velocity.yml
+      title: TMT Velocity API specs
+      openapi: 3.0.0
+      paths: 1
+      servers: [https://api.tmtvelocity.com]
+      sourceURL: https://tmtid.com/developer/tmt_velocity_v1.html
+      sourceStatus: 200
+      fetched: '2026-07-25'
+    - file: openapi/tmt-id-live.yml
+      title: TMT Live API specs
+      openapi: 3.0.0
+      paths: 1
+      servers: [https://api.tmtvelocity.com/live]
+      sourceURL: https://tmtid.com/developer/tmt_live_v1.html
+      sourceStatus: 200
+      fetched: '2026-07-25'
+    - file: openapi/tmt-id-teleshield.yml
+      title: TMT Teleshield API specs
+      openapi: 3.0.0
+      paths: 5
+      servers: [https://api.tmtid.com]
+      sourceURL: https://tmtid.com/developer/tmt_teleshield_v1.html
+      sourceStatus: 200
+      fetched: '2026-07-25'
+    - file: openapi/tmt-id-score.yml
+      title: TMT Score API specs
+      openapi: 3.0.0
+      paths: 1
+      servers: [https://api.tmtid.com]
+      sourceURL: https://tmtid.com/developer/tmt_score_v1.html
+      sourceStatus: 200
+      fetched: '2026-07-25'
+    - file: openapi/tmt-id-authenticate.yml
+      title: TMT Authenticate API specs
+      openapi: 3.0.3
+      version: 1.1.2
+      paths: 5
+      servers:
+      - https://auth-staging-api.tmtid.dev/v1
+      - https://auth-api.tmtanalysis.com/v1
+      sourceURL: https://tmtid.com/developer/tmt_authenticate_v1.html
+      sourceStatus: 200
+      fetched: '2026-07-25'
+    - file: openapi/tmt-id-network-biometrics.yml
+      title: Network Biometrics™ by TMT ID
+      openapi: 3.0.3
+      version: 1.20.0
+      paths: 3
+      servers:
+      - https://ea.api.phronesis.tech
+      - https://api.phronesis.tech
+      sourceURL: https://tmtid.com/developer/network_biometrics.html
+      sourceStatus: 200
+      fetched: '2026-07-25'
+  camara:
+    posture: >-
+      Self-declared GSMA Open Gateway member with no CAMARA-conformant API published —
+      SIM swap, number verification and silent network authentication all ship under
+      TMT ID's own proprietary schemas.
+    exposesCamaraApis: false
+    camaraApisFound: []
+    evidence:
+    - claim: TMT ID states it is a GSMA Open Gateway member.
+      quote: >-
+        "TMT ID is a GSMA Open Gateway member and a global expert in Mobile Number
+        Intelligence™"
+      url: https://tmtid.com/news/building-a-trusted-model-for-caller-authentication/
+      status: 200
+    - claim: The word CAMARA appears nowhere on tmtid.com or in any of the seven specs.
+      note: >-
+        Zero occurrences of "CAMARA", "Aduna", "Open Gateway" or "TM Forum" across all
+        seven harvested OpenAPI documents. Across the crawled site, "Open Gateway"
+        appears only in the boilerplate About TMT ID paragraph of news posts; "GSMA"
+        otherwise appears only as a footer membership logo image. No CAMARA repository,
+        no CAMARA API name, no CAMARA path or schema.
+    - claim: >-
+        The functional equivalents of CAMARA APIs exist here, but as TMT ID's own
+        contracts, not CAMARA's.
+      note: >-
+        Verify returns a proprietary "simswap" block (elapsed time since last recorded
+        SIM change) rather than CAMARA SIM Swap check/retrieve-date. Network Biometrics
+        exposes SIM-swap and device-change look-back windows plus GSMA device blacklist
+        status through POST /network-biometrics with a bespoke request body. Authenticate
+        implements Silent Network Authentication through /oauth/token, /get_config,
+        /authenticate and /validate — not CAMARA Number Verification. This is convergence
+        of capability without convergence of contract.
+    - claim: >-
+        TMT ID participates in GSMA-convened work on caller authentication alongside
+        Telefónica Tech and Dock Labs.
+      url: https://tmtid.com/news/building-a-trusted-model-for-caller-authentication/
+      note: >-
+        A proof of concept announcement. Named participation in a GSMA PoC is not a
+        callable CAMARA endpoint, and none was found.
+    reachesMarketVia: >-
+      Direct sales plus the Viteza self-serve portal; also reaches carriers and
+      messaging providers through partners — a strategic partner relationship with
+      NetNumber was announced in TMT ID's own news feed. No Aduna channel found.
+  openGateway:
+    member: true
+    source: first-party statement on tmtid.com
+    note: >-
+      Membership is claimed; no Open Gateway or CAMARA endpoint is exposed by TMT ID
+      itself. TMT ID is a data aggregator, not an operator, so it is a consumer and
+      participant in that programme rather than an exposer of network APIs.
+  tmForum:
+    conformanceFound: false
+    note: >-
+      No TM Forum Open API conformance certification, no TMF62x/TMF64x surface, and no
+      mention of TM Forum anywhere on tmtid.com or in the specs. Expected — TMT ID sells
+      into fraud and identity teams, not BSS/OSS integration.
+  threeGpp:
+    nefOrScef: false
+    networkSlicing: false
+    edgeMec: false
+    note: >-
+      No NEF or SCEF surface and no 5G slicing or MEC API. TMT ID reaches operator data
+      through commercial data-sharing and ENUM/HLR-style lookups, not through 3GPP
+      exposure functions. The TMT Live documentation does reference 3GPP-style ENUM
+      NAPTR querying (dig -t naptr against live.tmtvelocity.com) as a carrier-side
+      integration option.
+  auth:
+    schemes:
+    - api-key: >-
+        Verify and TeleShield take X-API-Key and X-API-Secret request headers.
+    - api-key: >-
+        Network Biometrics takes API-Token and API-Secret request headers, described in
+        the spec as "provided to you during the onboarding process".
+    - api-key-in-path: >-
+        Velocity (GET /standard/{format}/{key}/{secret}/{number}) and Live
+        (GET /{format}/{key}/{secret}/{number}) carry the key and secret as URL PATH
+        segments — credentials in the request line, which land in proxy and server logs.
+        This is a real, documented weakness in two of the seven APIs.
+    - oauth2-like: >-
+        Authenticate exchanges HTTP Basic client credentials at POST /oauth/token for a
+        PASETO bearer token, then carries that token on /get_config and /validate. It is
+        a client-credentials-shaped flow, but the token format is PASETO rather than JWT
+        and there is no OIDC discovery document.
+    ciba:
+      present: false
+      note: >-
+        CIBA (Client-Initiated Backchannel Authentication) does not appear anywhere in
+        the seven specs or on the site. Authenticate uses redirect_uri callbacks against
+        an allow-list of customer callback URLs for the Silent Network Authentication
+        flow — a front-channel redirect model, not CAMARA's back-channel CIBA.
+    oidcDiscovery:
+      served: false
+      probed:
+      - https://tmtid.com/.well-known/openid-configuration (404)
+      - https://api.phronesis.tech/.well-known/openid-configuration (404)
+      - https://auth-api.tmtanalysis.com/v1/.well-known/openid-configuration (404)
+  webhooks:
+    published: false
+    asyncapi: false
+    note: >-
+      No webhooks and no event catalog. The only callbacks in any spec are OAuth-style
+      redirect_uri callbacks in the Authenticate flow, with documented errors for
+      "Invalid Callback URL" and "Network does not support callback on redirect_uri".
+      Everything else is synchronous request/response — appropriate for a lookup
+      business, and a real gap against CPaaS peers that publish event streams.
+  sdks:
+    firstParty: []
+    note: >-
+      No first-party SDK packages found on npm (registry search for tmtid / tmt-id
+      returns nothing belonging to this company) and no GitHub organisation at
+      github.com/tmtid (HTTP 404). A "device intelligence SDK" is mentioned in prose on
+      https://tmtid.com/authenticate/ but no package, repository or download is
+      published. Integration is raw HTTPS.
+  postman:
+    publicWorkspace: false
+  graphql:
+    surface: false
+  grpc:
+    surface: false
+  products:
+    documented:
+    - Verify
+    - Velocity
+    - Live
+    - TeleShield
+    - Score
+    - Authenticate
+    - Network Biometrics
+    documentedElsewhere:
+    - name: Atlas
+      note: >-
+        Global Numbering Plan intelligence — 3.1 million number ranges across 18,000
+        networks. Described on https://tmtid.com/atlas/ as API-centric and available over
+        ENUM, HTTPS, SIP redirect and download packages, but no dedicated reference page
+        or spec is published; it is the data behind TeleShield rather than a separate
+        documented API. Not listed in apis.yml because no contract is published for it.
+    - name: Viteza
+      note: >-
+        Pay-as-you-go self-serve portal fronting Live, Velocity and TeleShield with 500
+        free queries on signup. A UI, not a separate API.
+  certifications:
+  - ISO/IEC 27001
+  - UKAS certified (per about-us page)
+  transports:
+  - protocol: REST
+    scheme: https
+    documented: true
+    baseURLs:
+    - https://api.tmtverify.com
+    - https://api.tmtvelocity.com
+    - https://api.tmtvelocity.com/live
+    - https://api.tmtid.com
+    - https://auth-api.tmtanalysis.com/v1
+    - https://api.phronesis.tech
+  - protocol: ENUM
+    scheme: dns
+    documented: true
+    note: >-
+      NAPTR lookups documented for Live (live.tmtvelocity.com), Velocity and TeleShield
+      as a carrier-side integration path alongside HTTPS.
+  - protocol: SIP
+    scheme: sip
+    documented: true
+    note: SIP redirect set-up referenced for TeleShield and Atlas.
+  - protocol: WebSocket
+    documented: false
+  - protocol: GraphQL
+    documented: false
+  - protocol: gRPC
+    documented: false
+sources:
+- url: https://tmtid.com/
+  type: Website
+  status: 200
+- url: https://tmtid.com/developers/
+  type: Documentation
+  status: 200
+  note: Public developer hub, no login, links all seven API reference pages.
+- url: https://tmtid.com/developer/tmt_verify_v1.html
+  type: APIReference
+  status: 200
+- url: https://tmtid.com/developer/tmt_velocity_v1.html
+  type: APIReference
+  status: 200
+- url: https://tmtid.com/developer/tmt_live_v1.html
+  type: APIReference
+  status: 200
+- url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  type: APIReference
+  status: 200
+- url: https://tmtid.com/developer/tmt_score_v1.html
+  type: APIReference
+  status: 200
+- url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  type: APIReference
+  status: 200
+- url: https://tmtid.com/developer/network_biometrics.html
+  type: APIReference
+  status: 200
+- url: https://viteza.tmtanalysis.com/register
+  type: SignUp
+  status: 200
+- url: https://tmtid.com/about-us/
+  type: About
+  status: 200
+  note: London HQ, founded 2017 as TMT Analysis, Phronesis acquired 2023, rebrand 2024.
+- url: https://tmtid.com/news/building-a-trusted-model-for-caller-authentication/
+  type: Blog
+  status: 200
+  note: Source of the verbatim GSMA Open Gateway membership claim.
+- url: https://tmtid.com/atlas/
+  type: Documentation
+  status: 200
