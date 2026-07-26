@@ -1,0 +1,149 @@
+generated: '2026-07-25'
+method: searched
+source: https://tmtid.com/developer/network_biometrics.html, https://tmtid.com/developer/tmt_verify_v1.html,
+  https://tmtid.com/developer/tmt_authenticate_v1.html, openapi/*.yml
+summary: >-
+  TMT ID is a lookup API, not a resource API: almost every operation is a single-shot
+  question about one MSISDN, so there is no collection pagination, no sparse-fieldset syntax
+  and no create/update lifecycle to make idempotent. What it does have is a request-shaping
+  convention (a datapoint/product selector that decides which blocks come back and what the
+  call costs), two different response envelopes across the estate, and a correlation-id
+  tracing header on the newest product only.
+authentication:
+  style: key + secret pair, transported differently per product
+  detail: authentication/tmt-id-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No Idempotency-Key header, no idempotent-retry contract and no request-replay window is
+    documented on any of the seven APIs. Every operation is a read-shaped lookup (POST is used
+    for query bodies, not for creating state), so a retry re-queries and — importantly — is
+    re-billed. Agents should treat retries as chargeable, not free. Deliberately NOT wired as
+    a type Idempotency pointer: TMT ID publishes no idempotency contract.
+request_shaping:
+  name: datapoint / product selection
+  note: >-
+    The single most important convention on the platform. The caller declares which data it
+    wants and both the response shape and the price follow from it.
+  variants:
+  - api: TMT Verify
+    field: dpoints
+    form: comma-separated string in the JSON body
+    example: originnetwork,network,type,porteddate,subscriberstatus,roaminginfo
+    values: [type, etype, network, originnetwork, porteddate, porting_history, subscriberstatus,
+      roaminginfo, deactivation_last, deactivation_history, simswap, portfraud, tmt_score,
+      online_presence, age_verification, kycmatch, normalize, call_forwarding, market_segment]
+  - api: Network Biometrics
+    field: discover / assure / protect product objects
+    form: nested JSON objects in the request body
+    note: >-
+      The discover object is REQUIRED in every request; assure and protect are optional and
+      order-insensitive. discover.device and protect.hasDeviceInfo must not both appear in the
+      same request — use discover.device when the IMEI is known, protect.hasDeviceInfo when it
+      is not.
+  - api: TMT Velocity, TMT Live
+    field: '{format} path segment'
+    form: path
+    values: [JSON, CSV]
+pagination:
+  supported: false
+  note: Single-subject lookups only; no list endpoints, so no cursor or offset convention exists.
+field_expansion:
+  supported: false
+  note: >-
+    Response breadth is controlled up-front by the datapoint/product selector rather than by an
+    expand parameter after the fact.
+metadata:
+  supported: false
+request_tracing:
+  header: Correlation-Id
+  applies_to: Network Biometrics API (v3 header form)
+  max_length: 64
+  echoed: true
+  note: >-
+    Optional caller-supplied unique string, echoed back in the response headers. For the
+    deprecated v2 Number Assurance operations the same value goes in the request BODY as
+    correlation_id, not as a header. Network Biometrics also returns a server-side
+    transaction.id (UUID) on every response — use that when reporting an issue to support.
+    Verify, Velocity, Live, Score and TeleShield document no tracing header.
+content_type:
+  request: application/json
+  response: application/json
+  note: >-
+    Network Biometrics only accepts requests with Content-Type application/json; an invalid
+    JSON body or unsupported content type returns 400 Bad Request. Velocity and Live also
+    offer CSV via the {format} path segment.
+versioning:
+  scheme: mixed — per-product, no estate-wide policy
+  detail: lifecycle/tmt-id-lifecycle.yml
+  forms:
+  - uri-path: Verify POST /v3/, Number Assurance /core/v2/...
+  - host-and-path: Authenticate https://auth-api.tmtanalysis.com/v1
+  - resource-name: TeleShield encodes the data-dictionary version in the path parameter label
+      ({number v1.3} vs {number v2.0})
+  - document-version: Network Biometrics info.version 1.20.0, Authenticate info.version 1.1.2
+error_envelope:
+  note: >-
+    Two different envelopes coexist across the estate; an agent must branch on which product it
+    called. Both put a numeric status in a 200-shaped body, so HTTP status alone is NOT
+    sufficient to determine success on the Verify/Velocity/Live/TeleShield family.
+  shapes:
+  - family: Verify, Velocity, Live, TeleShield, Score
+    fields: [status, status_message]
+    success_value: 'status: 0 (status_message "Success")'
+    example: '{"status": 4, "status_message": "Invalid request. Please check documentation, thank you"}'
+    note: The numeric status sits inside the per-number result object, alongside the data.
+  - family: Network Biometrics (v3)
+    fields: [transaction.status.value, transaction.status.message, transaction.id, transaction.reference]
+    success_value: 'transaction.status.value: 0 (message "transaction successful")'
+    note: >-
+      HTTP status codes ARE meaningful here (200/202/400/401/403/404/405/408/500/502/503) and
+      the transaction status object carries the detail. Per-feature failures are reported inside
+      that feature's own response object even when the transaction succeeded.
+  - family: TMT Authenticate
+    fields: [HTTP status]
+    note: 400/401/503 with product-specific bodies; also uses a 302 redirect as part of the
+      silent-network-authentication flow.
+partial_results:
+  isDataAvailable: >-
+    Network Biometrics returns isDataAvailable=false on an assure/protect feature when the
+    subscriber data simply is not held — a successful call with no answer, which is distinct
+    from an error.
+  isMatched_thresholds: >-
+    assure matching features return matchConfidence 0-100. isMatched flips true at >= 90 for
+    most fields, but email and date of birth require a 100 match. Some data sources only ever
+    return 0 or 100 with no intermediate score.
+rate_limits:
+  numbers_published: false
+  headers: none
+  http_429: false
+  signalled_by:
+    api: Network Biometrics
+    http_status: 503
+    codes:
+    - code: 201
+      meaning: request was throttled. submission per second limit exceeded
+    - code: 202
+      meaning: request was throttled. submission per day limit exceeded
+    - code: 203
+      meaning: request was throttled. submission per month limit exceeded
+  note: >-
+    Throttling is enforced on three axes (per second, per day, per month) but the numbers are
+    contractual, not published, and there are no RateLimit/X-RateLimit response headers and no
+    HTTP 429 anywhere in the estate — a client only learns it was throttled from the numeric
+    transaction.status.value under a 503. Test persona 447700900505 additionally simulates an
+    MNO-side "Rate limit exceeded" condition. The other six APIs signal nothing at all.
+cost_semantics:
+  note: >-
+    Calls are metered and billed per query (Viteza is explicitly pay-as-you-go with 500 free
+    queries). Some Network Biometrics features carry an additional MNO charge — the docs flag
+    that extra account information under assure.matchingAccountInfo may incur an additional
+    charge on some networks. Test personas exist precisely so that development traffic does not
+    hit the operator.
+cross_references:
+  errors: errors/tmt-id-problem-types.yml
+  lifecycle: lifecycle/tmt-id-lifecycle.yml
+  authentication: authentication/tmt-id-authentication.yml
+  sandbox: sandbox/tmt-id-sandbox.yml
+  data_model: data-model/tmt-id-data-model.yml

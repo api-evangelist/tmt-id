@@ -1,0 +1,149 @@
+generated: '2026-07-25'
+method: derived
+source: openapi/tmt-id-network-biometrics.yml (components.schemas), openapi/tmt-id-verify.yml,
+  openapi/tmt-id-authenticate.yml, https://tmtid.com/developer/tmt_verify_v1.html (Available data table)
+summary: >-
+  There is exactly one root entity across the whole TMT ID estate — the mobile number (MSISDN).
+  Nothing is created, nothing is stored on the caller's behalf, and no object carries a
+  provider-issued id that a later call can dereference. Every product is a projection of facts
+  about one MSISDN, optionally joined to a device (IMEI), a subscriber account, and a set of
+  personal details the caller supplies for matching. The only durable identifiers TMT ID mints are
+  transaction ids for support traceability. Model this as a star: MSISDN at the centre, feature
+  blocks hanging off it, and no edges between transactions.
+root_entity:
+  name: MSISDN
+  description: A mobile number in E.164 format. The subject of every operation in every product.
+  id_field: number
+  id_prefix: null
+  note: The caller supplies the identity; TMT ID never issues one.
+entities:
+- name: MSISDN
+  aliases: [number, msisdn, phone number]
+  fields: [is, isCorrectFormat, isValid, isPorted, present, type, etype]
+  apis: [Verify, Velocity, Live, Score, TeleShield, Network Biometrics, Authenticate]
+- name: Network
+  description: The mobile network operator serving (or originally issuing) the number.
+  fields: [MCC, MNC, networkName, name, spid, lrn, ocn]
+  variants: [onNetwork, wasOnNetwork, current_network, origin_network]
+  apis: [Verify, Velocity, Network Biometrics]
+- name: Country
+  fields: [name, code, dialCode]
+  standard: ISO 3166 alpha-2 + ITU dial code
+- name: Device
+  description: The handset associated with the number, keyed on IMEI.
+  fields: [IMEI, serial number, model, brand, activation status, blacklist status, estimated
+      purchase date, retail information]
+  apis: [Network Biometrics]
+  note: Reachable two ways — discover.device when the IMEI is known, protect.hasDeviceInfo when it
+    is not. The two must never appear in the same request.
+- name: SubscriberAccount
+  description: The billing/subscription account the number sits on.
+  fields: [contract type, account active, tenure, market_segment, lost or stolen flag]
+  apis: [Verify, Network Biometrics]
+- name: SubscriberIdentity
+  description: Personal details the CALLER supplies, which TMT ID matches against operator-held
+    data. TMT ID does not return the underlying personal data — only match flags and confidence.
+  fields: [first name, last name, house number, house name, street address, postcode, locality,
+    province, country, date of birth, email]
+  apis: [Verify (kycmatch), Network Biometrics (assure)]
+- name: Transaction
+  description: The per-call record. The only TMT-issued identifier in the model.
+  fields: [transaction.id (UUID), transaction.reference, transaction.status.value,
+    transaction.status.message, Correlation-Id]
+  apis: [Network Biometrics]
+  note: Not dereferenceable — there is no GET /transactions/{id}. It exists for support
+    traceability only.
+- name: Session
+  description: An authentication session in the Authenticate product.
+  fields: [access token (PASETO), MNO config, validation outcome]
+  apis: [Authenticate]
+- name: NumberRange
+  description: Numbering-plan level facts, as opposed to subscriber-level facts.
+  fields: [range validity, allocation, service type, fraud propensity]
+  apis: [TeleShield]
+relationships:
+- from: MSISDN
+  to: Network
+  type: has_one
+  via: onNetwork / current_network
+  note: Current serving network, portability-aware.
+- from: MSISDN
+  to: Network
+  type: has_one
+  via: wasOnNetwork / origin_network
+  note: Originally allocated network; differs from current when the number has been ported.
+- from: MSISDN
+  to: Country
+  type: has_one
+  via: country
+- from: MSISDN
+  to: Device
+  type: has_one
+  via: discover.device / protect.hasDeviceInfo
+- from: MSISDN
+  to: SubscriberAccount
+  type: has_one
+  via: assure.matchingAccountInfo / market_segment
+- from: MSISDN
+  to: SubscriberIdentity
+  type: matched_against
+  via: assure.matching* / kyc_results
+  note: Not a stored relationship — a per-call comparison returning isMatched + matchConfidence.
+- from: MSISDN
+  to: NumberRange
+  type: belongs_to
+  via: TeleShield range lookup
+- from: Transaction
+  to: MSISDN
+  type: belongs_to
+  via: request body
+- from: Session
+  to: MSISDN
+  type: belongs_to
+  via: authenticate flow
+feature_blocks:
+  note: >-
+    Network Biometrics organises its response as three product objects hanging off the request.
+    These are the practical "resources" a client codes against.
+  discover:
+    purpose: existence, format, validity, reachability, network and recycle state
+    features: [number, hasNumberBeenRecycled, hasMVNOInfo, hasHomeNetworkInfo, device]
+  assure:
+    purpose: KYC-style matching of caller-supplied identity against operator-held data
+    features: [matchingName, matchingIdentityDocument, matchingAddress, matchingBirthDate,
+      matchingAge, matchingDeviceInfo, matchingAccountInfo, hasServiceRestriction]
+    response_contract: 'every assure feature returns isDataAvailable + isMatched; matchingName,
+      matchingAddress and matchingBirthDate also return matchConfidence 0-100'
+  protect:
+    purpose: real-time suspicious-behaviour signals
+    features: [hasSimChanged, hasDeviceChanged, wasReportedLostOrStolen, hasAccountTenure,
+      hasContractInfo, hasCallForwarding, hasActiveCall, hasDeviceInfo, wasBlacklisted]
+    response_contract: 'event-window features return changedInTimePeriod plus a last-event date
+      that is only populated when the event fell inside the requested window'
+  transaction:
+    purpose: outcome envelope
+    features: [status.value, status.message, id, reference]
+verify_datapoints:
+  note: The Verify product exposes the same underlying model through a flat comma-separated
+    selector rather than nested objects.
+  values: [type, etype, network, originnetwork, porteddate, porting_history, subscriberstatus,
+    roaminginfo, deactivation_last, deactivation_history, simswap, portfraud, tmt_score,
+    online_presence, age_verification, kycmatch, normalize, call_forwarding, market_segment]
+schemas:
+  network_biometrics:
+  - DiscoverProductRequest
+  - AssureProductRequest
+  - ProtectProductRequest
+  - NetworkBiometricProductRequest
+  - DiscoverProductResponse
+  - AssureProductResponse
+  - ProtectProductResponse
+  - TransactionResponse
+  - NetworkBiometricProductResponse
+  - AssuredRegistrationRequest
+  - AssuredAgeRequest
+  - NumberAssuranceResponse
+  note: >-
+    Network Biometrics is the only product with a components.schemas section (12 schemas). The
+    other six specs inline every request and response shape, which is why they contribute no
+    reusable entities to this model.

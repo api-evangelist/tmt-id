@@ -1,0 +1,560 @@
+generated: '2026-07-25'
+method: searched
+source: https://tmtid.com/developer/network_biometrics.html (per-response code tables, mirrored in openapi/tmt-id-network-biometrics.yml)
+applies_to: Network Biometrics API (and the deprecated v2 Number Assurance operations)
+envelope:
+  field: transaction.status.value
+  message_field: transaction.status.message
+  correlation: transaction.id (server-side UUID) and the optional caller-supplied Correlation-Id header
+  note: The numeric code is the authoritative outcome. The same code can arrive under different HTTP statuses depending
+    on the operation (e.g. 306 unknown subscriber is 200 on the deprecated v2 operations and 404 on /network-biometrics),
+    so branch on the numeric code, not on HTTP status alone.
+families:
+- range: 0-2
+  name: success
+  note: 0 = fully successful, 2 = successful but partial data returned.
+- range: 100-106
+  name: account & authentication
+  note: Returned as HTTP 401/400/405. Terminal — a retry with the same credentials will fail identically.
+- range: 200-215
+  name: entitlement, throttling & request validation
+  note: 200 IP not whitelisted, 201/202/203 per-second/per-day/per-month throttling (HTTP 503), 204/206 product
+    not provisioned or suspended, 207-215 parameter validation, 212 MNO access not authorised (HTTP 403).
+- range: 300-310
+  name: per-check failure
+  note: A named check inside the transaction could not be completed (call forward, SIM swap, country, user information,
+    vicinity). Usually HTTP 202 — the transaction itself was accepted.
+- range: 404-409
+  name: subscriber / number not resolvable
+  note: Opt-out, invalid number, unregistered prepay, unknown routing information, unknown number range, unsupported
+    device. Terminal negative answers, not faults.
+- range: 800-817
+  name: data source & subsystem
+  note: 'Upstream MNO/data-partner and internal subsystem conditions surfaced honestly to the caller: unavailable,
+    query failed, timed out, capacity/quota exceeded, called too early, unexpected response.'
+rate_limit_signalling:
+  codes:
+  - 201
+  - 202
+  - 203
+  http_status: 503
+  note: TMT ID publishes no numeric rate limits and returns no RateLimit/X-RateLimit headers and no HTTP 429; throttling
+    is only observable through these three numeric codes under a 503. Network Biometrics test persona 447700900505
+    deliberately simulates an MNO-side "Rate limit exceeded" condition.
+total_codes: 62
+codes:
+- code: 0
+  http_status: 200
+  message: transaction successful
+  family: success
+  action: proceed
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 2
+  http_status: 200
+  message: transaction successful but partial data returned
+  family: success
+  action: proceed
+  operations:
+  - post-network-biometrics
+- code: 100
+  http_status: 401
+  message: user account not found
+  family: account & authentication
+  action: do not retry; fix credentials, IP allow-list or account provisioning with TMT ID support
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 101
+  http_status: 401
+  message: authentication failed
+  family: account & authentication
+  action: do not retry; fix credentials, IP allow-list or account provisioning with TMT ID support
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 102
+  http_status: 401
+  message: user account suspended
+  family: account & authentication
+  action: do not retry; fix credentials, IP allow-list or account provisioning with TMT ID support
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 103
+  http_status: 400
+  message: bad request
+  family: account & authentication
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 104
+  http_status: 400
+  message: invalid Content-Type header
+  family: account & authentication
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 105
+  http_status: 405
+  message: method not allowed
+  family: account & authentication
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 106
+  http_status: 401
+  message: admin privileges required for this API
+  family: account & authentication
+  action: do not retry; fix credentials, IP allow-list or account provisioning with TMT ID support
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 200
+  http_status: 401
+  message: IP address not whitelisted
+  family: entitlement, throttling & request validation
+  action: do not retry; fix credentials, IP allow-list or account provisioning with TMT ID support
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 201
+  http_status: 503
+  message: request was throttled. submission per second limit exceeded
+  family: entitlement, throttling & request validation
+  action: back off and retry later; per-second, per-day and per-month submission limits are enforced separately
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 202
+  http_status: 503
+  message: request was throttled. submission per day limit exceeded
+  family: entitlement, throttling & request validation
+  action: back off and retry later; per-second, per-day and per-month submission limits are enforced separately
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 203
+  http_status: 503
+  message: request was throttled. submission per month limit exceeded
+  family: entitlement, throttling & request validation
+  action: back off and retry later; per-second, per-day and per-month submission limits are enforced separately
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 204
+  http_status: 401
+  message: product not provisioned for your account
+  family: entitlement, throttling & request validation
+  action: do not retry; fix credentials, IP allow-list or account provisioning with TMT ID support
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 206
+  http_status: 401
+  message: product availability suspended for your account
+  family: entitlement, throttling & request validation
+  action: do not retry; fix credentials, IP allow-list or account provisioning with TMT ID support
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 207
+  http_status: 400
+  message: invalid parameters
+  family: entitlement, throttling & request validation
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 208
+  http_status: 400
+  message: invalid postcode parameter
+  family: entitlement, throttling & request validation
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 209
+  http_status: 400
+  message: invalid name parameter
+  family: entitlement, throttling & request validation
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 210
+  http_status: 400
+  message: invalid address parameter
+  family: entitlement, throttling & request validation
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 211
+  http_status: 400
+  message: invalid birthdate parameter
+  family: entitlement, throttling & request validation
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 212
+  http_status: 403
+  message: MNO access not authorised
+  family: entitlement, throttling & request validation
+  action: do not retry; MNO/use-case permission must be granted commercially before this feature is callable
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 213
+  http_status: 400
+  message: invalid use case identifier
+  family: entitlement, throttling & request validation
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 214
+  http_status: 400
+  message: invalid number parameter
+  family: entitlement, throttling & request validation
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 215
+  http_status: 400
+  message: invalid IMEI parameter
+  family: entitlement, throttling & request validation
+  action: do not retry unchanged; correct the request
+  operations:
+  - post-network-biometrics
+- code: 300
+  http_status: 202
+  message: call Forward check failed
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 301
+  http_status: 202
+  message: SIM swap check failed
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 302
+  http_status: 202
+  message: country check failed
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 303
+  http_status: 202
+  message: user information check failed
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 304
+  http_status: 202
+  message: vicinity check failed
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 305
+  http_status: 200
+  message: subscriber absent, data may be incomplete
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+- code: 306
+  http_status: 200
+  message: unknown subscriber, data may be incomplete
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+- code: 306
+  http_status: 404
+  message: unknown subscriber, data may be incomplete
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-network-biometrics
+- code: 307
+  http_status: 202
+  message: no coverage for country
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+- code: 307
+  http_status: 404
+  message: no coverage for country
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-network-biometrics
+- code: 308
+  http_status: 200
+  message: teleservice not provisioned for subscriber
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+- code: 309
+  http_status: 200
+  message: call or SMS facility barred for subscriber
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+- code: 310
+  http_status: 200
+  message: call or SMS facility not currently supported in serving network
+  family: per-check failure (partial result)
+  action: treat the individual check as unavailable; the rest of the transaction may still carry data
+  operations:
+  - post-assured-age
+  - post-assured-registration
+- code: 404
+  http_status: 404
+  message: subscriber opted out of service
+  family: subscriber / number not resolvable
+  action: no data for this subscriber/number; do not retry, this is a terminal negative answer
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 405
+  http_status: 404
+  message: invalid number
+  family: subscriber / number not resolvable
+  action: no data for this subscriber/number; do not retry, this is a terminal negative answer
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 406
+  http_status: 404
+  message: subscriber is unregistered prepay
+  family: subscriber / number not resolvable
+  action: no data for this subscriber/number; do not retry, this is a terminal negative answer
+  operations:
+  - post-network-biometrics
+- code: 407
+  http_status: 404
+  message: unknown routing information
+  family: subscriber / number not resolvable
+  action: no data for this subscriber/number; do not retry, this is a terminal negative answer
+  operations:
+  - post-network-biometrics
+- code: 408
+  http_status: 404
+  message: unknown number range
+  family: subscriber / number not resolvable
+  action: no data for this subscriber/number; do not retry, this is a terminal negative answer
+  operations:
+  - post-network-biometrics
+- code: 409
+  http_status: 404
+  message: device or brand not supported
+  family: subscriber / number not resolvable
+  action: no data for this subscriber/number; do not retry, this is a terminal negative answer
+  operations:
+  - post-network-biometrics
+- code: 800
+  http_status: 503
+  message: database subsystem unavailable
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 801
+  http_status: 503
+  message: datasource permanently unavailable
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 802
+  http_status: 403
+  message: datasource temporarily not available
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 803
+  http_status: 502
+  message: datasource query failed
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 804
+  http_status: 404
+  message: resource not found
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 805
+  http_status: 502
+  message: database subsystem error
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 806
+  http_status: 408
+  message: datasource query time out
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+- code: 806
+  http_status: 503
+  message: datasource connection error
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 807
+  http_status: 404
+  message: subscriber data unavailable
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 808
+  http_status: 503
+  message: service not available for MNO or MVNO
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-assured-age
+  - post-assured-registration
+  - post-network-biometrics
+- code: 809
+  http_status: 503
+  message: datasource capacity exceeded
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 810
+  http_status: 503
+  message: internal server error
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 811
+  http_status: 503
+  message: datasource called too early
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 812
+  http_status: 502
+  message: datasource returned unexpected response
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 813
+  http_status: 503
+  message: datasource quota exceeded
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 814
+  http_status: 503
+  message: problem connecting to datasource
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 815
+  http_status: 503
+  message: datasource requires further data
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 816
+  http_status: 503
+  message: datasource query error
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics
+- code: 817
+  http_status: 404
+  message: datasource data not found
+  family: data source & subsystem
+  action: transient upstream data-source or subsystem condition; retry with backoff
+  operations:
+  - post-network-biometrics

@@ -1,0 +1,115 @@
+generated: '2026-07-25'
+method: searched
+source: openapi/tmt-id-authenticate.yml, openapi/tmt-id-network-biometrics.yml, openapi/tmt-id-verify.yml,
+  openapi/tmt-id-teleshield.yml, openapi/tmt-id-velocity.yml, openapi/tmt-id-live.yml
+docs: https://tmtid.com/developers/
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+  - path
+  oauth2_flows: []
+  credential_issuance: >-
+    Keys are issued two ways. Self-serve: sign up at the Viteza portal
+    (https://viteza.tmtanalysis.com/register) and receive a key/secret pair with 500 free
+    queries for Live, Velocity and TeleShield Routing. Commercial: for Verify, Score,
+    Authenticate and Network Biometrics the key and secret are delivered by TMT ID Support
+    during a customer onboarding conversation (Network Biometrics additionally requires
+    per-feature use-case pre-approval with the data partners). There is no instant
+    self-service key generation for the full product set.
+  note: >-
+    Every TMT ID product authenticates with a key + secret PAIR — never a single bearer key —
+    but the transport of that pair differs per product, and two products carry it in the URL
+    path rather than in a header. No product uses OAuth 2.0 or OpenID Connect; the only
+    token-based product, Authenticate, exchanges HTTP Basic credentials for a PASETO bearer
+    token at its own /oauth/token endpoint.
+schemes:
+- name: basic
+  type: http
+  scheme: basic
+  applies_to: TMT Authenticate API
+  used_by: POST /oauth/token
+  description: >-
+    Client id and client secret presented as HTTP Basic to obtain a PASETO access token.
+  sources:
+  - openapi/tmt-id-authenticate.yml
+- name: paseto_token
+  type: http
+  scheme: bearer
+  bearer_format: PASETO
+  applies_to: TMT Authenticate API
+  used_by: POST /get_config, POST /validate, GET /authenticate, GET /authenticate/otp
+  description: >-
+    Bearer token returned by POST /oauth/token. PASETO rather than JWT — tokens are not
+    introspectable with standard JWT tooling and there is no published JWKS or OIDC discovery
+    document (both probed, 404/503).
+  sources:
+  - openapi/tmt-id-authenticate.yml
+- name: token
+  type: apiKey
+  in: header
+  parameter: API-Token
+  applies_to: Network Biometrics API
+  description: API Token provided during the onboarding process.
+  sources:
+  - openapi/tmt-id-network-biometrics.yml
+- name: secret
+  type: apiKey
+  in: header
+  parameter: API-Secret
+  applies_to: Network Biometrics API
+  description: API Secret provided during the onboarding process.
+  sources:
+  - openapi/tmt-id-network-biometrics.yml
+- name: X-API-Key
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  applies_to: TMT Verify API, TMT TeleShield API
+  description: >-
+    Declared as a required header PARAMETER on every operation rather than as a
+    components.securitySchemes entry, so generic tooling will not treat it as auth. Obtained
+    from the Viteza portal or from Support during customer onboarding.
+  sources:
+  - openapi/tmt-id-verify.yml
+  - openapi/tmt-id-teleshield.yml
+- name: X-API-Secret
+  type: apiKey
+  in: header
+  parameter: X-API-Secret
+  applies_to: TMT Verify API, TMT TeleShield API
+  description: Paired secret for X-API-Key. Also declared as a header parameter, not a security scheme.
+  sources:
+  - openapi/tmt-id-verify.yml
+  - openapi/tmt-id-teleshield.yml
+- name: path-embedded key/secret
+  type: apiKey
+  in: path
+  parameter: '{key}/{secret}'
+  applies_to: TMT Velocity API, TMT Live API
+  description: >-
+    Velocity (GET /standard/{format}/{key}/{secret}/{number}) and Live
+    (GET /{format}/{key}/{secret}/{number}) carry the API credentials as path segments in the
+    request URL. Credentials in a URL path are logged by proxies, browsers and access logs;
+    consumers should treat these keys as rotatable and never expose these calls to a browser
+    or to an agent that persists URLs. This is a legacy carrier-integration shape, not an
+    artefact of the capture.
+  sources:
+  - openapi/tmt-id-velocity.yml
+  - openapi/tmt-id-live.yml
+- name: unauthenticated in spec
+  type: none
+  applies_to: TMT Score API
+  description: >-
+    openapi/tmt-id-score.yml declares no security scheme and no credential parameter on
+    GET /score/{number}. The product is commercially gated, so the published spec is
+    almost certainly incomplete on auth rather than the endpoint being open.
+  sources:
+  - openapi/tmt-id-score.yml
+gaps:
+- Only 2 of 7 specs (Authenticate, Network Biometrics) declare components.securitySchemes; the
+  other five express credentials as parameters or omit them entirely.
+- No OpenID Connect discovery, no OAuth 2.0 authorization server metadata, no JWKS, no scopes.
+- No published key-rotation or credential-revocation procedure.

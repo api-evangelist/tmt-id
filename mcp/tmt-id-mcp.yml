@@ -1,0 +1,113 @@
+generated: '2026-07-25'
+method: derived
+status: candidate
+source: openapi/*.yml
+provenance: api-evangelist-derived
+searched:
+  result: none
+  probed:
+  - url: https://tmtid.com/mcp
+    status: 404
+  - url: https://mcp.tmtid.com/
+    status: 'no TLS certificate for host'
+  - registry: npm @modelcontextprotocol and tmtid/tmtverify/tmtvelocity/teleshield/phronesis searches
+    status: no first-party package
+  note: >-
+    TMT ID publishes no hosted or packaged MCP server. It does publish an llms.txt with an explicit
+    authority hierarchy for AI assistants (llms/tmt-id-llms.txt), so the company is thinking about
+    agent consumption of its CONTENT, but not yet about agent consumption of its APIs.
+server:
+  name: tmt-id
+  transport: http
+  url: null
+note: >-
+  This is an API Evangelist DERIVED candidate tool surface, not a TMT ID product. Every tool below
+  maps 1:1 to a published operation; input schemas are exactly the parameters and request bodies in
+  the referenced spec. Credentials differ per tool (see authentication/tmt-id-authentication.yml) —
+  a real server would need per-product key/secret pairs, and Velocity/Live would have to move their
+  credentials out of the URL path before they were safe for an agent to call.
+tools:
+- name: verify_number
+  description: Verify a mobile number against operator data and return the requested datapoints —
+    network, portability, subscriber status, roaming, SIM swap, market segment, KYC match.
+  source_operation: openapi/tmt-id-verify.yml#POST
+  consequence: read
+  cost: chargeable per query
+- name: lookup_current_network
+  description: Return the mobile network operator currently serving a number, portability-aware.
+  source_operation: openapi/tmt-id-velocity.yml#GET
+  consequence: read
+  cost: chargeable per query
+- name: check_number_live
+  description: Check whether a mobile number is currently assigned and active on a network.
+  source_operation: openapi/tmt-id-live.yml#GET
+  consequence: read
+  cost: chargeable per query
+- name: score_number
+  description: Return a 0-100 credibility score for a phone number.
+  source_operation: openapi/tmt-id-score.yml#GET
+  consequence: read
+  cost: chargeable per query
+- name: teleshield_routing
+  description: Numbering-plan validity, allocation and service type for routing decisions.
+  source_operation: openapi/tmt-id-teleshield.yml#POST (/r-teleshield/{number})
+  consequence: read
+  cost: chargeable per query
+- name: teleshield_fraud
+  description: Fraud propensity for a number range — wangiri, IRSF, CLI spoofing, origin-based
+    rating abuse.
+  source_operation: openapi/tmt-id-teleshield.yml#POST (/f-teleshield/{number})
+  consequence: read
+  cost: chargeable per query
+- name: teleshield_enhanced_fraud
+  description: Enhanced fraud data dictionary (v1.3 and v2.0 variants).
+  source_operation: openapi/tmt-id-teleshield.yml#POST (/e-teleshield/{number v2.0})
+  consequence: read
+  cost: chargeable per query
+- name: network_biometrics
+  description: Assemble a configurable set of mobile network signals about a number and device —
+    discover (validity, network, recycle, MVNO, device), assure (name/address/age/DOB/account
+    matching) and protect (SIM change, device change, lost or stolen, tenure, call forwarding,
+    blacklist).
+  source_operation: openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  consequence: read
+  cost: chargeable per query; some assure features incur an additional MNO charge
+  note: The discover object is required in every request; assure and protect are optional.
+- name: authenticate_get_token
+  description: Exchange HTTP Basic credentials for a PASETO access token.
+  source_operation: openapi/tmt-id-authenticate.yml#getAccessToken
+  consequence: credential exchange
+- name: authenticate_get_config
+  description: Learn how the relevant mobile network operator wants the authentication session
+    opened.
+  source_operation: openapi/tmt-id-authenticate.yml#getConfig
+  consequence: read
+- name: authenticate_silent
+  description: Run the silent network authentication flow for a subscriber.
+  source_operation: openapi/tmt-id-authenticate.yml#authenticateUserWithMNO
+  consequence: acting
+  note: Involves a 302 redirect through the operator; not a pure server-to-server read.
+- name: authenticate_otp
+  description: Fall back to a one-time-password authentication flow.
+  source_operation: openapi/tmt-id-authenticate.yml#authenticateUserWithOtp
+  consequence: acting
+  note: Sends an OTP to a real subscriber — human-visible side effect.
+- name: authenticate_validate
+  description: Confirm whether the phone number was successfully authenticated in this session.
+  source_operation: openapi/tmt-id-authenticate.yml#validateUserSession
+  consequence: read
+excluded:
+- source_operation: openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  reason: deprecated v2 Number Assurance operation; superseded by network_biometrics
+- source_operation: openapi/tmt-id-network-biometrics.yml#post-assured-age
+  reason: deprecated v2 Number Assurance operation; superseded by network_biometrics
+agent_guidance:
+- Every call is metered and billed. There is no idempotency contract, so a retry is a second
+  chargeable query — never retry blindly on timeout.
+- Use the published test personas (sandbox/tmt-id-sandbox.yml) during development; they return
+  canned scenarios without hitting — or being billed by — the mobile network operator.
+- Success is not the HTTP status on the lookup family; branch on the numeric status /
+  transaction.status.value (errors/tmt-id-error-codes.yml).
+- Throttling appears as codes 201/202/203 under HTTP 503, not as a 429.
+- These APIs return personal-data MATCH signals about real people. TMT ID's own llms.txt forbids
+  presenting the output as a legal, regulatory, KYC, AML or age determination.

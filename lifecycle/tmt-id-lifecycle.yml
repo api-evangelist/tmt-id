@@ -1,0 +1,83 @@
+generated: '2026-07-25'
+method: searched
+source: https://tmtid.com/developers/, https://tmtid.com/developer/network_biometrics.html, openapi/*.yml,
+  probes of status.tmtid.com and the tmtid.com sitemap
+summary: >-
+  TMT ID versions each product independently and publishes no estate-wide versioning or
+  deprecation policy, no SLA document, no public status page and no dated changelog. What it does
+  publish honestly is one real deprecation: the v2 Number Assurance family is marked deprecated in
+  the OpenAPI itself, restricted to existing customers, and given a named successor product.
+versioning:
+  scheme: per-product, mixed
+  policy_url: null
+  current:
+  - api: TMT Verify
+    version: v3
+    form: uri-path (POST /v3/)
+  - api: Network Biometrics
+    version: 1.20.0
+    form: document version in info.version; the current surface is unversioned in the path
+      (POST /network-biometrics)
+  - api: TMT Authenticate
+    version: v1 / 1.1.2
+    form: uri-path on the host (https://auth-api.tmtanalysis.com/v1) plus info.version 1.1.2
+  - api: TMT TeleShield
+    version: v1.3 and v2.0 data dictionaries served side by side
+    form: encoded in the path-parameter label ('{number v1.3}' vs '{number v2.0}') rather than in
+      the route — an unusual and machine-hostile way to express a version
+  - api: TMT Velocity
+    version: unversioned (/standard/...)
+  - api: TMT Live
+    version: unversioned
+  - api: TMT Score
+    version: unversioned (/score/{number})
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No RFC 8594 Sunset support, no Deprecation header, no published notice period and no
+    deprecation policy page. Deprecation is communicated in the documentation body and via the
+    OpenAPI `deprecated: true` flag.
+  announced:
+  - product: Number Assurance (v2)
+    status: deprecated
+    availability: existing customers only
+    successor: Network Biometrics
+    migration_contact: https://phronesis.net/contact/
+    evidence: 'openapi/tmt-id-network-biometrics.yml tag "v2 (deprecated)" and deprecated: true on
+      both operations'
+deprecated_operations:
+- openapi/tmt-id-network-biometrics.yml#post-assured-registration
+- openapi/tmt-id-network-biometrics.yml#post-assured-age
+environments:
+- name: production
+  hosts: [https://api.phronesis.tech, https://api.tmtverify.com, https://api.tmtvelocity.com,
+    https://api.tmtid.com, https://auth-api.tmtanalysis.com]
+- name: early access
+  hosts: [https://ea.api.phronesis.tech]
+  note: Published as the platform running the latest early-access code base; access depends on
+    account plan.
+- name: staging
+  hosts: [https://auth-staging-api.tmtid.dev/v1]
+  note: Declared in openapi/tmt-id-authenticate.yml servers[].
+sla:
+  url: null
+  uptime_target: null
+  note: No public SLA or uptime commitment is published; availability terms sit inside commercial
+    contracts.
+status_page: null
+status_page_probe:
+  probed: [https://status.tmtid.com/]
+  result: does not resolve to a status page (TLS certificate does not cover the host)
+  sitemap_check: no status page listed in https://tmtid.com/page-sitemap.xml
+changelog:
+  url: null
+  note: >-
+    No dated changelog or release-notes page exists. The only version signal is info.version inside
+    two of the seven OpenAPI documents, which is why no changelog/ artifact was written this round.
+support:
+  contact: support@tmtid.com
+  page: https://tmtid.com/contact-us/
+  note: Version and migration questions run through the account manager, not through public
+    release channels.

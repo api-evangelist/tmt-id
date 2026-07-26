@@ -58,6 +58,8 @@ apis:
     url: https://tmtid.com/verify/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_verify_v1.html
+  - type: Overlay
+    url: overlays/tmt-id-verify-overlay.yaml
 - aid: tmt-id:tmt-id-velocity
   name: TMT Velocity API
   description: >-
@@ -77,6 +79,8 @@ apis:
     url: https://tmtid.com/velocity/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_velocity_v1.html
+  - type: Overlay
+    url: overlays/tmt-id-velocity-overlay.yaml
 - aid: tmt-id:tmt-id-live
   name: TMT Live API
   description: >-
@@ -96,6 +100,8 @@ apis:
     url: https://tmtid.com/live/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_live_v1.html
+  - type: Overlay
+    url: overlays/tmt-id-live-overlay.yaml
 - aid: tmt-id:tmt-id-teleshield
   name: TMT TeleShield API
   description: >-
@@ -116,6 +122,8 @@ apis:
     url: https://tmtid.com/teleshield/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  - type: Overlay
+    url: overlays/tmt-id-teleshield-overlay.yaml
 - aid: tmt-id:tmt-id-score
   name: TMT Score API
   description: >-
@@ -134,6 +142,8 @@ apis:
     url: https://tmtid.com/score/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_score_v1.html
+  - type: Overlay
+    url: overlays/tmt-id-score-overlay.yaml
 - aid: tmt-id:tmt-id-authenticate
   name: TMT Authenticate API
   description: >-
@@ -155,6 +165,8 @@ apis:
     url: https://tmtid.com/authenticate/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  - type: Overlay
+    url: overlays/tmt-id-authenticate-overlay.yaml
 - aid: tmt-id:tmt-id-network-biometrics
   name: Network Biometrics API
   description: >-
@@ -177,7 +189,49 @@ apis:
     url: https://tmtid.com/developers/
   - type: APIReference
     url: https://tmtid.com/developer/network_biometrics.html
+  - type: Overlay
+    url: overlays/tmt-id-network-biometrics-overlay.yaml
 common:
+- type: DeveloperPortal
+  url: https://tmtid.com/developers/
+- type: WellKnown
+  url: well-known/tmt-id-well-known.yml
+- type: SecurityTxt
+  url: well-known/tmt-id-security.txt
+- type: Security
+  url: https://tmtid.com/responsible-vulnerability-disclosure-policy/
+- type: TrustCenter
+  url: security/tmt-id-trust-center.yml
+- type: LLMsTxt
+  url: llms/tmt-id-llms.txt
+- type: Conventions
+  url: conventions/tmt-id-conventions.yml
+- type: ErrorCatalog
+  url: errors/tmt-id-problem-types.yml
+- type: ErrorCodes
+  url: errors/tmt-id-error-codes.yml
+- type: Lifecycle
+  url: lifecycle/tmt-id-lifecycle.yml
+- type: Conformance
+  url: conformance/tmt-id-conformance.yml
+- type: Sandbox
+  url: sandbox/tmt-id-sandbox.yml
+- type: DataModel
+  url: data-model/tmt-id-data-model.yml
+- type: MCPServer
+  url: mcp/tmt-id-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Packages
+  url: packages/tmt-id-packages.yml
+- type: AgenticAccess
+  url: agentic-access/tmt-id-agentic-access.yml
+- type: VulnerabilityDisclosure
+  url: security/tmt-id-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/tmt-id-domain-security.yml
+- type: Authentication
+  url: authentication/tmt-id-authentication.yml
 - type: Website
   url: https://tmtid.com/
 - type: Documentation

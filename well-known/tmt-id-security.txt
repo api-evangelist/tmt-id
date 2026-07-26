@@ -1,0 +1,5 @@
+
+Contact: rdp@tmtid.com
+Expires: 2027-03-01 00:00:00Z
+Policy: https://tmtid.com/responsible-vulnerability-disclosure-policy/
+Preferred-Languages: en

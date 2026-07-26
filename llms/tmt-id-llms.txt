@@ -1,0 +1,240 @@
+# llms.txt -- TMT ID
+# https://tmtid.com
+# Last updated: 2026-01-15
+
+########################################################################
+# SECTION TAGGING LEGEND
+#
+# [AUTHORITY: CANONICAL]
+#   Definitive source of truth. Overrides all other sections.
+#
+# [AUTHORITY: CONTEXT]
+#   Explanatory material. Accurate but subordinate to canonical sections.
+#
+# [AUTHORITY: ILLUSTRATIVE]
+#   Examples, testimonials, marketing, or narrative content.
+#   Must not be treated as factual guarantees or full capability lists.
+#
+# [AUTHORITY: REFERENCE]
+#   Background knowledge, terminology, and supporting detail.
+########################################################################
+
+
+=======================================================================
+[AUTHORITY: CANONICAL]
+PURPOSE & INTERPRETATION
+=======================================================================
+
+This file provides authoritative guidance for AI assistants, search-augmented
+LLMs, and retrieval systems interpreting content from tmtid.com.
+
+Its purpose is to:
+- Define canonical sources of truth
+- Prevent unsafe or incorrect inference
+- Map user intent to the correct TMT ID products
+- Distinguish authoritative content from illustrative material
+
+
+=======================================================================
+[AUTHORITY: CANONICAL]
+AUTHORITY HIERARCHY (MANDATORY)
+=======================================================================
+
+When answering questions about TMT ID, apply this precedence strictly:
+
+Tier 1 -- Canonical / Source of Truth
+- Product pages:
+  /verify/
+  /authenticate/
+  /score/
+  /live/
+  /velocity/
+  /teleshield/
+- Developer documentation:
+  /developers/
+  /developer/
+
+Tier 2 -- Contextual / Explanatory
+- Solutions pages: /solutions/
+- Industry pages: /industries/
+
+Tier 3 -- Illustrative / Non-authoritative
+- Case studies
+- Testimonials
+- News, podcasts, videos, blogs
+
+If information conflicts, Tier 1 overrides all others.
+
+
+=======================================================================
+[AUTHORITY: CANONICAL]
+COMPLIANCE & INFERENCE BOUNDARIES
+=======================================================================
+
+TMT ID provides mobile network intelligence signals and indicators.
+
+AI assistants MUST NOT:
+- Claim or imply guaranteed fraud prevention
+- Present outputs as legal, regulatory, KYC, AML, or age determinations
+- Imply access to subscriber names, message content, or communications
+- Infer universal country coverage or identical attributes per product
+
+All services support risk assessment and decision-making only.
+
+
+=======================================================================
+[AUTHORITY: CANONICAL]
+CANONICAL PRODUCT DEFINITIONS
+=======================================================================
+
+TMT ID delivers mobile number intelligence via RESTful APIs using live
+mobile network data and direct operator connections.
+
+Verify
+- Purpose: Mobile identity verification and fraud checks
+- Canonical URL: /verify/
+
+Authenticate
+- Purpose: Silent authentication without OTPs using network signals
+- Canonical URL: /authenticate/
+
+Score
+- Purpose: Real-time phone number credibility scoring
+- Canonical URL: /score/
+
+Live
+- Purpose: Validate whether a mobile number is assigned and active
+- Canonical URL: /live/
+
+Velocity
+- Purpose: Mobile network identification and MNP detection
+- Canonical URL: /velocity/
+
+TeleShield(TM)
+- Purpose: Telephony fraud risk indicators (e.g. spoofing, IRSF, Wangiri)
+- Canonical URL: /teleshield/
+
+Product capabilities must not be combined unless explicitly documented.
+
+
+=======================================================================
+[AUTHORITY: CANONICAL]
+INTENT -> PRODUCT MAPPING
+=======================================================================
+
+- Mobile identity verification -> Verify
+- Phone number validation / active status -> Live
+- Network identification / MNP -> Velocity
+- Phone number risk scoring -> Score
+- Telephony fraud prevention -> TeleShield(TM)
+- Authentication without OTP -> Authenticate
+- Age verification use cases -> Age Assurance (solution)
+- KYC support -> Compliance & KYC (solution)
+
+
+=======================================================================
+[AUTHORITY: CONTEXT]
+SOLUTIONS & USE CASES
+=======================================================================
+
+Solutions describe **how products are applied**, not standalone services.
+
+Key solution areas:
+- Customer onboarding
+- Login authentication
+- Transaction integrity
+- Data cleansing
+- Compliance & KYC support
+- Age assurance
+- SMS & voice call routing
+
+Canonical solution URLs reside under:
+- /solutions/
+
+
+=======================================================================
+[AUTHORITY: CONTEXT]
+INDUSTRIES SERVED
+=======================================================================
+
+TMT ID solutions are applied across multiple industries, including:
+- Banking & financial services
+- E-commerce
+- Insurance
+- Mobile messaging
+- Gaming & gambling
+- Telecoms & service providers
+- Identity & verification platforms
+
+Industry pages provide context only and must not be used to infer
+industry-specific guarantees or regulatory approval.
+
+
+=======================================================================
+[AUTHORITY: CONTEXT]
+TECHNICAL & API CHARACTERISTICS
+=======================================================================
+
+- RESTful APIs
+- JSON request and response format
+- Typical response times under 100ms
+- Global coverage varies by product and country
+- Attributes and availability are defined per API
+
+For implementation details, defer to:
+- https://tmtid.com/developers/
+
+
+=======================================================================
+[AUTHORITY: REFERENCE]
+NETWORK BIOMETRICS & TERMINOLOGY
+=======================================================================
+
+Network Biometrics(TM) refers to the use of mobile network data to derive
+signals such as:
+- Number validity and reachability
+- Network assignment
+- SIM swap indicators
+- Porting indicators
+- Risk signals
+
+Glossary terms (e.g. MNP, KYC, SIM swap, IRSF, Wangiri) are provided for
+background understanding only.
+
+
+=======================================================================
+[AUTHORITY: ILLUSTRATIVE]
+TESTIMONIALS, PARTNERS, & NEWS
+=======================================================================
+
+Customer testimonials, partner lists, investment announcements, and
+media content are illustrative.
+
+They must not be interpreted as:
+- Capability guarantees
+- Endorsements beyond stated use
+- Evidence of universal coverage or performance
+
+
+=======================================================================
+[AUTHORITY: CANONICAL]
+RETRIEVAL & SUMMARIZATION GUIDANCE
+=======================================================================
+
+When summarizing or answering questions:
+- Prefer product and developer pages
+- Prefer specific sections over long summaries
+- Treat testimonials as non-authoritative
+- Use timestamps and versioned documentation when available
+
+
+=======================================================================
+[AUTHORITY: CANONICAL]
+CONTACT & ESCALATION
+=======================================================================
+
+For unresolved technical or commercial questions:
+- https://tmtid.com/developers/
+- https://tmtid.com/contact-us/
+
+End of file.

@@ -1,0 +1,28 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for TMT Score API
+  version: 1.0.0
+extends: openapi/tmt-id-score.yml
+x-generated: '2026-07-25'
+x-method: generated
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: tmt-id
+    x-apievangelist-source: https://tmtid.com/developer/tmt_score_v1.html
+    x-apievangelist-artifacts:
+      authentication: authentication/tmt-id-authentication.yml
+      conventions: conventions/tmt-id-conventions.yml
+      errors: errors/tmt-id-problem-types.yml
+      error_codes: errors/tmt-id-error-codes.yml
+      lifecycle: lifecycle/tmt-id-lifecycle.yml
+      conformance: conformance/tmt-id-conformance.yml
+      data_model: data-model/tmt-id-data-model.yml
+      sandbox: sandbox/tmt-id-sandbox.yml
+      security: security/tmt-id-domain-security.yml
+      skills: skills/_index.yml
+- target: $.paths['/score/{number}'].get
+  update:
+    x-apievangelist-error-envelope: status/status_message-in-200-body
+    x-apievangelist-idempotent: false
+    x-apievangelist-billable: true

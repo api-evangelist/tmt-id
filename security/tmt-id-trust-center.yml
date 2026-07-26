@@ -1,0 +1,31 @@
+generated: '2026-07-25'
+method: searched
+probe: true
+url: https://tmtid.com/trust-centre/
+status: 200
+certifications: []
+note: >-
+  TMT ID publishes a Trust Centre page, but it is a narrative commitment page rather than a
+  compliance disclosure: it states a commitment to cybersecurity standards and links out to the
+  Responsible Vulnerability Disclosure Policy and to an Acknowledgments page for researchers. It
+  names NO certification or attestation — no SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP or CSA
+  STAR — and there is no trust portal, no subprocessor list and no downloadable report request
+  flow. That is why the automated trust probe recorded no hit and why no `Compliance` pointer is
+  emitted for this provider.
+sections:
+- name: Responsible Vulnerability Disclosure Policy
+  url: https://tmtid.com/responsible-vulnerability-disclosure-policy/
+- name: Acknowledgments
+  url: https://tmtid.com/acknowledgments/
+  note: Researcher hall of fame — corroborates that the disclosure programme is actually operated.
+related_policies:
+- type: PrivacyPolicy
+  url: https://tmtid.com/privacy-policy/
+- type: AcceptableUsePolicy
+  url: https://tmtid.com/acceptable-use-policy/
+- type: TermsOfService
+  url: https://tmtid.com/terms-and-conditions/
+evidence:
+- source: https://tmtid.com/trust-centre/
+  keywords: [trust centre, cybersecurity, responsible vulnerability disclosure]
+  certifications_found: []

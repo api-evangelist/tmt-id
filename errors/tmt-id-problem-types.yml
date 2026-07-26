@@ -1,0 +1,141 @@
+generated: '2026-07-25'
+method: derived
+source: openapi/tmt-id-network-biometrics.yml, openapi/tmt-id-authenticate.yml, openapi/tmt-id-verify.yml,
+  openapi/tmt-id-teleshield.yml, openapi/tmt-id-velocity.yml, openapi/tmt-id-live.yml, openapi/tmt-id-score.yml
+format: proprietary
+rfc9457: false
+note: >-
+  TMT ID does not use RFC 9457 application/problem+json anywhere. Two proprietary envelopes
+  coexist: the older lookup family (Verify, Velocity, Live, TeleShield, Score) answers HTTP 200
+  and puts a numeric `status` + `status_message` inside the result object, and Network Biometrics
+  answers with a real HTTP status plus a `transaction.status` object. The numeric registry behind
+  the Network Biometrics envelope is captured in full in errors/tmt-id-error-codes.yml (62 codes).
+  Only two of the seven specs declare any non-2xx response at all — the other five document only
+  a 200, which is the single largest contract-quality gap in this estate.
+envelopes:
+- family: lookup APIs
+  apis: [TMT Verify, TMT Velocity, TMT Live, TMT TeleShield, TMT Score]
+  http: '200 for both success and failure'
+  fields: [status, status_message]
+  success: 'status: 0 / "Success"'
+  observed_failure: '{"status": 4, "status_message": "Invalid request. Please check documentation, thank you"}'
+  evidence: >-
+    Observed live against https://api.tmtverify.com — every unrecognised path returns HTTP 200
+    with that body, confirming the envelope is applied at the edge as well as in the products.
+- family: Network Biometrics
+  apis: [Network Biometrics]
+  http: 200, 202, 400, 401, 403, 404, 405, 408, 500, 502, 503
+  fields: [transaction.status.value, transaction.status.message, transaction.id, transaction.reference]
+  success: 'transaction.status.value: 0 / "transaction successful"'
+  registry: errors/tmt-id-error-codes.yml
+- family: TMT Authenticate
+  apis: [TMT Authenticate]
+  http: 200, 302, 400, 401, 503
+  fields: [HTTP status]
+  note: 302 is not an error — it is part of the silent-network-authentication redirect flow.
+problems:
+- status: 400
+  title: Bad Request
+  detail: Malformed body, invalid Content-Type, or a failed parameter validation (numeric codes 103,
+    104, 207-215).
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+  - openapi/tmt-id-authenticate.yml#getAccessToken
+  - openapi/tmt-id-authenticate.yml#getConfig
+  - openapi/tmt-id-authenticate.yml#validateUserSession
+  - openapi/tmt-id-authenticate.yml#authenticateUserWithMNO
+  - openapi/tmt-id-authenticate.yml#authenticateUserWithOtp
+- status: 401
+  title: Unauthorized
+  detail: Account not found, authentication failed, account suspended, admin privileges required,
+    IP address not whitelisted, or the product is not provisioned/suspended for the account
+    (numeric codes 100-106, 200, 204, 206).
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+  - openapi/tmt-id-authenticate.yml#getAccessToken
+  - openapi/tmt-id-authenticate.yml#getConfig
+- status: 403
+  title: Forbidden
+  detail: MNO access not authorised for this use case (212) or data source temporarily not
+    available (802). The 212 case is a commercial permission, not a credential problem.
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+- status: 404
+  title: Not Found
+  detail: Terminal negative answers about the subject number — unknown subscriber, no country
+    coverage, subscriber opted out, invalid number, unregistered prepay, unknown routing
+    information, unknown number range, unsupported device, subscriber data unavailable
+    (codes 306, 307, 404-409, 804, 807, 817).
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+- status: 405
+  title: Method Not Allowed
+  detail: Numeric code 105.
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+- status: 408
+  title: Request Timeout
+  detail: May be returned without a body on /network-biometrics; on the deprecated v2 operations
+    it carries code 806 datasource query time out.
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+- status: 500
+  title: Internal Server Error
+  detail: May be returned without a body.
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+- status: 502
+  title: Bad Gateway
+  detail: Data source query failed, database subsystem error, or the data source returned an
+    unexpected response (803, 805, 812).
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+- status: 503
+  title: Service Unavailable
+  detail: Throttling (201 per second, 202 per day, 203 per month) and data-source availability
+    conditions (800, 801, 806, 808-816). This is where rate limiting surfaces — there is no 429.
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+  - openapi/tmt-id-authenticate.yml#getAccessToken
+  - openapi/tmt-id-authenticate.yml#authenticateUserWithOtp
+- status: 202
+  title: Accepted with a failed sub-check
+  detail: Not an HTTP error, but it must be handled as a partial outcome — codes 300-304 report
+    that a named check (call forward, SIM swap, country, user information, vicinity) could not be
+    completed while the transaction itself was accepted.
+  source_operations:
+  - openapi/tmt-id-network-biometrics.yml#post-network-biometrics
+  - openapi/tmt-id-network-biometrics.yml#post-assured-registration
+  - openapi/tmt-id-network-biometrics.yml#post-assured-age
+undocumented:
+- api: TMT Verify
+  operation: openapi/tmt-id-verify.yml#POST
+  note: Only a 200 is declared; failures arrive as status/status_message inside a 200 body.
+- api: TMT TeleShield
+  operations_declaring_only_200: 5
+  note: openapi/tmt-id-teleshield.yml declares no 4xx/5xx on any of its five operations.
+- api: TMT Velocity
+  operation: openapi/tmt-id-velocity.yml#GET
+  note: Only a 200 is declared.
+- api: TMT Live
+  operation: openapi/tmt-id-live.yml#GET
+  note: Only a 200 is declared.
+- api: TMT Score
+  operation: openapi/tmt-id-score.yml#GET
+  note: Only a 200 is declared.

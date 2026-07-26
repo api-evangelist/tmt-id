@@ -1,0 +1,24 @@
+generated: '2026-07-25'
+method: searched
+source: registry searches + https://tmtid.com/developers/
+result: none
+packages: []
+note: >-
+  TMT ID ships no client libraries. The developer area at tmtid.com/developers/ links only to the
+  seven ReDoc reference pages — there is no SDK section, no code-samples section beyond the ReDoc
+  request samples, and no GitHub organisation (github.com/tmtid and github.com/tmt-analysis both
+  404). Integration is raw HTTPS: a JSON POST or a GET with credentials in headers or in the URL
+  path. No `SDKs` pointer is emitted because there is no official client library to point at.
+registries_probed:
+- registry: npm
+  queries: [tmtid, tmt-id, tmtverify, tmtvelocity, teleshield, phronesis, network-biometrics]
+  result: no first-party package (all hits are unrelated projects)
+- registry: pypi
+  queries: [tmtid, tmt-id, tmtverify, phronesis, teleshield]
+  result: 404 on every candidate
+- registry: github
+  queries: [github.com/tmtid, github.com/tmt-analysis]
+  result: 404 — no public organisation
+docs_checked:
+- https://tmtid.com/developers/
+- https://tmtid.com/developer/tmt_verify_v1.html

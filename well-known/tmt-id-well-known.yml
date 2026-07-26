@@ -1,0 +1,105 @@
+generated: '2026-07-25'
+method: searched
+source: live probes of every apis.yml baseURL host, every OpenAPI servers[] host and the marketing/docs host
+notes: >-
+  Only the corporate/docs host tmtid.com serves a /.well-known/ document (RFC 9116
+  security.txt). The product API hosts are bare JSON endpoints: api.tmtverify.com
+  answers every unknown path with a 200 catch-all body
+  {"status": 4, "status_message": "Invalid request. Please check documentation, thank you"},
+  so its 200s are NOT well-known documents and are recorded here as catch-all;
+  api.tmtvelocity.com and auth-api.tmtanalysis.com return 503 to unauthenticated
+  discovery probes; api.tmtid.com does not resolve for direct HTTPS probes; and
+  api.phronesis.tech returns clean 404s.
+hosts:
+- host: https://tmtid.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: tmt-id-security.txt
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.tmtverify.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    catch_all: true
+  - path: /.well-known/openid-configuration
+    status: 200
+    catch_all: true
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    catch_all: true
+  - path: /.well-known/api-catalog
+    status: 200
+    catch_all: true
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    catch_all: true
+- host: https://api.tmtvelocity.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 503
+  - path: /.well-known/openid-configuration
+    status: 503
+  - path: /.well-known/oauth-authorization-server
+    status: 503
+  - path: /.well-known/api-catalog
+    status: 503
+  - path: /.well-known/ai-plugin.json
+    status: 503
+- host: https://auth-api.tmtanalysis.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 503
+  - path: /.well-known/openid-configuration
+    status: 503
+  - path: /.well-known/oauth-authorization-server
+    status: 503
+  - path: /.well-known/api-catalog
+    status: 503
+  - path: /.well-known/ai-plugin.json
+    status: 503
+- host: https://api.phronesis.tech
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.tmtid.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 0
+    note: host does not answer direct HTTPS probes
+contract_discovery:
+  openapi_probes:
+    note: >-
+      /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs, /docs
+      and /redoc were probed on api.tmtid.com, api.tmtverify.com, api.tmtvelocity.com,
+      auth-api.tmtanalysis.com, api.phronesis.tech and tmtid.com. Every probe returned
+      404, 503 or no answer. TMT ID publishes its OpenAPI only as pre-rendered ReDoc
+      pages at tmtid.com/developer/*.html with the spec inlined in the page bundle and
+      offered as a client-side blob download; those inlined specs are what openapi/
+      holds.
+    result: no additional spec found
+  graphql:
+    probed: https://tmtid.com/graphql
+    status: 404
+    result: no GraphQL surface
+  mcp:
+    probed:
+    - https://tmtid.com/mcp
+    - https://mcp.tmtid.com/
+    status: 404 / DNS-TLS mismatch
+    result: no hosted MCP server

@@ -1,0 +1,96 @@
+generated: '2026-07-25'
+method: derived
+source: openapi/*.yml, https://tmtid.com/developers/, https://tmtid.com/trust-centre/,
+  https://tmtid.com/llms.txt, https://tmtid.com/.well-known/security.txt
+note: >-
+  Derived from the published specs and site, plus live probes. TMT ID makes one prominent
+  standards claim — GSMA Open Gateway membership — but ships no CAMARA-conformant API, which is
+  recorded here as a claim without a conformant surface rather than as conformance. No
+  certification (SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP) is named anywhere on the site,
+  including on its own Trust Centre page, so no Compliance pointer is emitted.
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: All seven product specs are OpenAPI 3.0.0/3.0.3 documents rendered publicly with ReDoc
+    at tmtid.com/developer/*.html.
+- id: e164
+  conforms: true
+  evidence: Every product takes the subject number in E.164 international format; parameter
+    descriptions state it explicitly (Score, TeleShield, Velocity, Live, Verify).
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: https://tmtid.com/.well-known/security.txt returns 200 with Contact, Expires, Policy
+    and Preferred-Languages fields.
+- id: paseto
+  conforms: true
+  evidence: 'openapi/tmt-id-authenticate.yml declares a bearer scheme named paseto_token; access
+    tokens issued at POST /oauth/token are PASETO, not JWT.'
+- id: http-basic-rfc7617
+  conforms: true
+  evidence: 'openapi/tmt-id-authenticate.yml securitySchemes.basic (type http, scheme basic) on
+    POST /oauth/token.'
+- id: enum-e164-naptr
+  conforms: true
+  evidence: TMT Live is documented as available over ENUM/NAPTR against live.tmtvelocity.com for
+    carrier-side integrations in addition to HTTPS.
+- id: gsma-open-gateway
+  conforms: false
+  claimed: true
+  evidence: >-
+    TMT ID states GSMA Open Gateway membership on its own site, but publishes no CAMARA API. Its
+    SIM-swap and network-authentication products ship under proprietary TMT ID / Phronesis schemas
+    (POST /network-biometrics, GET /authenticate) rather than CAMARA SimSwap or CAMARA
+    NumberVerification shapes.
+- id: camara
+  conforms: false
+  evidence: No CAMARA-named path, schema or spec exists in any of the seven published documents.
+- id: oauth2-rfc6749
+  conforms: false
+  evidence: >-
+    TMT Authenticate exposes a POST /oauth/token endpoint but authenticates it with HTTP Basic and
+    returns a PASETO token; there is no authorization endpoint, no scopes, no grant_type surface
+    and no RFC 8414 authorization-server metadata (probed, 404/503). The path name is
+    OAuth-shaped; the contract is not.
+- id: openid-connect
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on tmtid.com and is not served by any
+    API host.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: No application/problem+json media type in any spec; errors use two proprietary
+    envelopes (see errors/tmt-id-problem-types.yml).
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header support; deprecation is communicated only in prose and
+    via OpenAPI deprecated flags.
+- id: rfc6585-429-rate-limiting
+  conforms: false
+  evidence: Throttling is signalled with proprietary numeric codes 201/202/203 under HTTP 503; no
+    429 and no RateLimit headers.
+- id: json-api
+  conforms: false
+  evidence: Plain application/json payloads keyed by MSISDN; no JSON:API document structure.
+- id: asyncapi
+  conforms: false
+  evidence: No event, streaming or webhook surface is published, so there is nothing to describe.
+- id: iso-3166
+  conforms: true
+  evidence: Country identification in responses uses ISO 3166 alpha-2 codes (e.g. country.code
+    "GB") alongside the ITU dial code.
+- id: mcc-mnc-itu-e212
+  conforms: true
+  evidence: Network identification across Verify, Velocity and Network Biometrics is expressed as
+    MCC/MNC pairs per ITU-T E.212.
+- id: gsma-imei-tac
+  conforms: true
+  evidence: Network Biometrics accepts IMEI input and returns GSMA device blacklist status,
+    activation status and model/retail data keyed on the device identity.
+- id: gdpr
+  conforms: null
+  evidence: >-
+    TMT ID operates under UK/EU data-protection law and publishes a privacy policy and an
+    acceptable-use policy, and its llms.txt explicitly forbids presenting outputs as legal,
+    regulatory, KYC, AML or age determinations. No GDPR certification or attestation is published,
+    so this is recorded as unasserted rather than as conformance.
+certifications_published: []
+compliance_program_published: false
