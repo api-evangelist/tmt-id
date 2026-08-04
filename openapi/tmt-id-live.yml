@@ -9,7 +9,7 @@ info:
   x-logo:
     url: https://www.tmtid.com/developer/live_logo_png.png
     altText: TMT Live
-  version: ''
+  version: "1.0"
 paths:
   /{format}/{key}/{secret}/{number}:
     get:

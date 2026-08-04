@@ -9,7 +9,7 @@ info:
   x-logo:
     url: https://www.tmtid.com/developer/score_logo_png.png
     altText: TMT Standard
-  version: ''
+  version: "1.0"
 paths:
   /score/{number}:
     get:

@@ -9,7 +9,7 @@ info:
   x-logo:
     url: https://www.tmtid.com/developer/velocity_logo_png.png
     altText: TMT Standard
-  version: ''
+  version: "1.0"
 paths:
   /standard/{format}/{key}/{secret}/{number}:
     get:

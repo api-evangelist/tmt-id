@@ -9,7 +9,7 @@ info:
   x-logo:
     url: https://www.tmtid.com/developer/teleshield_logo_png.png
     altText: TMT Teleshield
-  version: ''
+  version: "1.0"
 paths:
   /r-teleshield/{number}:
     post:

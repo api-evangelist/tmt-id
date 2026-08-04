@@ -9,7 +9,7 @@ info:
   x-logo:
     url: https://www.tmtid.com/developer/verify_logo_png.png
     altText: TMT Verify
-  version: ''
+  version: "1.0"
 paths:
   /v3/:
     post:
