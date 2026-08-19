@@ -1,0 +1,197 @@
+{
+  "item": [
+    {
+      "id": "2bb7bc91-12b8-4089-8b65-4977a5c423a2",
+      "name": "About TMT",
+      "description": {
+        "content": "\nTMT ID is a leading provider of data, intelligence and analytics, helping customers find extra value from the information they hold. Our team of technology and telecommunications specialists has a proven track record empowering companies, brands and agencies around the world to better understand their businesses and their customers. TMT ID has a suite of technology and telecommunications data available, for further information, please visit [www.tmtid.com](https://www.tmtid.com) or email info@tmtid.com.",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "93d598a7-1bf5-462e-98ed-ecae27183532",
+      "name": "ENUM Service",
+      "description": {
+        "content": "\n\n## ENUM TEL-URI\n\n  ### Query Format\n\n  dig -t naptr @**NodeIP** *Phone_number_in_enum_format*.live.tmtvelocity.com\n\n  ### Query Parameter Description\n\n\n  | Record-Type | NAPTR |\n  | ----------- | ----------- |\n  | Node IPs | x.x.x.x |\n  | Phone Number in enum format | The E.164 number needs to be transformed as follows (eg. for: +40/766610060): <ul><li>Remove all special characters: +40/766610060 becomes 40766610060. </li><li> Reverse all digits from the number: 40766610060 becomes 06001666704. </li><li> Add Dots between all digits: 06001666704 becomes 0.6.0.0.1.6.6.6.7.0.4. </li></ul> |\n  | Domain | e164enum.tmtvelocity.com |\n  | Port | 53 |\n\n  ### Output Data\n\n\n  | Field | Description |\n  | ----------- | ----------- |\n  | tel | Queried phone number |\n  | npdi | Number Portability Dip Indicator (indicates to any downstream systems a portability lookup has been performed) |\n  | rn | Routing Number (LRN for USA/Canada) |\n  | cic | Carrier Identification Code (list provided by TMT). |\n  | ocn | Operating Company Name is the carrier’s Company Code - only for USA / Canada |\n  | cc | Country Code |\n  | cn | Carrier short name (list provided by TMT) |\n  | nt | Number type<br>Values: <ul><li>mobile</li><li>fixed.</li></ul> |\n  | mcc | Mobile Country Code of the carrier |\n  | mnc | Mobile Network Code of the carrier |\n  | np | Indicates the portability status. It is a custom field that can be added upon request.<br>Values:<ul><li>yes = ported</li><li>no = not ported</li></ul> |\n\n  ### ENUM – Successful Query & Response\n\n    Command:\n    $ dig +yaml -t naptr @176.9.67.8 9.8.9.3.5.2.2.2.7.0.4.e164enum.tmtvelocity.com\n    -\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      [..]\n      response_message_data:\n      opcode: QUERY\n      status: NOERROR\n      [..]\n      QUESTION_SECTION:\n      - 9.8.9.3.5.2.2.2.7.0.4.e164enum.tmtvelocity.com. IN NAPTR\n      ANSWER_SECTION:\n      - 9.8.9.3.5.2.2.2.7.0.4.e164enum.tmtvelocity.com. 3600 IN NAPTR 10 100 \"u\" \"E2U+pstn:tel\"\"!^(.*)$!tel:1;npdi;np=no;rn=;cic=4018720;ocn=;cc=ro;cn=VODA;nt=mobile;mcc=226;mnc=01!\" .\n\n  ### ENUM – Unsuccessful Query & Response\n\n  > In the example below an invalid phone number was queried. The output status is NXDOMAIN and the answer section is blank.\n\n    Command:\n    $ dig +short +yaml -t naptr @176.9.67.8 4.3.2.1.0.4.e164enum.tmtvelocity.com\n    -\n      type: MESSAGE\n      message:\n      type: AUTH_RESPONSE\n      query_time: !!timestamp 2023-03-27T15:34:53.879Z\n      response_time: !!timestamp 2023-03-27T15:34:53.879Z\n      {..}\n      response_address: 176.9.67.8\n      response_port: 53\n      query_address: 0.0.0.0\n      [..]\n      opcode: QUERY\n      status: NXDOMAIN\n      id: 13664\n      flags: qr aa rd\n      QUESTION: 1\n      ANSWER: 0\n      AUTHORITY: 0\n      ADDITIONAL: 0",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "5436f0a8-61f7-4b17-87e5-247ec2b3733f",
+      "name": "Service Coverage",
+      "description": {
+        "content": "\nVelocity coverage is constantly changing. Each update is uploaded on the Viteza Customer Portal. Users can download all files at once (zip archive) or country by country (CSV file).  \nFor each country, an operators file is provided during the provisioning process via Email. The up-to-date coverage files are updated in the Viteza Customer Portal.  \n  - network_id – unique across the system (assigned by TMTID). You will find this in the download files as well as in the CIC field of the ENUM response. You should use this field for mapping to our system.\n  - ocn – (only for US/Canada files) – Operating Company Name is the carrier’s Company Code. It is assigned by the National Exchange Carrier Association. You should use this field for mapping to our system.\n  - network – carriers’ short name. Unique per country. You will find this in the download files as well as in the CN field of the ENUM response. This field is for quickly identifying networks during operator-assisted tests.\n  - full_name – the full name of the operator/carrier.\n  - mcc – the mobile country code of the operator/carrier.\n  - mnc – mobile network code for the operator/carrier.\n\nExample: \n\n    filename SK_operators.csv\n      4219920;SKOTW;O2 Slovakia;231;06\n      4219910;SKOGE;Orange Slovakia;231;01\n      4219900;SKTEL;Slovak Telekom;231;02\n      4219903;SKSWA;Swan 4KA Slovakia;231;03\n      4219930;SKZSR;ZSR Slovakia;231;99",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "adee04fd-a20d-4727-9f2a-8c2acc91be1e",
+      "name": "HTTP API",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5f5d49fe-e79a-4c25-988c-1d4f8568d7bf",
+          "name": "GET method",
+          "request": {
+            "name": "GET method",
+            "description": {
+              "content": "",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "standard",
+                ":format",
+                ":key",
+                ":secret",
+                ":number"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "format",
+                  "description": "(Required) JSON CSV"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "key",
+                  "description": "(Required) API credentials – delivered to you via email"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "secret",
+                  "description": "(Required) API credentials – delivered to you via email"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "number",
+                  "description": "(Required) The number in E.164 format (includes the country code sufix)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "JSON"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "335831de-7620-40e1-bd8c-a9acce174829",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "standard",
+                    ":format",
+                    ":key",
+                    ":secret",
+                    ":number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "format",
+                      "description": "(Required) JSON CSV"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) API credentials – delivered to you via email"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "secret",
+                      "description": "(Required) API credentials – delivered to you via email"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "number",
+                      "description": "(Required) The number in E.164 format (includes the country code sufix)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "JSON"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "JSON"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tmtvelocity.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "37fb3022-8bf3-450c-863c-cd4e50b6d788",
+    "name": "TMT Velocity API specs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Contact Support:\n Name: TMT Support\n Email: support@tmtid.com",
+      "type": "text/plain"
+    }
+  }
+}

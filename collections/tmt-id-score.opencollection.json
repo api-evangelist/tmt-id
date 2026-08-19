@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TMT Score API specs",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "HTTP API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET method",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tmtid.com/score/:number",
+            "params": [
+              {
+                "name": "number",
+                "value": "",
+                "type": "path",
+                "description": "The Phone Number in internationally recognized E.164 format with the country code."
+              }
+            ]
+          },
+          "docs": "GET method"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

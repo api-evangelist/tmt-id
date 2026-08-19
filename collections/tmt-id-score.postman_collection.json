@@ -1,0 +1,141 @@
+{
+  "item": [
+    {
+      "id": "d2cdb1eb-f52e-456c-bac8-1cc7fa495ad7",
+      "name": "About TMT",
+      "description": {
+        "content": "\nTMT ID is a leading provider of data, intelligence and analytics, helping customers find extra value from the information they hold. Our team of technology and telecommunications specialists has a proven track record empowering companies, brands and agencies around the world to better understand their businesses and their customers. TMT ID has a suite of technology and telecommunications data available, for further information, please visit [www.tmtid.com](https://www.tmtid.com) or email info@tmtid.com.",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "7237394d-ca99-4f86-992f-05212534aa58",
+      "name": "HTTP API",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d9d8e0a1-4b89-4204-b53e-f12229b82c91",
+          "name": "GET method",
+          "request": {
+            "name": "GET method",
+            "description": {
+              "content": "",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "score",
+                ":number"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "number",
+                  "description": "(Required) The Phone Number in internationally recognized E.164 format with the country code."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "JSON"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e9d809d9-8cd2-449e-ab6b-6d93375e123c",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "score",
+                    ":number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "number",
+                      "description": "(Required) The Phone Number in internationally recognized E.164 format with the country code."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "JSON"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The API key received from TMT",
+                  "key": "x-tmt-key",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "The API secret received from TMT",
+                  "key": "x-tmt-secret",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "JSON"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tmtid.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6318df12-1551-4aea-b1fa-f42d1d32d325",
+    "name": "TMT Score API specs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Contact Support:\n Name: TMT Support\n Email: support@tmtid.com",
+      "type": "text/plain"
+    }
+  }
+}

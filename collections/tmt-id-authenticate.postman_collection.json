@@ -1,0 +1,1192 @@
+{
+  "item": [
+    {
+      "id": "df375542-50a4-4d31-bff6-cd5d6a52cc66",
+      "name": "About TMT",
+      "description": {
+        "content": "\nTMT ID is a leading provider of data, intelligence and analytics, helping customers find extra value from the information they hold. Our team of technology and telecommunications specialists has a proven track record empowering companies, brands and agencies around the world to better understand their businesses and their customers. TMT ID has a suite of technology and telecommunications data available, for further information, please visit [www.tmtid.com](https://www.tmtid.com) or email info@tmtid.com.",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "48673800-4477-4de8-9f72-e9b7a9bd9ca0",
+      "name": "Authenticate",
+      "description": {
+        "content": "Authenticate user with MNO or OTP. These endpoints can be directly called by the users.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c7a3b808-9923-417e-a1af-98d5e8c161cb",
+          "name": "This phase is where the Customer requests authorization to perform an authentication for a given device.",
+          "request": {
+            "name": "This phase is where the Customer requests authorization to perform an authentication for a given device.",
+            "description": {
+              "content": "This phase is where the Customer requests authorization to perform an authentication for a given device.\n\nThe Customer requests permission to make an Authentication query and receives a timebound token for that transaction. The Customer also must request which authentication technology is required for this transaction.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "oauth",
+                "token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "<string>",
+                  "description": "(Required) Scope must contain the requested services. It can be authenticate and/or otp concatenated with a “+”."
+                },
+                {
+                  "disabled": false,
+                  "key": "grant_type",
+                  "value": "<string>",
+                  "description": "(Required) The value must be “client_credentials”.By passing this value the service will return an access_token for direct access to the services."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "189fcdab-64b1-48a1-941a-8feb147fa540",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Scope must contain the requested services. It can be authenticate and/or otp concatenated with a “+”.",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "authenticate+otp"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The value must be “client_credentials”.By passing this value the service will return an access_token for direct access to the services.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "client_credentials"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"token_type\": \"Bearer\",\n  \"access_token\": \"v4.public.eyJzY29wZSI6ImF1dGgrb3RwIiwidXNlcl9pZ…\",\n  \"expires_in\": 9999\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2f5a876-2a3e-42d9-ac54-70283062d8b9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Scope must contain the requested services. It can be authenticate and/or otp concatenated with a “+”.",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "authenticate+otp"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The value must be “client_credentials”.By passing this value the service will return an access_token for direct access to the services.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "client_credentials"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"invalid_request\",\n  \"error_description\": \"The required field is missing or it is invalid.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d498c8ff-37b7-4112-b82c-ffa5332c7c13",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Scope must contain the requested services. It can be authenticate and/or otp concatenated with a “+”.",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "authenticate+otp"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The value must be “client_credentials”.By passing this value the service will return an access_token for direct access to the services.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "client_credentials"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"unauthorized_client\",\n  \"error_description\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6b71d33-565e-4a81-a5ff-708249283f17",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Scope must contain the requested services. It can be authenticate and/or otp concatenated with a “+”.",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "authenticate+otp"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The value must be “client_credentials”.By passing this value the service will return an access_token for direct access to the services.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "client_credentials"
+                    }
+                  ]
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"temporarily_unavailable\",\n  \"error_description\": \"Service is unavailable\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a958b674-d616-438f-9183-12b669cec6ec",
+          "name": "The get_config endpoint will return specific instructions on how to begin the session with the relevant MNO and how to send the OTP message.",
+          "request": {
+            "name": "The get_config endpoint will return specific instructions on how to begin the session with the relevant MNO and how to send the OTP message.",
+            "description": {
+              "content": "The get_config endpoint will return specific instructions on how to begin the session with the relevant MNO and how to send the OTP message.\n\nThe Customer requests the specific telephone number that requires authentication. In response to this stage TMT ID will return the specific uri that the handset must call for the Silent Authentication (where appropriate).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "get_config"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "msisdn",
+                  "value": "<string>",
+                  "description": "(Required) The phone number that needs to be authenticated by our system in E.164 format."
+                },
+                {
+                  "disabled": false,
+                  "key": "client_ip",
+                  "value": "<string>",
+                  "description": "(Required) The IP of the user needed to be authenticated. This is required by some MNO’s for validation."
+                },
+                {
+                  "disabled": false,
+                  "key": "correlation_id",
+                  "value": "<string>",
+                  "description": "It is used to correlate the transaction across all components(authenticate, validate). It must be unique to the instance of the transaction."
+                },
+                {
+                  "disabled": false,
+                  "key": "redirect_uri",
+                  "value": "<string>",
+                  "description": "Predefined callback url to be used in the session and send the request back to the client"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "af2d0f65-2de3-4c1f-9cef-313d29690511",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "get_config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The phone number that needs to be authenticated by our system in E.164 format.",
+                        "type": "text/plain"
+                      },
+                      "key": "msisdn",
+                      "value": "+44770123456"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The IP of the user needed to be authenticated. This is required by some MNO’s for validation.",
+                        "type": "text/plain"
+                      },
+                      "key": "client_ip",
+                      "value": "11.22.33.44"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "It is used to correlate the transaction across all components(authenticate, validate). It must be unique to the instance of the transaction.",
+                        "type": "text/plain"
+                      },
+                      "key": "correlation_id",
+                      "value": "Noo7siol1Yj763XTRDidILTv96ly9kFS"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Predefined callback url to be used in the session and send the request back to the client",
+                        "type": "text/plain"
+                      },
+                      "key": "redirect_uri",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id_token\": \"v4.public.eyJqdGkiOiI3…\",\n  \"expires_in\": 4247,\n  \"authorize\": {\n    \"authorization_uri\": \"http://example.com/session\",\n    \"request_type\": \"POST\",\n    \"ajax\": false,\n    \"request_config\": {\n      \"headers\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"parameters\": {\n        \"key_0\": \"string\"\n      }\n    }\n  },\n  \"correlation_id\": \"Noo7siol1Yj763XTRDidILTv96ly9kFS\",\n  \"otp_authorization_uri\": \"https://auth-staging-api.tmtanalysis.com/v1/authenticate/otp?id_token=v4.public.eyJqdGkiOiI3ODExNDc5YS1lZjY1LT\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef457d54-18b9-4d3b-9aea-2010345aec86",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "get_config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The phone number that needs to be authenticated by our system in E.164 format.",
+                        "type": "text/plain"
+                      },
+                      "key": "msisdn",
+                      "value": "+44770123456"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The IP of the user needed to be authenticated. This is required by some MNO’s for validation.",
+                        "type": "text/plain"
+                      },
+                      "key": "client_ip",
+                      "value": "11.22.33.44"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "It is used to correlate the transaction across all components(authenticate, validate). It must be unique to the instance of the transaction.",
+                        "type": "text/plain"
+                      },
+                      "key": "correlation_id",
+                      "value": "Noo7siol1Yj763XTRDidILTv96ly9kFS"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Predefined callback url to be used in the session and send the request back to the client",
+                        "type": "text/plain"
+                      },
+                      "key": "redirect_uri",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"invalid_request\",\n  \"error_description\": \"The required field is missing or it is invalid.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "651173eb-cb95-4dd1-b2db-3f4325c52d35",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "get_config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The phone number that needs to be authenticated by our system in E.164 format.",
+                        "type": "text/plain"
+                      },
+                      "key": "msisdn",
+                      "value": "+44770123456"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The IP of the user needed to be authenticated. This is required by some MNO’s for validation.",
+                        "type": "text/plain"
+                      },
+                      "key": "client_ip",
+                      "value": "11.22.33.44"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "It is used to correlate the transaction across all components(authenticate, validate). It must be unique to the instance of the transaction.",
+                        "type": "text/plain"
+                      },
+                      "key": "correlation_id",
+                      "value": "Noo7siol1Yj763XTRDidILTv96ly9kFS"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Predefined callback url to be used in the session and send the request back to the client",
+                        "type": "text/plain"
+                      },
+                      "key": "redirect_uri",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"unauthorized_client\",\n  \"error_description\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2c36d0ef-4f6f-4bd9-ab7c-415457561b5d",
+          "name": "The validate endpoint will return whether the phone number was validated successfully or not and the service used in order to achieve the authentication.",
+          "request": {
+            "name": "The validate endpoint will return whether the phone number was validated successfully or not and the service used in order to achieve the authentication.",
+            "description": {
+              "content": "The validate endpoint will return whether the phone number was validated successfully or not and the service used in order to achieve the authentication.\n\nSecurity mechanism that allows the Customer to check with TMT ID that a handset had correctly authenticated.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "validate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_token\": \"<string>\",\n  \"code\": \"<string>\",\n  \"correlation_id\": \"<string>\",\n  \"otp_code\": \"<string>\",\n  \"payload\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "da2e9e01-d52f-4316-83d9-477c9d23b94c",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id_token\": \"v4.public.eyJ2ZW5kb3JfdHlwZSI6IkVFIiwianRp…\",\n  \"code\": \"64a5b19-457a-4d30-a5c4-038c62dcssfg3\",\n  \"correlation_id\": \"Noo7siol1Yj763XTRDidILTv96ly9kFS\",\n  \"otp_code\": \"123456\",\n  \"payload\": {}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"authenticated\": true,\n  \"service\": \"authenticate\",\n  \"correlation_id\": \"Noo7siol1Yj763XTRDidILTv96ly9kFS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40ab35d7-2c8c-4a81-8eeb-31d749587dd2",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id_token\": \"v4.public.eyJ2ZW5kb3JfdHlwZSI6IkVFIiwianRp…\",\n  \"code\": \"64a5b19-457a-4d30-a5c4-038c62dcssfg3\",\n  \"correlation_id\": \"Noo7siol1Yj763XTRDidILTv96ly9kFS\",\n  \"otp_code\": \"123456\",\n  \"payload\": {}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"invalid_request\",\n  \"error_description\": \"Invalid request. Received both 'payload' and 'code' in validate request.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "93558fa9-ace8-485c-9f59-51061fa79c66",
+      "name": "Service",
+      "description": {
+        "content": "Service endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cccee509-7e85-4904-b6b1-eca4b41142c1",
+          "name": "Authenticate with Silent Network Authentication method",
+          "request": {
+            "name": "Authenticate with Silent Network Authentication method",
+            "description": {
+              "content": "Authenticate with Silent Network Authentication method\n\nThe authenticate endpoint will execute the Silent Authentication against the Operator wherever this is supported.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authenticate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id_token",
+                  "value": "<string>",
+                  "description": "(Required) Provided in the get_config request"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6f0970bb-6038-4e24-be08-820237f91688",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authenticate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id_token",
+                      "value": "v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w..."
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"session_id\": \"pYXQiOiIyMDIyLTEyLTEyVDEyOjI4Oj\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f4599cd1-cc0b-4a5e-9ddf-259f28e87653",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authenticate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id_token",
+                      "value": "v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w..."
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Found",
+              "code": 302,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"https://example.com/callback?code=f3c75c82-9f85-42ab-be67-36f9dceb891e&correlation_id=123456789\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec2c731c-52b7-4947-8db1-4ce9ff151326",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authenticate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id_token",
+                      "value": "v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w..."
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"invalid_request\",\n  \"error_description\": \"The required field is missing or it is invalid.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "15be9d5b-3d83-4a35-ba32-5c8dc7293259",
+          "name": "Authenticate with  One-Time Password method",
+          "request": {
+            "name": "Authenticate with  One-Time Password method",
+            "description": {
+              "content": "Authenticate with  One-Time Password method\n\nThis specific endpoint will be triggered by the Customer and in case of success a special form where the user needs to input the OTP code needs to be displayed in the Customer APP.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authenticate",
+                "otp"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id_token",
+                  "value": "<string>",
+                  "description": "(Required) Provided in the get_config request"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "48ff3176-97a5-4d5a-8a29-e98356c236c5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authenticate",
+                    "otp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id_token",
+                      "value": "v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w..."
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"session_id\": \"pYXQiOiIyMDIyLTEyLTEyVDEyOjI4Oj\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc0f862d-acee-4ea9-bd5d-fa823972255f",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authenticate",
+                    "otp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id_token",
+                      "value": "v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w..."
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"invalid_request\",\n  \"error_description\": \"The required field is missing or it is invalid.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d1b1304-7c0b-40bd-802b-12d6f7757448",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authenticate",
+                    "otp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id_token",
+                      "value": "v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w..."
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"temporarily_unavailable\",\n  \"error_description\": \"Service is unavailable\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://auth-staging-api.tmtid.dev/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2c7f1ee9-6b0d-4cce-b058-3ef1518fbb8c",
+    "name": "TMT Authenticate API specs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Contact Support:\n Name: TMT Support\n Email: support@tmtid.com",
+      "type": "text/plain"
+    }
+  }
+}

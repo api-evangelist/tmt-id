@@ -1,0 +1,171 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TMT Teleshield API specs",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "HTTP API v2.0",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "TeleShield Routing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tmtid.com/r-teleshield/:number",
+            "headers": [
+              {
+                "name": "X-API-Key",
+                "value": ""
+              },
+              {
+                "name": "X-API-Secret",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "number",
+                "value": "",
+                "type": "path",
+                "description": "The number in E.164 format (includes the country code sufix)."
+              }
+            ]
+          },
+          "docs": "TeleShield Routing"
+        },
+        {
+          "info": {
+            "name": "TeleShield Fraud",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tmtid.com/f-teleshield/:number",
+            "headers": [
+              {
+                "name": "X-API-Key",
+                "value": ""
+              },
+              {
+                "name": "X-API-Secret",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "number",
+                "value": "",
+                "type": "path",
+                "description": "The number in E.164 format (includes the country code sufix)."
+              }
+            ]
+          },
+          "docs": "TeleShield Fraud"
+        },
+        {
+          "info": {
+            "name": "TeleShield Enhanced Fraud",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tmtid.com/e-teleshield/:number v2.0",
+            "headers": [
+              {
+                "name": "X-API-Key",
+                "value": ""
+              },
+              {
+                "name": "X-API-Secret",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "number",
+                "value": "",
+                "type": "path",
+                "description": "The number in E.164 format (includes the country code sufix)."
+              }
+            ]
+          },
+          "docs": "TeleShield Enhanced Fraud"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "HTTP API v1.3",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "POST method Teleshield",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tmtid.com/teleshield/:number",
+            "headers": [
+              {
+                "name": "X-API-Key",
+                "value": ""
+              },
+              {
+                "name": "X-API-Secret",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "number",
+                "value": "",
+                "type": "path",
+                "description": "The number in E.164 format."
+              }
+            ]
+          },
+          "docs": "POST method Teleshield"
+        },
+        {
+          "info": {
+            "name": "POST method E-Teleshield",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tmtid.com/e-teleshield/:number v1.3",
+            "headers": [
+              {
+                "name": "X-API-Key",
+                "value": ""
+              },
+              {
+                "name": "X-API-Secret",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "number",
+                "value": "",
+                "type": "path",
+                "description": "The number in E.164 format."
+              }
+            ]
+          },
+          "docs": "POST method E-Teleshield"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

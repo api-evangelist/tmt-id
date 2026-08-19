@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TMT Verify API specs",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Standard API Call",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "POST method",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tmtverify.com/v3/",
+            "headers": [
+              {
+                "name": "X-API-Key",
+                "value": ""
+              },
+              {
+                "name": "X-API-Secret",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "POST method"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

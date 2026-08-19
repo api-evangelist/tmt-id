@@ -1,0 +1,55 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TMT Live API specs",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "HTTP API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET method",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tmtvelocity.com/live/:format/:key/:secret/:number",
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "path",
+                "description": "JSON"
+              },
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "API credentials – delivered to you via email"
+              },
+              {
+                "name": "secret",
+                "value": "",
+                "type": "path",
+                "description": "API credentials – delivered to you via email"
+              },
+              {
+                "name": "number",
+                "value": "",
+                "type": "path",
+                "description": "The number in E.164 format (includes the country code sufix)"
+              }
+            ]
+          },
+          "docs": "GET method"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

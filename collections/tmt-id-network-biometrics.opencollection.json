@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Network Biometrics™ by TMT ID",
+    "version": "1.20.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "API-Token",
+      "value": "{{API-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Default",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Network Biometrics™",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ea.api.phronesis.tech/network-biometrics",
+            "headers": [
+              {
+                "name": "Correlation-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Network Biometrics™️ is for identifying, verifying and assuring customers. We make customer signups and transactions smoother while reducing exposure to fraud and related risks across the entire customer lifecycle."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "v2 (deprecated)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Assured Registration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ea.api.phronesis.tech/core/v2/NumberAssurance/AssuredRegistration",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validate that the mobile phone number provided by a customer at the point of account registration / creation is associated with the same person’s mobile network billing identity."
+        },
+        {
+          "info": {
+            "name": "Assured Age",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ea.api.phronesis.tech/core/v2/NumberAssurance/AssuredAge",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Verify that the mobile phone number provided by a customer is registered to them and they meet certain age requirements."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

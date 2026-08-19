@@ -1,0 +1,1852 @@
+{
+  "item": [
+    {
+      "id": "be7e3409-2978-4b18-8238-e8f942a47388",
+      "name": "API Overview",
+      "description": {
+        "content": "\n\n\nThe API provides three distinct areas of functionality:\n### Number Discovery™\n\n  The `discover` product is designed to provide instant checks as a user enters their information or before you attempt to send a message or place a call.\n  Check if a `number` is correctly formatted, genuine, active, reachable and if it was recently assigned to a new user (Number Recycle).\n\n  The `discover.device` product feature takes an IMEI as an input and provides a range of information related to the device such as device serial number and model, activation status, blacklist status, estimated purchase date, and retail information.\n\n  > `discover.device` and `protect.hasDeviceInfo` are not to be used in the same API request. If the IMEI is known use `discover.device`, if the IMEI is not known use `protect.hasDeviceInfo`.\n\n### Number Assurance™\n\n  The `assure` product verifies that the `number` and personal details provided to you can be linked together, and match those held by our data partners and there are no suspicious activity flags.\n  Perform data matches for Know Your Customer (KYC), proof of age, email addresses and prevent identity fraud.\n\n### Number Protect™\n\n  The `protect` product is used to identify suspicious behaviour in real time.\n  Use live mobile network data to highlight potential fraud, identity theft, account takeovers, false claims and defend against sophisticated crime, including Authorised Push Payment (APP) fraud and One-Time Password (OTP) interception.\n\n  The `protect.hasDeviceInfo` product feature provides infomation about a device, where the IMEI number is not known and is discoverable via the mobile `number`.\n\n  > `discover.device` and `protect.hasDeviceInfo` are not to be used in the same API request. If the IMEI is known use `discover.device`, if the IMEI is not known use `protect.hasDeviceInfo`.\n\n---\n## Requesting API access\n\n  A combination of API token and secret is required to send a request to the API. Access to some API features requires the pre-approval of a suitable use case with our data partners. To apply for API access and use case permission, please visit our [contact page](https://phronesis.net/contact/).\n\n---\n## API endpoints\n\n  Depending on your account plan you will be granted access to one or more of the following API platforms:\n\n\n\n| Account plan | API endpoint | Response |\n| -- | -- | -- |\n| early access | https://ea.api.phronesis.tech | full responses using latest early access code base |\n| production | https://api.phronesis.tech | full responses using latest stable code base |\n\n\n\n  *The API will only accept and respond to secure communications using HTTPS*\n\n---\n## API Security and Authentication\n\n  All requests to the **Network Biometrics** API require these headers:\n\n\n\n| Header | Description |\n| -- | -- |\n| API-Token | The API Token |\n| API-Secret | The API Secret |\n\n\n\n  The values required for authentication will have been provided to you during the onboarding process after requesting API access.\n  *Authentication errors will result in a `401 Unauthorised` response code with a transaction status object in the JSON body giving further feedback on the error.*\n\n  > For the deprecated v2 services in the **Number Assurance** family, the `API_token` and `API_secret` are required in the body of the request rather than the header.\n\n---\n## Header Parameters\n\n  The API only accepts requests with the `Content-Type` header set to `application/json`. All responses are made using the same format. An invalid JSON body or unsupported content type will result in a `400: Bad request` response.\n  The API consumer may optionally provide a unique string (with a 64-character limit) to aid in matching requests, this must be supplied as the `Correlation-Id` request header and is echoed back in the response headers as `Correlation-Id`.\n\n  > For the deprecated v2 services in the **Number Assurance** family, the optional `correlation_id` should be in the body of the request rather than the header.",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "034672e6-be7c-40a3-af63-b2d7197e9a69",
+      "name": "Calling Network Biometrics™",
+      "description": {
+        "content": "\n\n\n## Discover  \n  With our **Number Discovery™** feature set, verify that a customer's mobile phone `number` is correctly formatted, genuine, active, reachable and if it was recently assigned to a new and different subscriber (Number Recycle).\n\n  > **Please note** the `discover` product is **required in EVERY request** but additional products such as `assure` or `protect` can be added to the request object - the ordering is not significant. ***Please refer to the examples provided***.  \n\n  - ### Number Recycle  \n    Check if a customer's mobile `number` remains active on a network operator, or if it was recently deactivated or recycled (`hasNumberBeenRecycled`), to prevent false number declarations and providing information or access to an authorised user.\n\n  - ### MVNO Pre-filtering\n    Check if a customer's mobile `number` is allocated to a virtual mobile network (MVNO) or not using `hasMVNOInfo`, and additionally allow pre-filtering on features where they are likely to fail for MVNO customers, e.g. Assure Age Eligibility.\n\n## Assure\n  With our **Number Assurance™** feature set, step up the protection and add confidence with Know Your Customer (**KYC**) data matching to verify the `number` provided by a customer, as part of their identity, is registered to them and does not carry any suspicious activity flags.    \n\n  - ### Address Info\n    Use the `matchingAddress` feature to check that the address information supplied matches that of the subscriber associated with the mobile `number`.  \n    The address features vary from country to country, below is a table highlighting the availability:\n\n| Address feature | UK | France | Italy | Spain | Germany | Netherlands | US |\n| -- | -- | -- | -- | -- | -- | -- | -- |\n| houseNumber | ✅ | ⬜ | ✅ | ✅ | ✅ | ✅ | ✅ |\n| houseName | ✅ | ⬜ | ✅ | ✅ | ✅ | ✅ | ✅ |\n| streetAddress | ⬜️ | ✅* | ✅ | ✅ | ✅ | ✅ | ✅ |\n| postcode | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |\n| locality | ⬜ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ✅ |\n| province | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ✅ |\n| country | ⬜ | ✅ | ✅ | ⬜ | ⬜ | ✅ | ✅ |\n\n  ***streetAddress match in France takes an input of house name/number followed by street name (e.g. 26 Rue du Labrador)**\n\n  - ### Age Eligibility\n    Use the `matchingAge` feature to check if the mobile subscriber associated with the `number` is at least 18 years of age (i.e. 18+) and help control access to age-restricted products and services in accordance with legislation.\n    > **Please note** that some datasource restrictions might apply to `matchingAge` including:\n      > - the number must be associated with an active subscription on a supported mobile network (**MVNOs excluded**),\n      > - the number must belong to the subscription holder and bill-payer,\n      > - the subscription must be a pay monthly contract (**PAYM**).\n\n  - ### Device Info\n    Use the `matchingDeviceInfo` feature to check that the identity of the mobile device (i.e. IMEI) you are expecting in transaction is the same and associated with the provided `number`.\n\n  - ### Account Info\n    Use the `matchingAccountInfo` feature to obtain details on the subscriber account linked to `number`. This feature allows you to request specific information to check:\n    * the contract type of the account,\n    * if the subscriber account is active, and/or\n    * if the device, or more specifically the SIM card, connected to the account has been reported lost or stolen.\n\n    >  Additional account information may only be available on some networks when you are making a call to `assure.matchingName` and you generate a match, and may incur an additional charge on some networks\n\n## Protect\n  With our **Number Protect™** feature set, identify suspicious behaviour in real time and be certain your customer is not the victim of identity theft, account takeover or sophisticated crime, including Authorised Push Payment (APP) fraud and One-Time Password (OTP) interception. Defend against fraudulent claims.\n\n  > Identify **SIM card** `hasSimChanged` and **device** `hasDeviceChanged` swap events and detect suspicious call activity and patterns.\n\n  - ### Tenure\n    Use the `hasAccountTenure` feature to determine if the account linked to the provided MSISDN has been held for a minimum amount of time.\n    To provide flexibility, this can be checked using a measure of days, months, or years, or by providing a fixed date.\n    The service will return true if the account has been held at least as long as the period given.\n\n    >  In some cases, the maximum period you can check is 90 days. Your account manager will confirm where this applies.",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "2c093f11-4090-4560-b811-9674b36f14b5",
+      "name": "Calling Number Assurance",
+      "description": {
+        "content": "\n\n\n>  **Number Assurance** is a deprecated product family and is available only to existing customers. All features and MNO coverage are included and extended within the **Network Biometrics™** product family.\nPlease [contact us](https://phronesis.net/contact/) if you would like to migrate to the more feature rich **Network Biometrics™** product family. \n## Assured Registration and Assured Age\nWith our **Assured Registration** and **Assured Age** feature sets, step up the protection and add confidence with Know Your Customer (**KYC**) data matching to verify the `number` provided by a customer is registered to them, as part of their identity. **Assured Age** adds basic age verification by confirming date of birth. > **Please note** that some datasource restrictions might apply, including: > - the number *must* be associated with an active subscription on a supported mobile network (**MVNOs excluded**) > - the number *must* belong to the subscription holder and bill-payer > - the subscription *must* be a pay monthly contract (**PAYM**)",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "59d70b80-b757-4de5-9508-48848a794ad3",
+      "name": "Response Overview",
+      "description": {
+        "content": "\n\n\nCall **Network Biometrics™** services as specified in the request body.\n## Response Headers\n  The API call will respond with appropriate HTTP status codes set in the header and additional detail within the JSON body.\n\n## Feature Responses\n\n  There are 3 types of responses that can be returned from each feature requested:\n\n  1. a successful call to the feature (i.e., data is held about the number in question and has been returned within the matching response object).\n  2. a successful call to the feature, however the requested data is unavailable, which is indicated by the `isDataAvailable` flag set to `false` (where applicable).\n  3. a failed call, which could be for a number of reasons - in this case the feature response will contain a status object indicating the error.\n\n## Assure isDataAvailable & isMatched Responses\n\n  All successful `assure` features will return `isDataAvailable` & `isMatched`\n\n  - `isDataAvailable` indicates if the subscriber data is available.\n  - `isMatched` indicates if the data provided in the request matches the data held about the subscriber.\n\n>  The `isMatched` flag is directly linked with `matchConfidence` as further explained below.\nSimilarly, the deprecated v2 services in the **Number Assurance** family, will respond with `*_match` and `*_data_available` for the requested data points, e.g. `first_name_match` and `first_name_data_available`\n## Assure matchConfidence Responses\n\n  As part of the `assure` features  `matchingName`, `matchingAddress`, and `matchingBirthDate` we will return\n  a `matchConfidence` property as an integer between 0-100 (representing a percentage score of how much the requested data\n  matches with data held about the subscriber).\n\n  >  **Match thresholds** : for **email** and **date of birth** matching, a **100%** match is required to trigger\n  >  the `isMatched` flag as `true`. All other fields are considered to be `isMatched` `true` at or above **90%**.\n\n  >  **Please note** that for some user data we may only be able to respond with a `matchConfidence` of **100**\n  >  for `isMatched` `true` or **0** for `isMatched` `false`, and no intermediate scores will be provided.\n  >\n  >  *For more information see the `200: OK` example for UK and France `assure` responses.*\n\n## Event Date Responses\n\n  Some features of our product allow you to specify a time period to verify if the relevant event happened during that\n  time (i.e. `hasNumberBeenRecycled`, `hasSimChanged`, `hasDeviceChanged`, `wasReportedLostOrStolen`, `hasAccountTenure`,\n  `wasBlacklisted`)\n\n  Those features all at a minimum return a flag indicating if the event happened within the requested period, e.g.\n  `changedInTimePeriod`, and the date of the last registered event, e.g. `lastChange`, however that field will only return\n  a date/time value if the event took place during the same time period\n\n  >  Scenario: we want to check that a SIM change event happened during the last 15 minutes (900 seconds)\n\n    {\n      \"discover\": {\n        \"number\": \"447700900501\"\n      },\n      \"protect\": {\n        \"hasSimChanged\": {\n          \"inSeconds\": 900\n        }\n      }\n    } \n\n  >  If the event has occurred during the last 15 minutes the Network Biometrics™ API will return:\n\n    {\n      \"discover\": {\n        \"number\": {\n          \"is\": \"447700900501\",\n          \"isCorrectFormat\": true,\n          \"isValid\": true,\n          \"country\": {\n            \"name\": \"United Kingdom of Great Britain and Northern Ireland\",\n            \"code\": \"GB\",\n            \"dialCode\": \"44\"\n                },\n                \"onNetwork\": {\n                    \"MCC\": \"001\",\n                    \"MNC\": \"04\",\n                    \"networkName\": \"Phronesis (H3G UK)\"\n                },\n                \"isPorted\": false\n            }\n        },\n        \"protect\": {\n            \"hasSimChanged\": {\n                \"changedInTimePeriod\": true,\n                \"lastChange\": \"2023-05-26T12:19:11+00:00\"\n            }\n        },\n      \"transaction\": {\n        \"status\": {\n          \"value\": 0,\n          \"message\": \"transaction successful\"\n        },\n        \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n        \"id\": \"dad42be1-fdcd-49ee-bd4c-c153befbff35\"\n      }\n    }\n\n>  However, if the event did not occur during the specified time the field `lastChange` will be null:\n\n    {\n      \"discover\": {\n        \"number\": {\n          \"is\": \"447700900501\",\n          \"isCorrectFormat\": true,\n          \"isValid\": true,\n          \"country\": {\n            \"name\": \"United Kingdom of Great Britain and Northern Ireland\",\n            \"code\": \"GB\",\n            \"dialCode\": \"44\"\n                },\n                \"onNetwork\": {\n                    \"MCC\": \"001\",\n                    \"MNC\": \"04\",\n                    \"networkName\": \"Phronesis (H3G UK)\"\n                },\n                \"isPorted\": false\n            }\n        },\n        \"protect\": {\n            \"hasSimChanged\": {\n                \"changedInTimePeriod\": false,\n                \"lastChange\": null\n            }\n        },\n        \"transaction\": {\n            \"status\": {\n                \"value\": 0,\n                \"message\": \"transaction successful\"\n            },\n            \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n            \"id\": \"bd843246-1eed-4519-9869-a7fdc72a260e\"\n        }\n    }",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "c7c701b6-0307-4db9-97f2-565572b9577d",
+      "name": "Test Personas",
+      "description": {
+        "content": "\n\n\nThe following numbers with associated personas are provided for testing purposes and will generate scenarios as described without making costly calls to the mobile network operators (MNO).\nEach number can be tested on any of our platforms to which you have been granted access during your onboarding.\n---\nEE UK\n| Number       | First Name | Last Name | House Number | House Name        | Postcode | Date of Birth | IMEI            | Description                 |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447539272271 | James      | Trenholme | n/a          | Livingstone Lodge | BA2 5EF  | 14-10-1974    | 969455279101641 | James' number to test EE UK |\n---\nO2 UK\n| Number       | First Name | Last Name         | House Number | House Name        | Postcode | Date of Birth | IMEI | Description                                       |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447392844732 | Alex       | Ferreira          | n/a          | Livingstone Lodge | BS3 2NQ  | 14-10-1974    | n/a  | Alex's number to test O2 UK                       |\n| 447700900007 | Alfred     | Middlemass        | 117          | n/a               | MP23 5RF | 22-08-1978    | n/a  | O2 UK - test number                               |\n| 447100000847 | Bernadine  | Worthington-Smith | n/a          | Worlds End        | HY20 7DM | 19-01-1989    | n/a  | O2 UK - number recycle                            |\n| 447700900006 | Augustus   | Willmington       | 297          | n/a               | JY34 1DT | 24-10-1970    | n/a  | O2 UK - test number                               |\n| 447700600287 | John       | Smith             | 321          | n/a               | FB05 7BR | 08-04-1999    | n/a  | O2 UK - always responds with subscriber not found |\n| 447700900107 | John       | Smith             | 321          | n/a               | FB05 7BR | 08-04-1999    | n/a  | O2 UK - always responds with MSISDN not found     |\n| 447700900005 | Madeline   | Hamiltone         | 30           | n/a               | CD29 8PH | 25-12-1985    | n/a  | O2 UK - always responds with MSISDN not found     |\n---\nH3G UK\n| Number       | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI            | Description                  |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447412697906 | Matthew    | Hornsey   | n/a          | Broadwood  | JE2 7NH  | 02-07-1980    | 291702647925014 | Matt's number to test H3G UK |\n| 440000000001 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180149 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180160 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180146 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180342 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180144 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180158 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180155 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180159 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180157 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180463 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180488 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180464 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180461 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447898180490 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447472828364 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447472814683 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n| 447472814682 | n/a        | n/a       | n/a          | n/a        | n/a      | n/a           | n/a             | H3G - test number            |\n---\nPhronesis (H3G UK)\n| Number       | First Name | Last Name   | House Number | House Name   | Postcode | Date of Birth | IMEI            | Description                                                                                |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447700900500 | Bob        | Lemon       | 225          | drizzle cake | EH2 4RT  | 01-01-1700    | 868368053484111 | simulates lost or stolen (yesterday) with 16 digit IMEI & device information for OnePlus   |\n| 447700900501 | Chicken    | chorizo     | 180          | jambalaya    | ML7 4HR  | 01-01-1849    | 868620064561687 | simulates sim change in the last 10min with 14 digit IMEI & device information for Xiaomi  |\n| 447700900502 | Brownie    | Chocolate   | 20           | recipe       | WA13 0TP | 01-01-1893    | 356133080448029 | simulates device change during the last 10min with valid IMEI & device information for HTC |\n| 447700900503 | Brownie    | Chocolate   | 20           | recipe       | WA13 0TP | 01-01-1893    | n/a             | simulates call forwarding with invalid IMEI                                                |\n| 447700900504 | Banana     | Bread       | 30           | Peanuts      | TN38 0JU | 01-01-1870    | n/a             | simulates number recycle during the last 10min with empty IMEI                             |\n| 447700900505 | Fennel     | Balsamic    | 40           | recipe       | M32 8LJ  | 01-01-1880    | 351981064726629 | simulates H3G UK error: 'Rate limit exceeded'                                              |\n| 447700900506 | James      | Karrman     | 49           | Karoline     | BS3 2LQ  | 15-09-1972    | n/a             | H3G MVNO Smarty for testing identity filtering                                             |\n| 447700900507 | Subscriber | Unavailable | n/a          | n/a          | n/a      | n/a           | n/a             | simulates H3G error: 'User unknown'                                                        |\n| 447700900508 | James      | Karrman     | 49           | Karoline     | BS3 2LQ  | 15-09-1972    | 356528090553652 | H3G persona & device information for DoCoMo                                                |\n| 447700900509 | Fruit      | Scone       | n/a          | Restormel    | PL22 0EE | 01-01-2000    | 351475465491024 | H3G persona with Motorola device info & roaming                                            |\n| 447700900510 | Brownie    | Chocolate   | 20           | recipe       | WA13 0TP | 01-01-1893    | 867358040780060 | H3G persona with Optus device info                                                         |\n---\nPhronesis (WindTre IT)\n| Number       | First Name   | Last Name                     | House Number | House Name | Postcode | Date of Birth | IMEI | Description                     |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 396490000100 | Sandro       | Botticelli                    | 5            | n/a        | 00197    | 01-05-1470    | n/a  | WindTre Italy, KYC test persona |\n| 396490000101 | Michelangelo | di Lodovico Buonarroti Simoni | 6            | n/a        | 50122    | 06-03-1475    | n/a  | WindTre Italy, KYC test persona |\n| 396490000102 | Gian Lorenzo | Bernini                       | 4            | n/a        | 50122    | 07-12-1598    | n/a  | WindTre Italy, KYC test persona |\n---\nPhronesis (Vodafone UK)\n| Number       | First Name | Last Name           | House Number | House Name                   | Postcode | Date of Birth | IMEI | Description                                                        |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447700900600 | Uberto     | Rapizzi             | n/a          | Theatre Royal                | BA1 1ET  | 27-03-1908    | n/a  | simulates lost or stolen                                           |\n| 447700900601 | Robert     | Adam                | n/a          | Pulteney Bridge              | BA2 4AT  | 03-07-1728    | n/a  | simulates sim change during the last 10min                         |\n| 447700900602 | Jane       | Austen              | n/a          | Sydney Place                 | BA2 6NF  | 16-12-1775    | n/a  | simulates device change during the last 10min                      |\n| 447700900603 | Ralph      | Allen               | n/a          | Prior Park                   | BA2 5AH  | 01-01-1693    | n/a  | simulates call forwarding                                          |\n| 447700900604 | William    | Herschel            | n/a          | Herschel Museum of Astronomy | BA1 2BL  | 15-11-1738    | n/a  | simulates number recycle during the last 10min                     |\n| 447700900605 | Roger      | Bannister           | n/a          | Beechen Cliff                | BA2 4RE  | 23-03-1929    | n/a  | simulates Vodafone UK error: 'Resources not available'             |\n| 447700900606 | Subscriber | Unavailable         | n/a          | n/a                          | n/a      | n/a           | n/a  | simulates Vodafone error: 'MSISDN is not available'                |\n| 447700900607 | Isaac      | Newton              | n/a          | Woolsthorpe Manor House      | NG33 5NR | 04-01-1643    | n/a  | simulates Vodafone UK MVNO - Talk Mobile                           |\n| 447700900608 | unknown    | MCC/MNC combination | n/a          | n/a                          | n/a      | n/a           | n/a  | simulates number with known prefix but unknown MCC/MNC combination |\n| 447700900609 | Henry      | Cole                | 1            | n/a                          | BA1 2LR  | 15-07-1808    | n/a  | Vodafone UK persona with roaming                                   |\n---\nPhronesis (Vodafone NL)\n| Number      | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                            |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 31699109010 | Johannes   | Vermeer   | 41           | n/a        | 2517 HV  | 31-10-1632    | n/a  | Vodafone Netherlands, KYC test persona |\n| 31699109011 | Rembrandtt | Danaë     | 6            | n/a        | 1071 DJ  | 15-07-1606    | n/a  | Vodafone Netherlands, KYC test persona |\n| 31699109012 | Vincent    | van Gogh  | 18           | n/a        | 3015 CX  | 30-03-1853    | n/a  | Vodafone Netherlands, KYC test persona |\n---\nPhronesis (Vodafone DE)\n| Number        | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                        |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 4931700900200 | Paule      | Klee      | 27           | n/a        | 80333    | 18-12-1879    | n/a  | Vodafone Germany, KYC test persona |\n| 4931700900201 | George     | Baselitz  | 40           | n/a        | 80333    | 23-01-1938    | n/a  | Vodafone Germany, KYC test persona |\n| 4931700900202 | Gerhard    | Richter   | 33           | n/a        | 80333    | 09-02-1932    | n/a  | Vodafone Germany, KYC test persona |\n---\nPhronesis (EE UK)\n| Number       | First Name | Last Name   | House Number | House Name              | Postcode | Date of Birth | IMEI            | Description                                                                                    |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447700900700 | Dina       | St Johnston | n/a          | Senate House            | WC1E 7HU | 20-09-1930    | 353090101175010 | simulates lost or stolen & device information for Apple                                        |\n| 447700900701 | Ada        | Lovelace    | 12           | n/a                     | SW1Y 4LB | 10-12-1815    | 355657110807193 | simulates SIM change during the last 10min with 14 digit IMEI & device information for LG      |\n| 447700900702 | Mary       | Coombs      | n/a          | Queen Mary University   | E1 4NS   | 04-02-1929    | 355502292399173 | simulates device change during the last 10min with valid IMEI & device information for Samsung |\n| 447700900703 | Henrietta  | Vansittart  | n/a          | Bourne Hall             | KT17 1UF | 01-01-1833    | n/a             | simulates call forwarding with invalid IMEI                                                    |\n| 447700900704 | Katharine  | Parsons     | n/a          | Michael Faraday House   | SG1 2AY  | 01-01-1859    | 351182299619628 | simulates number recycle during the last 10min & device information for Huawei                 |\n| 447700900705 | Amy        | Johnson     | n/a          | University of Sheffield | S10 2TN  | 01-07-1903    | 860998045818162 | simulates EE UK error: 'general error, resource error' on number recycle                       |\n| 447700900706 | Subscriber | Unavailable | n/a          | n/a                     | n/a      | n/a           | n/a             | simulates EE error: 'No record found'                                                          |\n| 447700900707 | Virgine    | Mobile      | n/a          | n/a                     | n/a      | n/a           | 987651870084644 | simulates EE MVNO for identity filtering                                                       |\n| 447700900708 | Dina       | St Johnston | n/a          | Senate House            | WC1E 7HU | 20-09-1930    | 356785114975663 | simulates lost or stolen & device information for Apple with GSM blacklist status              |\n| 447700900709 | Margaret   | Allan       | 4            | Bletchley Park          | MK3 6EB  | 26-07-1909    | n/a             | EE UK persona with roaming                                                                     |\n| 447700900710 | Hedy       | Lamarr      | 85           | n/a                     | EX22 6UC | 09-11-1914    | 067737453896935 | EE UK persona with Blacklist Error trigger                                                     |\n---\nPhronesis (O2 UK)\n| Number       | First Name | Last Name   | House Number | House Name | Postcode | Date of Birth | IMEI | Description                                           |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447700900900 | Henry      | The First   | n/a          | Normandy   | BB18 6JH | 03-08-1068    | n/a  | simulates lost or stolen                              |\n| 447700900901 | Edward     | The Elder   | n/a          | Wessex     | TA11 9AS | 01-04-1871    | n/a  | simulates SIM change event during the last 10min      |\n| 447700900903 | James V    | Scotland    | n/a          | Stewart    | EH49 7EY | 10-04-1512    | n/a  | simulates call forwarding                             |\n| 447700900904 | George     | The second  | n/a          | Hanover    | SW1A 1BA | 30-10-1683    | n/a  | simulates number recycle during the last 10min        |\n| 447700900905 | George     | The Fifth   | n/a          | Windsor    | EH49 7EY | 03-06-1865    | n/a  | simulates O2 UK error: 'resource removed or disabled' |\n| 447700900906 | Subscriber | Unavailable | n/a          | n/a        | n/a      | n/a           | n/a  | simulates TEF error: 'Subscriber info not found'      |\n| 447700900909 | Harold     | Godwinson   | 1            | n/a        | SW1P 3PA | 26-07-1909    | n/a  | O2 UK persona with roaming                            |\n---\nPhronesis (invalid or unknown)\n| Number       | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447700900999 | Invalid    | Number    | n/a          | n/a        | n/a      | n/a           | n/a  | n/a         |\n---\nPhronesis (Telefonica DE)\n| Number        | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                          |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 4931700900100 | Albrecht   | Dürer     | 63           | n/a        | 60596    | 21-05-1471    | n/a  | Telefonica Germany, KYC test persona |\n| 4931700900101 | Max        | Ernst     | n/a          | n/a        | 50667    | 02-04-1891    | n/a  | Telefonica Germany, KYC test persona |\n| 4931700900102 | Otto       | Dix       | 1            | n/a        | 01067    | 02-12-1891    | n/a  | Telefonica Germany, KYC test persona |\n---\nPhronesis (SFR)\n| Number      | First Name | Last Name   | Street Address                         | Postcode | Locality | Date of Birth | IMEI | Description                                                        |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 33639980100 | Jean-Ive   | Lafesse     | 64 Le Grand Détournement               | 56300    | Pontivy  | 13-03-1957    | n/a  | not implemented ! (simulates sim change during the last 10min)     |\n| 33639980101 | Francois   | chevaux     | Champ de Mars, 5 Av. Anatole France    | 75007    | Paris    | 31-03-1889    | n/a  | not implemented ! (simulates device change during the last 10min)  |\n| 33639980102 | Aimée      | Frank       | Rue de Rivoli                          | 75001    | Paris    | 12-03-1950    | n/a  | not implemented ! (simulates number recycle during the last 10min) |\n| 33639980103 | Antoinette | Beau        | 6 Parvis Notre-Dame - Pl. Jean-Paul II | 75004    | Paris    | 09-09-1945    | n/a  | not implemented ! (simulates number ported)                        |\n| 33639980104 | Bernadette | Bread       | 1 Rue de la Légion d'Honneur           | 75007    | Paris    | 04-10-1952    | n/a  | no specific effects                                                |\n| 33639980105 | Chloé      | leclair     | 6 Parvis Notre-Dame - Pl. Jean-Paul II | 75004    | Paris    | 04-06-1972    | n/a  | simulates SFR error: 'cannot deliver the scope for this MVNO '     |\n| 33639980106 | Subscriber | Unavailable | n/a                                    | n/a      | n/a      | n/a           | n/a  | simulates SFR error: 'invalid_user'                                |\n| 33639980107 | DEBITEL    | SFR MVNO    | n/a                                    | n/a      | n/a      | n/a           | n/a  | simulates SFR MVNO for identity filtering                          |\n---\nPhronesis (Bouygues)\n| Number      | First Name    | Last Name          | Street Address                     | Postcode | Locality | Date of Birth | IMEI | Description                                                                    |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 33639980200 | Danielle      | Peter              | 3 Av. de l'Aérodrome de Montaudran | 31400    | Toulouse | 02-02-1987    | n/a  | not implemented ! (simulates sim change during the last 10min)                 |\n| 33639980201 | Jack          | Fromage            | 18 bis Gd Rue Saint-Michel         | 31400    | Toulouse | 09-09-1937    | n/a  | not implemented ! (simulates device change during the last 10min)              |\n| 33639980202 | Jean-Hubert   | Tourette           | 2 Pl. Saint-Sernin                 | 31000    | Toulouse | 07-07-1977    | n/a  | not implemented ! (simulates number recycle during the last 10min)             |\n| 33639980203 | Jean-François | lelouttre          | 118 Rte de Narbonne                | 31062    | Toulouse | 20-07-1997    | n/a  | not implemented ! (simulates number ported)                                    |\n| 33639980204 | Edouard       | Montmiraille       | 18 bis Gd Rue Saint-Michel         | 31400    | Toulouse | 10-03-1927    | n/a  | no specific effects                                                            |\n| 33639980205 | Estel         | Florence           | 1 All. Gabriel Biénès              | 31000    | Toulouse | 10-10-1947    | n/a  | simulate Bouygues error: 'UNKNOWN_PUBLIC_KEY'                                  |\n| 33639980206 | Subscriber    | Unavailable        | n/a                                | n/a      | n/a      | n/a           | n/a  | simulates Bouygues error: 'MSISDN_NOT_FOUND'                                   |\n| 33639980207 | Văn           | Phạm Phương Nguyễn | 42 Avenue des Champs-Élysées       | 69002    | Lyon     | 04-04-1984    | n/a  | persona to test encoding behaviour, ensuring encoded character is counted as 1 |\n| 33639980208 | Invalid       | Token              | n/a                                | n/a      | n/a      | n/a           | n/a  | simulates Bouygues error: 'invalid_token'                                      |\n---\nPhronesis (Orange)\n| Number      | First Name | Last Name   | Street Address         | Postcode | Locality  | Date of Birth | IMEI | Description                                                                          |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 33639980300 | Charle     | René        | 3 Bd Jard. Zoologique  | 13004    | Marseille | 05-05-1985    | n/a  | not implemented ! (simulates sim change during the last 10min)                       |\n| 33639980301 | Léo        | Bet         | 59 Av. de Saint Menet  | 13011    | Marseille | 08-08-1988    | n/a  | not implemented ! (simulates device change during the last 10min)                    |\n| 33639980302 | Raphaël    | Jambon      | 132 Av. Clot Bey       | 13008    | Marseille | 06-06-1966    | n/a  | not implemented ! (simulates number recycle during the last 10min)                   |\n| 33639980303 | Arthur     | Patouf      | 30 Pl. de la Major     | 13002    | Marseille | 01-02-1963    | n/a  | not implemented ! (simulates number ported)                                          |\n| 33639980304 | Adam       | Eve         | 1 Rue de Lodi          | 13006    | Marseille | 18-06-1945    | n/a  | no specific effects                                                                  |\n| 33639980305 | Dominique  | Joux        | 91 Av. Jean Compadieue | 13012    | Marseille | 02-02-1987    | n/a  | simulate Orange error: 'The MSISDN does not match the user tied to the access token' |\n| 33639980306 | Subscriber | Unavailable | n/a                    | n/a      | n/a       | n/a           | n/a  | simulates Orange error: 'sub authenticate false'                                     |\n| 33639980307 | n/a        | n/a         | n/a                    | n/a      | n/a       | n/a           | n/a  | simulates no source data available                                                   |\n---\nPhronesis (Free Mobile)\n| Number      | First Name | Last Name     | Street Address            | Postcode | Locality | Date of Birth | IMEI | Description                                                       |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 33639980400 | Georges    | Le Curieux    | 87 Rue de la Baie Fleurie | 24120    | Dordogne | 04-09-1989    | n/a  | simulates sim change during the last 10min                        |\n| 33639980401 | Annette    | Barbapapa     | 87 allée de canne à sucre | 21290    | Essarois | 21-02-1990    | n/a  | no specific effects                                               |\n| 33639980402 | Babar      | des éléphants | 78 rue de Brunhoff        | 04200    | sisteron | 26-02-1999    | n/a  | no specific effects                                               |\n| 33639980403 | Azalée     | Margote       | 5 Le Manège enchanté      | 75001    | Paris    | 02-02-2005    | n/a  | no specific effects                                               |\n| 33639980404 | Esteban    | Soleil        | 39 avenue de l'or         | 06620    | Cipiéres | 29-06-1982    | n/a  | no specific effects                                               |\n| 33639980405 | Subscriber | Unavailable   | n/a                       | n/a      | n/a      | n/a           | n/a  | simulates Free Mobile error: 'LINE_NOT_FOUND_WITH_EXPECTED_STATE' |\n| 33639980406 | Subscriber | Unavailable   | n/a                       | n/a      | n/a      | n/a           | n/a  | simulates Free Mobile error: 'UNKNOWN_PHONE_NUMBER'               |\n---\nPhronesis (KPN)\n| Number      | First Name | Last Name | House Number | House Name    | Postcode | Date of Birth | IMEI | Description                            |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 31699108000 | Johan      | de Witt   | 33           | n/a           | 2513AH   | 24-09-1625    | n/a  | KPN NL - Phronesis test person for KYC |\n| 31699108001 | Abraham    | Kuyper    | 1105         | Main Building | 1081HV   | 29-10-1837    | n/a  | KPN NL - Phronesis test person for KYC |\n---\nPhronesis (Odido)\n| Number      | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                           |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 31699107000 | Anne       | Frank     | 20           | n/a        | 1016GV   | 12-06-1929    | n/a  | T-Mobile NL - TMT test person for KYC |\n| 31699107001 | Eddie      | Van Halen | 42           | n/a        | 3151XP   | 21-03-1975    | n/a  | T-Mobile NL - TMT test person for KYC |\n---\nVirgin Mobile Telecoms Limited\n| Number       | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                                                           |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447700900238 | n/a        | n/a       | n/a          | n/a        | n/a      | 01-01-1970    | n/a  | EE MVNO Virgin Mobile Telecoms Limited for testing identity filtering |\n---\n\n\n| Number       | First Name | Last Name    | House Number | House Name | Postcode | Date of Birth | IMEI | Description         |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447700900002 | Amelia     | Bronklehurst | 3            | n/a        | KG24 7PG | 30-09-1972    | n/a  | O2 UK - test number |\n---\nVodafone UK\n| Number       | First Name | Last Name | House Number | House Name        | Postcode | Date of Birth | IMEI | Description                     |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 447772000001 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-1891    | n/a  | Vodafone UK - test number       |\n| 447772000002 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-2000    | n/a  | Vodafone UK - test number       |\n| 447772000003 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-1891    | n/a  | Vodafone UK - test number       |\n| 447772000004 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-2010    | n/a  | Vodafone UK - test number       |\n| 447772000005 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-1891    | n/a  | Vodafone UK - test number       |\n| 447772000006 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-2010    | n/a  | Vodafone UK - test number       |\n| 447772000007 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-1891    | n/a  | Vodafone UK - test number       |\n| 447772000008 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-2010    | n/a  | Vodafone UK - test number       |\n| 447772000009 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-1891    | n/a  | Vodafone UK - test number       |\n| 447771000005 | Will       | Smith     | 12           | Trinitee House    | S11 8JN  | 09-07-1891    | n/a  | Vodafone UK - sandbox number    |\n| 447470543097 | Fuzz       | Owens     | 295a         | n/a               | TW9 3LU  | 28-12-1949    | n/a  | Vodafone UK - production number |\n| 447555394680 | Peter      | Parker    | 22           | Browenhaven House | KT6 4SS  | 28-12-1949    | n/a  | Vodafone UK - production number |\n| 447393668296 | Casey      | Cortez    | 1023         | n/a               | CB62AG   | 01-06-1960    | n/a  | Vodafone UK - production number |\n---\nVodafone Enabler Espana SL\n| Number      | First Name    | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                        |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 34600080001 | Lui Francisco | Garcia    | n/a          | n/a        | 28410    | 12-12-1984    | n/a  | Vodafone KYC Spain sandbox persona |\n| 34600080004 | Maria Jose    | Luna      | n/a          | n/a        | 28410    | 12-12-1984    | n/a  | Vodafone KYC Spain sandbox persona |\n---\nVodafone\n| Number      | First Name     | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                        |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 34600080002 | Bebé Valentina | Ana       | n/a          | n/a        | 08028    | 10-05-1991    | n/a  | Vodafone KYC Spain sandbox persona |\n---\nVodafone D2\n| Number       | First Name  | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                          |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 491722100001 | Gäöüldstein | Weber     | 3            | n/a        | 40236    | 02-09-1988    | n/a  | Vodafone KYC Germany sandbox persona |\n| 491722100003 | Steve       | Becker    | 26           | n/a        | 40210    | 17-01-1965    | n/a  | Vodafone KYC Germany sandbox persona |\n| 491722100006 | Adélaïde    | Sterling  | n/a          | n/a        | 40210    | 01-01-2000    | n/a  | Vodafone KYC Germany sandbox persona |\n---\nVodafone Libertel\n| Number      | First Name         | Last Name               | House Number | House Name | Postcode | Date of Birth | IMEI | Description                              |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 31777100001 | Hendricus Johannes | van der Vorst-Boomgaard | 237          | n/a        | 1012 SB  | 23-11-1953    | n/a  | Vodafone KYC Netherlands sandbox persona |\n| 31777100002 | Jacques            | van ‘t Schip            | 45           | n/a        | 3912 XB  | 25-11-2002    | n/a  | Vodafone KYC Netherlands sandbox persona |\n| 31777100003 | Marianne Corola    | Müller                  | 1024         | n/a        | 3912 XB  | 23-11-1999    | n/a  | Vodafone KYC Netherlands sandbox persona |\n---\nOrange France\n| Number      | First Name | Last Name       | Street Address                                      | Postcode | Locality  | Date of Birth | IMEI | Description                                                         |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 33600000000 | Christine  | Dumontel        | 11 rue des Lilas                                    | 75018    | Paris     | 25-11-1978    | n/a  | Orange France - sandbox number                                      |\n| 33772665825 | Marina     | Quatremaifictif | 93 RUE FELIX PYAT ORANGE DSI CEPC BATIMENT D ÉTG 05 | 13003    | Marseille | 15-10-1972    | n/a  | Orange France - provided by Orange France support team (production) |\n| 33673188201 | Yann       | Serquin         | 2 rue de la voie verte                              | 92140    | Clamart   | 15-03-1969    | n/a  | Orange France - provided by Orange France support team (production) |\n| 33786896808 | Gaëlle     | Serquin         | 2 rue de la voie verte                              | 92140    | Clamart   | 14-05-1970    | n/a  | Orange France - provided by Orange France support team (production) |\n| 33787187773 | Carole     | Benoist         | Boite au lettre 13 5 avenue du Général Leclerc      | 75014    | Paris     | 22-05-1968    | n/a  | Orange France - provided by Orange France support team (production) |\n| 33648123649 | Joan       | Buesnel         | Rue d'Embaques                                      | 32000    | Auch      | n/a           | n/a  | Orange France - Nana Hornsey personal information                   |\n---\nBouygues France\n| Number      | First Name | Last Name | Street Address         | Postcode | Locality | Date of Birth | IMEI | Description                                                              |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 33762106526 | Mustapha   | Poulain   | 1 Chemin des fontaines | 76350    | Oissel   | 11-07-1979    | n/a  | Bouygues France - will get 100 score on all field (production & sandbox) |\n| 33612345678 | Mustapha   | Poulain   | 1 Chemin des fontaines | 76350    | Oissel   | 11-07-1979    | n/a  | Bouygues France - will get bad score on all field (production & sandbox) |\n---\nFree Mobile\n| Number      | First Name | Last Name | Street Address     | Postcode | Locality | Date of Birth | IMEI | Description                      |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 33799999999 | Jean       | Dupont    | 12 rue de la perle | 75000    | Paris    | 01-01-1980    | n/a  | Free Mobile preprod test persona |\n---\nT-Mobile US-SVR-10X/2\n| Number      | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                            |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 16469817679 | William    | Moon      | 1899         | n/a        | 56075    | 25-11-1957    | n/a  | T-Mobile USA - TMT test person for KYC |\n| 12403505473 | Maggie     | Coleman   | 1019         | n/a        | 7102     | 13-04-1993    | n/a  | T-Mobile USA - TMT test person for KYC |\n| 12403505474 | Invalid    | Request   | n/a          | n/a        | n/a      | n/a           | n/a  | simulates TMT error: 'Invalid request' |\n---\nCingular Wireless-NSR/2\n| Number      | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                            |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 16469798053 | Vera       | Mathes    | 779          | n/a        | 94539    | 29-05-1986    | n/a  | T-Mobile USA - TMT test person for KYC |\n---\nVodafone (former Omnitel Pronto Italia)\n| Number       | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                              |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 393490086224 | Zelida     | Basile    | 20           | n/a        | 50144    | 22-10-2007    | n/a  | Vodafone Italy - TMT test person for KYC |\n| 393803275568 | Luigi      | Battaglia | 1            | n/a        | 56121    | 03-03-1983    | n/a  | Vodafone Italy - TMT test person for KYC |\n---\nNoverca - full mvno TIM\n| Number       | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                             |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 393760743161 | Cleopatra  | Rossetti  | 10           | n/a        | 43123    | 29-02-1992    | n/a  | Noverca Italy - TMT test person for KYC |\n---\nKPN B.V.\n| Number      | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                      |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 31104100000 | Ashley     | Scholten  | 6            | n/a        | 1071DJ   | 13-05-1980    | n/a  | KPN NL - TMT test person for KYC |\n---\nT-Mobile Netherlands B.V.\n| Number      | First Name | Last Name | House Number | House Name | Postcode | Date of Birth | IMEI | Description                           |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 31104100001 | Mirthe     | Velden    | 428          | n/a        | 3084LL   | 21-03-1975    | n/a  | T-Mobile NL - TMT test person for KYC |\n---\nTelefónica Móviles España, SAU\n| Number      | First Name       | Last Name            | House Number | House Name | Postcode | Date of Birth | IMEI | Description                                                                                |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 34629255833 | Federica         | Sánchez-Arjona Garza | 500          | n/a        | 28003    | 22-08-1978    | n/a  | Tef Match v5 sandbox persona                                                               |\n| 34649300097 | Daniel Adrian    | Fermonsel Muñoz      | 324          | n/a        | 46004    | 19-01-1989    | n/a  | Tef Match v5 sandbox persona                                                               |\n| 34649300099 | María del Carmen | Bonachera            | s/n          | n/a        | 08037    | 24-10-1970    | n/a  | Tef Match v5 sandbox persona                                                               |\n| 34649300098 | Aurelio          | Urriaga Vital        | 150          | n/a        | 28004    | 30-09-1972    | n/a  | Tef Match v5 sandbox persona - This MSISDN will always respond with 404 1 MSISDN not found |\n---\nTelefonica Germany GmbH & Co. oHG\n| Number       | First Name | Last Name     | House Number | House Name | Postcode | Date of Birth | IMEI | Description                                                                                |\n| -- | -- | -- | -- | -- | -- | -- | -- | -- |\n| 491767234567 | Dagmar     | Mustermann    | 28           | n/a        | 80335    | 22-04-1950    | n/a  | Tef Match v5 sandbox persona                                                               |\n| 491767987221 | Ilse       | Schmidt       | 53           | n/a        | 44139    | 05-09-1980    | n/a  | Tef Match v5 sandbox persona                                                               |\n| 491767878439 | Orland     | Müller        | 15           | n/a        | 22599    | 09-01-1990    | n/a  | Tef Match v5 sandbox persona                                                               |\n| 491767675498 | Maria      | Schulz        | 99           | n/a        | 90451    | 14-04-1999    | n/a  | Tef Match v5 sandbox persona                                                               |\n| 491767199237 | Amwolf     | Braun-Feldweg | 73           | n/a        | 68259    | 24-10-1987    | n/a  | Tef Match v5 sandbox persona                                                               |\n| 491767554388 | Rollan     | Bauer         | 16           | n/a        | 40629    | 03-05-1985    | n/a  | Tef Match v5 sandbox persona - This MSISDN will always respond with 404 1 MSISDN not found |",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "cad5bf1c-6765-4f59-86f8-bffb8345cc3c",
+      "name": "v2 (deprecated)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "75a26f98-a37e-471f-9ee4-9a25a5022ff2",
+          "name": "Assured Registration",
+          "request": {
+            "name": "Assured Registration",
+            "description": {
+              "content": "Validate that the mobile phone number provided by a customer at the point of account registration / creation is associated with the same person’s mobile network billing identity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "core",
+                "v2",
+                "NumberAssurance",
+                "AssuredRegistration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"API_token\": \"<string>\",\n  \"API_secret\": \"<string>\",\n  \"number\": \"<string>\",\n  \"user_info\": {\n    \"first_name\": \"<string>\",\n    \"surname\": \"<string>\",\n    \"house_number\": \"<string>\",\n    \"house_name\": \"<string>\",\n    \"postcode\": \"<string>\"\n  },\n  \"correlation_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0b85ce78-ff58-480b-8300-9b9d9655da26",
+              "name": "**200 - HTTP OK**  \nCheck `status` and `status_message` for further details on the success of the request:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 0    | transaction successful                                          |\n| 305  | subscriber absent, data may be incomplete                       |\n| 306  | unknown subscriber, data may be incomplete                      |\n| 308  | teleservice not provisioned for subscriber                      |\n| 309  | call or SMS facility barred for subscriber                      |\n| 310  | call or SMS facility not currently supported in serving network |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"status_message\": \"transaction successful\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"HTTP_status\": 200,\n  \"user_info_match\": {\n    \"first_name_match\": true,\n    \"first_name_data_available\": true,\n    \"last_name_match\": false,\n    \"last_name_data_available\": true,\n    \"name_match\": false,\n    \"name_data_available\": true,\n    \"house_number_or_house_name_match\": false,\n    \"house_number_or_house_name_data_available\": true,\n    \"postcode_match\": true,\n    \"postcode_data_available\": true,\n    \"address_match\": false,\n    \"address_data_available\": true,\n    \"birthdate_match\": false,\n    \"birthdate_data_available\": false,\n    \"contract_type\": \"PAYM\"\n  },\n  \"is_lost_or_stolen\": false,\n  \"is_active\": true,\n  \"correlation_id\": \"1677155591\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3b9a098-8152-4ddd-930a-199930526864",
+              "name": "**202 - HTTP Accepted**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 300  | call Forward check failed                                       |\n| 301  | SIM swap check failed                                           |\n| 302  | country check failed                                            |\n| 303  | user information check failed                                   |\n| 304  | vicinity check failed                                           |\n| 307  | no coverage for country                                         |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 300,\n  \"status_message\": \"call Forward check failed\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 202\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e8fef0f-503b-4624-b443-01a2b0ed1f1f",
+              "name": "**400 - HTTP Bad Request**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 103  | bad request                                                     |\n| 104  | invalid Content-Type header                                     |\n| 207  | invalid parameters                                              |\n| 208  | invalid postcode parameter                                      |\n| 209  | invalid name parameter                                          |\n| 210  | invalid address parameter                                       |\n| 211  | invalid birthdate parameter                                     |\n| 213  | invalid use case identifier                                     |\n| 214  | invalid number parameter                                        |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 103,\n  \"status_message\": \"bad request\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "19240c3b-2ba1-4ea6-a102-28f8868ecbb7",
+              "name": "**401 - HTTP Unauthorized**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 100  | user account not found                                          |\n| 101  | authentication failed                                           |\n| 102  | user account suspended                                          |\n| 106  | admin privileges required for this API                          |\n| 200  | IP address not whitelisted                                      |\n| 204  | product not provisioned for your account                        |\n| 206  | product availability suspended for your account                 |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 100,\n  \"status_message\": \"user account not found\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "daa8173b-c228-4126-bbf9-8a0f46493047",
+              "name": "**403 - HTTP Forbidden**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 212  | MNO access not authorised                                       |\n| 802  | datasource temporarily not available                            |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 212,\n  \"status_message\": \"MNO access not authorised\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "89bb8a19-4eec-4410-b01d-12f5dabd0c64",
+              "name": "**404 - HTTP Not Found**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 404  | subscriber opted out of service                                 |\n| 405  | invalid number                                                  |\n| 804  | resource not found                                              |\n| 807  | subscriber data unavailable                                      |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 404,\n  \"status_message\": \"subscriber opted out of service\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80275866-82be-4751-892e-4a06d4097a63",
+              "name": "**405 - HTTP Method Not Allowed**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 105  | method not allowed                                              |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 105,\n  \"status_message\": \"method not allowed\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 405\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "157f2922-04d7-4539-8237-39a0d143d3ac",
+              "name": "**408 - HTTP Request Timeout**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 806  | datasource query time out                                       |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Timeout",
+              "code": 408,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 806,\n  \"status_message\": \"datasource query time out\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 408\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7c8fd79-2693-4803-9f30-ec1c7c4ba77a",
+              "name": "**502 - HTTP Bad Gateway**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 803  | datasource query failed                                         |\n| 805  | database subsystem error                                        |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 803,\n  \"status_message\": \"datasource query failed\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 502\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf43f780-49b6-43b5-b566-3ce37ca816bc",
+              "name": "**503 - HTTP Service Unavailable**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 201  | request was throttled. submission limits exceeded               |\n| 202  | request was throttled. submission limits exceeded               |\n| 203  | request was throttled. submission limits exceeded               |\n| 800  | database subsystem unavailable                                  |\n| 801  | datasource permanently unavailable                              |\n| 808  | service not available for MVNO                                  |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredRegistration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 800,\n  \"status_message\": \"database subsystem unavailable\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a7944db-9391-4b81-8853-fd421e270eaa",
+          "name": "Assured Age",
+          "request": {
+            "name": "Assured Age",
+            "description": {
+              "content": "Verify that the mobile phone number provided by a customer is registered to them and they meet certain age requirements.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "core",
+                "v2",
+                "NumberAssurance",
+                "AssuredAge"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"API_token\": \"<string>\",\n  \"API_secret\": \"<string>\",\n  \"number\": \"<string>\",\n  \"user_info\": {\n    \"first_name\": \"<string>\",\n    \"surname\": \"<string>\",\n    \"date_of_birth\": \"<string>\",\n    \"house_number\": \"<string>\",\n    \"house_name\": \"<string>\",\n    \"postcode\": \"<string>\"\n  },\n  \"correlation_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1849d476-ae34-4463-a3dc-55b631399f88",
+              "name": "**200 - HTTP OK**  \nCheck `status` and `status_message` for further details on the success of the request:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 0    | transaction successful                                          |\n| 305  | subscriber absent, data may be incomplete                       |\n| 306  | unknown subscriber, data may be incomplete                      |\n| 308  | teleservice not provisioned for subscriber                      |\n| 309  | call or SMS facility barred for subscriber                      |\n| 310  | call or SMS facility not currently supported in serving network |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"status_message\": \"transaction successful\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"HTTP_status\": 200,\n  \"user_info_match\": {\n    \"first_name_match\": true,\n    \"first_name_data_available\": true,\n    \"last_name_match\": false,\n    \"last_name_data_available\": true,\n    \"name_match\": false,\n    \"name_data_available\": true,\n    \"house_number_or_house_name_match\": false,\n    \"house_number_or_house_name_data_available\": true,\n    \"postcode_match\": true,\n    \"postcode_data_available\": true,\n    \"address_match\": false,\n    \"address_data_available\": true,\n    \"birthdate_match\": false,\n    \"birthdate_data_available\": false,\n    \"contract_type\": \"PAYM\"\n  },\n  \"is_lost_or_stolen\": false,\n  \"is_active\": true,\n  \"correlation_id\": \"1677155591\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2453e7a9-b741-44b9-8ba2-1c16dd4e7ee8",
+              "name": "**202 - HTTP Accepted**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 300  | call Forward check failed                                       |\n| 301  | SIM swap check failed                                           |\n| 302  | country check failed                                            |\n| 303  | user information check failed                                   |\n| 304  | vicinity check failed                                           |\n| 307  | no coverage for country                                         |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 300,\n  \"status_message\": \"call Forward check failed\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 202\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ceb931c4-808f-4a53-999d-0ca5a72ca32f",
+              "name": "**400 - HTTP Bad Request**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 103  | bad request                                                     |\n| 104  | invalid Content-Type header                                     |\n| 207  | invalid parameters                                              |\n| 208  | invalid postcode parameter                                      |\n| 209  | invalid name parameter                                          |\n| 210  | invalid address parameter                                       |\n| 211  | invalid birthdate parameter                                     |\n| 213  | invalid use case identifier                                     |\n| 214  | invalid number parameter                                        |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 103,\n  \"status_message\": \"bad request\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04e9298a-c1de-448f-a505-1f2b7bed48a1",
+              "name": "**401 - HTTP Unauthorized**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 100  | user account not found                                          |\n| 101  | authentication failed                                           |\n| 102  | user account suspended                                          |\n| 106  | admin privileges required for this API                          |\n| 200  | IP address not whitelisted                                      |\n| 204  | product not provisioned for your account                        |\n| 206  | product availability suspended for your account                 |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 100,\n  \"status_message\": \"user account not found\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1576f7f-a399-4f81-8ba1-0c359b201888",
+              "name": "**403 - HTTP Forbidden**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 212  | MNO access not authorised                                       |\n| 802  | datasource temporarily not available                            |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 212,\n  \"status_message\": \"MNO access not authorised\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ec49663-fad9-41d3-9f47-bc2fb4470049",
+              "name": "**404 - HTTP Not Found**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 404  | subscriber opted out of service                                 |\n| 405  | invalid number                                                  |\n| 804  | resource not found                                              |\n| 807  | subscriber data unavailable                                      |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 404,\n  \"status_message\": \"subscriber opted out of service\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5da8379-00a7-4bfe-a51a-56c3d51a5a89",
+              "name": "**405 - HTTP Method Not Allowed**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 105  | method not allowed                                              |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 105,\n  \"status_message\": \"method not allowed\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 405\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bffac57b-0753-4d7f-b364-93033083f865",
+              "name": "**408 - HTTP Request Timeout**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 806  | datasource query time out                                       |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Timeout",
+              "code": 408,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 806,\n  \"status_message\": \"datasource query time out\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 408\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f75e58a-633d-4fd1-9650-e4468c1e9833",
+              "name": "**502 - HTTP Bad Gateway**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 803  | datasource query failed                                         |\n| 805  | database subsystem error                                        |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 803,\n  \"status_message\": \"datasource query failed\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 502\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47285a51-6504-48bd-857c-acbd23693dcc",
+              "name": "**503 - HTTP Service Unavailable**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 201  | request was throttled. submission limits exceeded               |\n| 202  | request was throttled. submission limits exceeded               |\n| 203  | request was throttled. submission limits exceeded               |\n| 800  | database subsystem unavailable                                  |\n| 801  | datasource permanently unavailable                              |\n| 808  | service not available for MVNO                                  |\n\n---",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "core",
+                    "v2",
+                    "NumberAssurance",
+                    "AssuredAge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"API_token\": \"CLIENT\",\n  \"API_secret\": \"u07ta73b0a001e9038\",\n  \"number\": \"447700900704\",\n  \"user_info\": {\n    \"first_name\": \"Katharine\",\n    \"surname\": \"Parsons\",\n    \"date_of_birth\": \"01-01-1859\",\n    \"house_number\": \"20\",\n    \"house_name\": \"Michael Faraday House\",\n    \"postcode\": \"SG1 2AY\"\n  },\n  \"correlation_id\": \"1677155591\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 800,\n  \"status_message\": \"database subsystem unavailable\",\n  \"transaction_id\": \"24163639-0b81-4101-9bfe-e5e5fe7d5064\",\n  \"correlation_id\": \"1677155591\",\n  \"HTTP_status\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5cb0c297-0185-41f9-8af6-69949570b2e0",
+      "name": "Network Biometrics™",
+      "request": {
+        "name": "Network Biometrics™",
+        "description": {
+          "content": "Network Biometrics™️ is for identifying, verifying and assuring customers. We make customer signups and transactions smoother while reducing exposure to fraud and related risks across the entire customer lifecycle.",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "network-biometrics"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "disabled": false,
+            "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+            "key": "Correlation-Id",
+            "value": "<string>"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "auth": null,
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"discover\": {\n    \"number\": \"<string>\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": \"<boolean>\"\n    },\n    \"hasNumberBeenRecycled\": {\n      \"inSeconds\": \"<integer>\"\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"<string>\",\n      \"for\": [\n        \"<string>\"\n      ],\n      \"calculateCheckDigit\": false\n    }\n  },\n  \"assure\": {\n    \"matchingName\": {\n      \"firstName\": \"<string>\",\n      \"lastName\": \"<string>\",\n      \"email\": \"<string>\"\n    },\n    \"matchingIdentityDocument\": {\n      \"nationalIdentity\": {\n        \"reference\": \"<string>\"\n      }\n    },\n    \"matchingAddress\": {\n      \"houseNumber\": \"<string>\",\n      \"houseName\": \"<string>\",\n      \"streetAddress\": \"<string>\",\n      \"postcode\": \"<string>\",\n      \"locality\": \"<string>\",\n      \"province\": \"<string>\",\n      \"country\": \"<string>\"\n    },\n    \"matchingBirthDate\": {\n      \"dateOfBirth\": \"<date>\"\n    },\n    \"matchingAge\": {\n      \"greaterThanYears\": 18\n    },\n    \"hasServiceRestriction\": {\n      \"for\": [\n        \"<string>\"\n      ]\n    },\n    \"matchingDeviceInfo\": {\n      \"IMEI\": \"<string>\",\n      \"calculateCheckDigit\": false\n    },\n    \"matchingAccountInfo\": {\n      \"for\": [\n        \"<string>\"\n      ]\n    }\n  },\n  \"protect\": {\n    \"hasSimChanged\": {\n      \"inSeconds\": \"<integer>\"\n    },\n    \"hasDeviceChanged\": {\n      \"inSeconds\": \"<integer>\"\n    },\n    \"wasReportedLostOrStolen\": {\n      \"inSeconds\": \"<integer>\"\n    },\n    \"hasAccountTenure\": {\n      \"greaterThanDays\": \"<integer>\"\n    },\n    \"hasContractInfo\": {\n      \"for\": [\n        \"startDate\"\n      ]\n    },\n    \"hasCallForwarding\": {\n      \"for\": \"unconditional\"\n    },\n    \"hasActiveCall\": {\n      \"withMinimumDuration\": {\n        \"inSeconds\": \"<integer>\"\n      },\n      \"with\": [\n        \"<string>\"\n      ]\n    },\n    \"hasDeviceInfo\": {\n      \"for\": [\n        \"IMEI\"\n      ]\n    },\n    \"wasBlacklisted\": {\n      \"inSeconds\": \"<integer>\"\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "id": "4b740633-ef2c-4683-8272-39b0d20c97d0",
+          "name": "**200 - HTTP OK**  \nCheck `transaction.status.value` for further detail on the success of the request:\n\n| Code | Message                                          |\n|:----:|:------------------------------------------------:|\n| 0    | transaction successful                           |\n| 2    | transaction successful but partial data returned |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"discover\": {\n    \"number\": {\n      \"is\": \"447700900501\",\n      \"isCorrectFormat\": true,\n      \"isValid\": true,\n      \"country\": {\n        \"name\": \"United Kingdom of Great Britain and Northern Ireland\",\n        \"code\": \"GB\",\n        \"dialCode\": \"44\"\n      },\n      \"onNetwork\": {\n        \"MCC\": \"001\",\n        \"MNC\": \"04\",\n        \"networkName\": \"Phronesis (H3G UK)\"\n      },\n      \"isPorted\": false\n    },\n    \"hasNumberBeenRecycled\": {\n      \"isRecycled\": true,\n      \"changedInTimePeriod\": true,\n      \"lastChange\": \"2022-10-20T11:36:26+00:00\"\n    },\n    \"hasMVNOInfo\": {\n      \"isMVNO\": true,\n      \"brand\": \"iD mobile\",\n      \"isDataAvailable\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"isRoaming\": true,\n      \"isDataAvailable\": true\n    },\n    \"device\": {\n      \"IMEI\": {\n        \"is\": \"969455279101647\"\n      },\n      \"serialNo\": {\n        \"value\": \"DX3ZJ7LRKXK7\",\n        \"isDataAvailable\": true\n      },\n      \"model\": {\n        \"brand\": \"Apple\",\n        \"name\": \"iPhone XR\",\n        \"code\": \"iPhone XR (A2105)\",\n        \"isDataAvailable\": true\n      },\n      \"activation\": {\n        \"isActivated\": true,\n        \"isDataAvailable\": true,\n        \"date\": null\n      },\n      \"estimatedPurchase\": {\n        \"date\": \"2020-01-28\",\n        \"isDataAvailable\": true\n      },\n      \"blacklist\": {\n        \"status\": true,\n        \"isDataAvailable\": true,\n        \"addEvent\": {\n          \"date\": \"2023-01-24 08:32:08\",\n          \"by\": \"Hutchison 3G UK\",\n          \"reason\": \"Stolen Or Lost\"\n        },\n        \"removeEvent\": {\n          \"date\": \"2023-01-24 15:32:08\",\n          \"by\": \"Hutchison 3G UK\",\n          \"reason\": \"Found\"\n        },\n        \"history\": {\n          \"blacklistedCount\": 30,\n          \"removedCount\": 29,\n          \"operators\": 2\n        }\n      },\n      \"retail\": {\n        \"currency\": \"USD\",\n        \"prices\": [\n          \"1247\",\n          \"1366\",\n          \"1604\",\n          \"1842\"\n        ],\n        \"storageOptions\": [\n          \"128 GB\",\n          \"256 GB\",\n          \"512 GB\",\n          \"1 TB\"\n        ],\n        \"releaseDate\": \"2021-09-01\",\n        \"isDataAvailable\": true\n      }\n    }\n  },\n  \"transaction\": {\n    \"status\": {\n      \"value\": 0,\n      \"message\": \"transaction successful\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"b196fe72-49f7-4888-abc2-66bc14b5ca3f\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "077c4416-be31-4a19-aa70-781f727a4a83",
+          "name": "**202 - HTTP Accepted**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                       |\n| ---- | -----------------------------:|\n| 300  | call Forward check failed     |\n| 301  | SIM swap check failed         |\n| 302  | country check failed          |\n| 303  | user information check failed |\n| 304  | vicinity check failed         |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Accepted",
+          "code": 202,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"transaction\": {\n    \"status\": {\n      \"value\": 300,\n      \"message\": \"call Forward check failed\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"600005e8-bb33-4a42-bb23-65aa70c3ec6e\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "77d8617a-ec6c-4657-8f80-b29598bfd55c",
+          "name": "**400 - HTTP Bad Request**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                     |\n|:----:|:---------------------------:|\n| 103  | bad request                 |\n| 104  | invalid Content-Type header |\n| 207  | invalid parameters          |\n| 208  | invalid postcode parameter  |\n| 209  | invalid name parameter      |\n| 210  | invalid address parameter   |\n| 211  | invalid birthdate parameter |\n| 213  | invalid use case identifier |\n| 214  | invalid number parameter    |\n| 215  | invalid IMEI parameter      |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"transaction\": {\n    \"status\": {\n      \"value\": 103,\n      \"message\": \"bad request\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"600005e8-bb33-4a42-bb23-65aa70c3ec6e\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "29410b22-285a-4bf0-82ae-144501795152",
+          "name": "**401 - HTTP Unauthorized**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                                         |\n| ---- | ----------------------------------------------- |\n| 100  | user account not found                          |\n| 101  | authentication failed                           |\n| 102  | user account suspended                          |\n| 106  | admin privileges required for this API          |\n| 200  | IP address not whitelisted                      |\n| 204  | product not provisioned for your account        | \n| 206  | product availability suspended for your account |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"transaction\": {\n    \"status\": {\n      \"value\": 100,\n      \"message\": \"user account not found\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"600005e8-bb33-4a42-bb23-65aa70c3ec6e\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "b78426d9-02e6-41d5-a485-eea59c6ec0ce",
+          "name": "**403 - HTTP Forbidden**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                              |\n| ---- | ------------------------------------ |\n| 212  | MNO access not authorised            |\n| 802  | datasource temporarily not available |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"transaction\": {\n    \"status\": {\n      \"value\": 212,\n      \"message\": \"MNO access not authorised\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"600005e8-bb33-4a42-bb23-65aa70c3ec6e\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "6f63fe23-d8e8-405b-b105-39d334708531",
+          "name": "**404 - HTTP Not Found**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                                       |\n| ---- | --------------------------------------------- |\n| 306  | unknown subscriber, data may be incomplete    |\n| 307  | no coverage for country                       |\n| 404  | subscriber opted out of service               |\n| 405  | invalid number                                |\n| 406  | subscriber is unregistered prepay             |\n| 407  | unknown routing information                   |\n| 408  | unknown number range                          |\n| 409  | device or brand not supported                 |\n| 804  | resource not found                            |\n| 807  | subscriber data unavailable                   |\n| 817  | datasource data not found                     |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"transaction\": {\n    \"status\": {\n      \"value\": 306,\n      \"message\": \"unknown subscriber, data may be incomplete\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"600005e8-bb33-4a42-bb23-65aa70c3ec6e\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "89559f2d-3841-4dd0-abed-b296032c3e07",
+          "name": "**405 - HTTP Method Not Allowed**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message              |\n| ---- | -------------------- |\n| 105  | method not allowed   |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Method Not Allowed",
+          "code": 405,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"transaction\": {\n    \"status\": {\n      \"value\": 105,\n      \"message\": \"method not allowed\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"600005e8-bb33-4a42-bb23-65aa70c3ec6e\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "09e9628a-6069-46b3-bd8b-92ac88179fab",
+          "name": "**408 - HTTP Request Timeout**  \nMay be returned without a body\n\n---\n",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Request Timeout",
+          "code": 408,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "311943e9-be4e-4741-8adc-abf647860a90",
+          "name": "**500 - HTTP Internal Server Error**  \nMay be returned without a body\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "8750d8de-5630-499f-a8fb-e45e1e5f26fc",
+          "name": "**502 - HTTP Bad Gateway**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                                 |\n| ---- | --------------------------------------- |\n| 803  | datasource query failed                 |\n| 805  | database subsystem error                |\n| 812  | datasource returned unexpected response |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Bad Gateway",
+          "code": 502,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"transaction\": {\n    \"status\": {\n      \"value\": 803,\n      \"message\": \"datasource query failed\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"600005e8-bb33-4a42-bb23-65aa70c3ec6e\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "735d8071-104a-494d-8cbd-71802ceb5365",
+          "name": "**503 - HTTP Service Unavailable**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                                                     |\n| ---- | ----------------------------------------------------------- |\n| 201  | request was throttled. submission per second limit exceeded |\n| 202  | request was throttled. submission per day limit exceeded    |\n| 203  | request was throttled. submission per month limit exceeded  |\n| 800  | database subsystem unavailable                              |\n| 801  | datasource permanently unavailable                          |\n| 806  | datasource connection error                                 |\n| 808  | service not available for MNO or MVNO                       |\n| 809  | datasource capacity exceeded                                |\n| 810  | internal server error                                       |\n| 811  | datasource called too early                                 |\n| 813  | datasource quota exceeded                                   |\n| 814  | problem connecting to datasource                            |\n| 815  | datasource requires further data                            |\n| 816  | datasource query error                                      |\n\n---",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "network-biometrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "API-Token",
+                "value": "<API Key>"
+              },
+              {
+                "disabled": false,
+                "description": "An optional user-generated string that will be returned in the response to allow the matching of request",
+                "key": "Correlation-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discover\": {\n    \"number\": \"447700900702\",\n    \"hasMVNOInfo\": {\n      \"filterMVNO\": true\n    },\n    \"hasHomeNetworkInfo\": {\n      \"for\": [\n        \"roaming\"\n      ]\n    },\n    \"device\": {\n      \"IMEI\": \"351498789456123\",\n      \"for\": [\n        \"serialNo\",\n        \"model\",\n        \"activation\",\n        \"purchaseDate\",\n        \"blacklist\",\n        \"retail\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Correlation-Id",
+              "value": "251250b0-05a5-44b1-9d6d-6d1c78e8d994",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"transaction\": {\n    \"status\": {\n      \"value\": 201,\n      \"message\": \"request was throttled. submission per second limit exceeded\"\n    },\n    \"reference\": \"https://developer.api.v3.phronesis.tech/\",\n    \"id\": \"600005e8-bb33-4a42-bb23-65aa70c3ec6e\"\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ea.api.phronesis.tech",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "API-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c5cf6c96-b849-40c6-b51e-791919285c51",
+    "name": "Network Biometrics™ by TMT ID",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "TMT ID is the creator of Network Biometrics™. We make customer signups and transactions smoother while reducing exposure to fraud and related risks. With most online transactions now being made on mobile devices, an individual’s mobile number is often the best starting point for establishing their digital identity and managing their ongoing relationship with your organisation.  \n\nBecause of the close relationship between number, handset, and SIM, it is possible to identify and authenticate users without interrupting the customer journey quickly and transparently. However, there are many ways of compromising mobile numbers for fraud, including identity theft, account takeover and man-in-the-middle attacks.  \n\nNetwork Biometrics™ provides additional capabilities for your existing security and fraud detection systems. Through our APIs you can instantly validate the personal data that is being given to you, check for SIM swap or device change events and obtain other fraud indicators.\n\n---\n\nContact Support:\n Name: support@phronesis.net\n Email: support@phronesis.net",
+      "type": "text/plain"
+    }
+  }
+}

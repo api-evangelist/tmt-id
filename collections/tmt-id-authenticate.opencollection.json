@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TMT Authenticate API specs",
+    "version": "1.1.2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authenticate",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "This phase is where the Customer requests authorization to perform an authentication for a given device.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://auth-staging-api.tmtid.dev/v1/oauth/token",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            },
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "This phase is where the Customer requests authorization to perform an authentication for a given device.\n\nThe Customer requests permission to make an Authentication query and receives a timebound token for that transaction. The Customer also must request which authentication technology is required for this transaction."
+        },
+        {
+          "info": {
+            "name": "The get_config endpoint will return specific instructions on how to begin the session with the relevant MNO and how to send the OTP message.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://auth-staging-api.tmtid.dev/v1/get_config",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "The get_config endpoint will return specific instructions on how to begin the session with the relevant MNO and how to send the OTP message.\n\nThe Customer requests the specific telephone number that requires authentication. In response to this stage TMT ID will return the specific uri that the handset must call for the Silent Authentication (where appropriate)."
+        },
+        {
+          "info": {
+            "name": "The validate endpoint will return whether the phone number was validated successfully or not and the service used in order to achieve the authentication.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://auth-staging-api.tmtid.dev/v1/validate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "The validate endpoint will return whether the phone number was validated successfully or not and the service used in order to achieve the authentication.\n\nSecurity mechanism that allows the Customer to check with TMT ID that a handset had correctly authenticated."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Service",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Authenticate with Silent Network Authentication method",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://auth-staging-api.tmtid.dev/v1/authenticate",
+            "params": [
+              {
+                "name": "id_token",
+                "value": "v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w...",
+                "type": "query",
+                "description": "Provided in the get_config request"
+              }
+            ]
+          },
+          "docs": "Authenticate with Silent Network Authentication method\n\nThe authenticate endpoint will execute the Silent Authentication against the Operator wherever this is supported."
+        },
+        {
+          "info": {
+            "name": "Authenticate with  One-Time Password method",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://auth-staging-api.tmtid.dev/v1/authenticate/otp",
+            "params": [
+              {
+                "name": "id_token",
+                "value": "v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w...",
+                "type": "query",
+                "description": "Provided in the get_config request"
+              }
+            ]
+          },
+          "docs": "Authenticate with  One-Time Password method\n\nThis specific endpoint will be triggered by the Customer and in case of success a special form where the user needs to input the OTP code needs to be displayed in the Customer APP."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
