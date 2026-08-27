@@ -38,160 +38,325 @@ created: '2026-07-25'
 modified: '2026-07-25'
 specificationVersion: '0.23'
 apis:
-- aid: tmt-id:tmt-id-verify
-  name: TMT Verify API
-  description: >-
-    Real-time verification of a mobile number against mobile network operator data.
-    A single POST returns the requested datapoints for a number — subscriber name and
-    address match, account type and tenure, market segment, roaming state, portability,
-    and a simswap block giving the elapsed time since the last recorded SIM change.
+- aid: tmt-id:tmt-id-authenticate-api
+  name: TMT ID Authenticate API
+  description: Authenticate user with MNO or OTP. These endpoints can be directly called by the users.
   humanURL: https://tmtid.com/developer/tmt_verify_v1.html
   baseURL: https://api.tmtverify.com
   tags:
-  - Identity Verification
-  - SIM Swap
-  - KYC
+  - Authenticate
   properties:
   - type: OpenAPI
-    url: openapi/tmt-id-verify.yml
+    url: openapi/tmt-id-authenticate-api-openapi.yml
   - type: Documentation
     url: https://tmtid.com/verify/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_verify_v1.html
-  - type: Overlay
-    url: overlays/tmt-id-verify-overlay.yaml
-- aid: tmt-id:tmt-id-velocity
-  name: TMT Velocity API
-  description: >-
-    Global mobile number lookup that returns the network operator currently serving a
-    number, including ported numbers, using live HLR/ENUM sourced data. Delivered as a
-    single GET with the API key and secret carried in the URL path.
-  humanURL: https://tmtid.com/developer/tmt_velocity_v1.html
-  baseURL: https://api.tmtvelocity.com
-  tags:
-  - Number Lookup
-  - Portability
-  - ENUM
-  properties:
-  - type: OpenAPI
-    url: openapi/tmt-id-velocity.yml
   - type: Documentation
     url: https://tmtid.com/velocity/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_velocity_v1.html
-  - type: Overlay
-    url: overlays/tmt-id-velocity-overlay.yaml
-- aid: tmt-id:tmt-id-live
-  name: TMT Live API
-  description: >-
-    Checks whether a mobile number is currently assigned and in active use on a network,
-    for data cleansing, deliverability and pre-send validation. Offered over HTTPS and
-    over ENUM/NAPTR against live.tmtvelocity.com for carrier-side integrations.
-  humanURL: https://tmtid.com/developer/tmt_live_v1.html
-  baseURL: https://api.tmtvelocity.com/live
-  tags:
-  - Number Validation
-  - Reachability
-  - ENUM
-  properties:
-  - type: OpenAPI
-    url: openapi/tmt-id-live.yml
   - type: Documentation
     url: https://tmtid.com/live/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_live_v1.html
-  - type: Overlay
-    url: overlays/tmt-id-live-overlay.yaml
-- aid: tmt-id:tmt-id-teleshield
-  name: TMT TeleShield API
-  description: >-
-    Telephony fraud and routing intelligence. Five documented POST operations cover
-    TeleShield Routing, TeleShield Fraud and Enhanced Fraud in both the v1.3 and v2.0
-    data dictionaries, returning number-range validity, allocation, service type and
-    fraud propensity for wangiri, IRSF, CLI spoofing and origin-based rating abuse.
-  humanURL: https://tmtid.com/developer/tmt_teleshield_v1.html
-  baseURL: https://api.tmtid.com
-  tags:
-  - Telephony Fraud
-  - Routing
-  - Numbering Plan
-  properties:
-  - type: OpenAPI
-    url: openapi/tmt-id-teleshield.yml
   - type: Documentation
     url: https://tmtid.com/teleshield/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_teleshield_v1.html
-  - type: Overlay
-    url: overlays/tmt-id-teleshield-overlay.yaml
-- aid: tmt-id:tmt-id-score
-  name: TMT Score API
-  description: >-
-    Returns a credibility score for a phone number, derived from the age, stability and
-    behaviour of the number across TMT ID's operator data, for risk decisioning at
-    onboarding, login and transaction time.
-  humanURL: https://tmtid.com/developer/tmt_score_v1.html
-  baseURL: https://api.tmtid.com
-  tags:
-  - Risk Scoring
-  - Anti-Fraud
-  properties:
-  - type: OpenAPI
-    url: openapi/tmt-id-score.yml
   - type: Documentation
     url: https://tmtid.com/score/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_score_v1.html
-  - type: Overlay
-    url: overlays/tmt-id-score-overlay.yaml
-- aid: tmt-id:tmt-id-authenticate
-  name: TMT Authenticate API
-  description: >-
-    Silent Network Authentication and OTP fallback. The client exchanges HTTP Basic
-    credentials at /oauth/token for a PASETO bearer token, calls /get_config to learn how
-    the relevant mobile network operator wants the session opened, then runs
-    /authenticate for the silent network flow or /authenticate/otp, and confirms the
-    outcome with /validate. Documented against a staging host as well as production.
-  humanURL: https://tmtid.com/developer/tmt_authenticate_v1.html
-  baseURL: https://auth-api.tmtanalysis.com/v1
-  tags:
-  - Authentication
-  - Silent Network Authentication
-  - OTP
-  properties:
-  - type: OpenAPI
-    url: openapi/tmt-id-authenticate.yml
   - type: Documentation
     url: https://tmtid.com/authenticate/
   - type: APIReference
     url: https://tmtid.com/developer/tmt_authenticate_v1.html
-  - type: Overlay
-    url: overlays/tmt-id-authenticate-overlay.yaml
-- aid: tmt-id:tmt-id-network-biometrics
-  name: Network Biometrics API
-  description: >-
-    The Phronesis-derived flagship, a single POST that assembles a configurable set of
-    mobile network signals about a number and device — SIM swap and device change
-    look-back windows, GSMA device blacklist status, reachability, roaming, account
-    type and tenure, and personal-data matching — plus the deprecated v2 Number
-    Assurance operations for assured registration and assured age.
-  humanURL: https://tmtid.com/developer/network_biometrics.html
-  baseURL: https://api.phronesis.tech
-  tags:
-  - Mobile Identity
-  - SIM Swap
-  - Device Intelligence
-  - Age Assurance
-  properties:
-  - type: OpenAPI
-    url: openapi/tmt-id-network-biometrics.yml
   - type: Documentation
     url: https://tmtid.com/developers/
   - type: APIReference
     url: https://tmtid.com/developer/network_biometrics.html
-  - type: Overlay
-    url: overlays/tmt-id-network-biometrics-overlay.yaml
+- aid: tmt-id:tmt-id-http-api-api
+  name: TMT ID HTTP API
+  description: The HTTP API API from TMT ID — 3 operation(s) for http api.
+  humanURL: https://tmtid.com/developer/tmt_verify_v1.html
+  baseURL: https://api.tmtverify.com
+  tags:
+  - HTTP API
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-http-api-api-openapi.yml
+  - type: Documentation
+    url: https://tmtid.com/verify/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_verify_v1.html
+  - type: Documentation
+    url: https://tmtid.com/velocity/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_velocity_v1.html
+  - type: Documentation
+    url: https://tmtid.com/live/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_live_v1.html
+  - type: Documentation
+    url: https://tmtid.com/teleshield/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  - type: Documentation
+    url: https://tmtid.com/score/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_score_v1.html
+  - type: Documentation
+    url: https://tmtid.com/authenticate/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  - type: Documentation
+    url: https://tmtid.com/developers/
+  - type: APIReference
+    url: https://tmtid.com/developer/network_biometrics.html
+- aid: tmt-id:tmt-id-http-api-v1-3-api
+  name: TMT ID HTTP API v1.3 API
+  description: The HTTP API v1.3 API from TMT ID — 2 operation(s) for http api v1.3.
+  humanURL: https://tmtid.com/developer/tmt_verify_v1.html
+  baseURL: https://api.tmtverify.com
+  tags:
+  - HTTP API v1.3
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-http-api-v1-3-api-openapi.yml
+  - type: Documentation
+    url: https://tmtid.com/verify/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_verify_v1.html
+  - type: Documentation
+    url: https://tmtid.com/velocity/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_velocity_v1.html
+  - type: Documentation
+    url: https://tmtid.com/live/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_live_v1.html
+  - type: Documentation
+    url: https://tmtid.com/teleshield/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  - type: Documentation
+    url: https://tmtid.com/score/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_score_v1.html
+  - type: Documentation
+    url: https://tmtid.com/authenticate/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  - type: Documentation
+    url: https://tmtid.com/developers/
+  - type: APIReference
+    url: https://tmtid.com/developer/network_biometrics.html
+- aid: tmt-id:tmt-id-http-api-v2-0-api
+  name: TMT ID HTTP API v2.0 API
+  description: The HTTP API v2.0 API from TMT ID — 3 operation(s) for http api v2.0.
+  humanURL: https://tmtid.com/developer/tmt_verify_v1.html
+  baseURL: https://api.tmtverify.com
+  tags:
+  - HTTP API v2.0
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-http-api-v2-0-api-openapi.yml
+  - type: Documentation
+    url: https://tmtid.com/verify/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_verify_v1.html
+  - type: Documentation
+    url: https://tmtid.com/velocity/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_velocity_v1.html
+  - type: Documentation
+    url: https://tmtid.com/live/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_live_v1.html
+  - type: Documentation
+    url: https://tmtid.com/teleshield/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  - type: Documentation
+    url: https://tmtid.com/score/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_score_v1.html
+  - type: Documentation
+    url: https://tmtid.com/authenticate/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  - type: Documentation
+    url: https://tmtid.com/developers/
+  - type: APIReference
+    url: https://tmtid.com/developer/network_biometrics.html
+- aid: tmt-id:tmt-id-network-biometrics-api
+  name: TMT ID Network Biometrics API
+  description: The Network Biometrics API from TMT ID — 1 operation(s) for network biometrics.
+  humanURL: https://tmtid.com/developer/tmt_verify_v1.html
+  baseURL: https://api.tmtverify.com
+  tags:
+  - Network Biometrics
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-network-biometrics-api-openapi.yml
+  - type: Documentation
+    url: https://tmtid.com/verify/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_verify_v1.html
+  - type: Documentation
+    url: https://tmtid.com/velocity/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_velocity_v1.html
+  - type: Documentation
+    url: https://tmtid.com/live/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_live_v1.html
+  - type: Documentation
+    url: https://tmtid.com/teleshield/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  - type: Documentation
+    url: https://tmtid.com/score/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_score_v1.html
+  - type: Documentation
+    url: https://tmtid.com/authenticate/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  - type: Documentation
+    url: https://tmtid.com/developers/
+  - type: APIReference
+    url: https://tmtid.com/developer/network_biometrics.html
+- aid: tmt-id:tmt-id-service-api
+  name: TMT ID Service API
+  description: Service endpoints
+  humanURL: https://tmtid.com/developer/tmt_verify_v1.html
+  baseURL: https://api.tmtverify.com
+  tags:
+  - Service
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-service-api-openapi.yml
+  - type: Documentation
+    url: https://tmtid.com/verify/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_verify_v1.html
+  - type: Documentation
+    url: https://tmtid.com/velocity/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_velocity_v1.html
+  - type: Documentation
+    url: https://tmtid.com/live/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_live_v1.html
+  - type: Documentation
+    url: https://tmtid.com/teleshield/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  - type: Documentation
+    url: https://tmtid.com/score/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_score_v1.html
+  - type: Documentation
+    url: https://tmtid.com/authenticate/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  - type: Documentation
+    url: https://tmtid.com/developers/
+  - type: APIReference
+    url: https://tmtid.com/developer/network_biometrics.html
+- aid: tmt-id:tmt-id-standard-api-call-api
+  name: TMT ID Standard API Call API
+  description: The Standard API Call API from TMT ID — 1 operation(s) for standard api call.
+  humanURL: https://tmtid.com/developer/tmt_verify_v1.html
+  baseURL: https://api.tmtverify.com
+  tags:
+  - Standard API Call
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-standard-api-call-api-openapi.yml
+  - type: Documentation
+    url: https://tmtid.com/verify/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_verify_v1.html
+  - type: Documentation
+    url: https://tmtid.com/velocity/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_velocity_v1.html
+  - type: Documentation
+    url: https://tmtid.com/live/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_live_v1.html
+  - type: Documentation
+    url: https://tmtid.com/teleshield/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  - type: Documentation
+    url: https://tmtid.com/score/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_score_v1.html
+  - type: Documentation
+    url: https://tmtid.com/authenticate/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  - type: Documentation
+    url: https://tmtid.com/developers/
+  - type: APIReference
+    url: https://tmtid.com/developer/network_biometrics.html
+- aid: tmt-id:tmt-id-v2-deprecated-api
+  name: TMT ID v2 (deprecated) API
+  description: The v2 (deprecated) API from TMT ID — 2 operation(s) for v2 (deprecated).
+  humanURL: https://tmtid.com/developer/tmt_verify_v1.html
+  baseURL: https://api.tmtverify.com
+  tags:
+  - v2 (deprecated)
+  properties:
+  - type: OpenAPI
+    url: openapi/tmt-id-v2-deprecated-api-openapi.yml
+  - type: Documentation
+    url: https://tmtid.com/verify/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_verify_v1.html
+  - type: Documentation
+    url: https://tmtid.com/velocity/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_velocity_v1.html
+  - type: Documentation
+    url: https://tmtid.com/live/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_live_v1.html
+  - type: Documentation
+    url: https://tmtid.com/teleshield/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_teleshield_v1.html
+  - type: Documentation
+    url: https://tmtid.com/score/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_score_v1.html
+  - type: Documentation
+    url: https://tmtid.com/authenticate/
+  - type: APIReference
+    url: https://tmtid.com/developer/tmt_authenticate_v1.html
+  - type: Documentation
+    url: https://tmtid.com/developers/
+  - type: APIReference
+    url: https://tmtid.com/developer/network_biometrics.html
 common:
+- type: Overlay
+  url: overlays/tmt-id-verify-overlay.yaml
+- type: Overlay
+  url: overlays/tmt-id-velocity-overlay.yaml
+- type: Overlay
+  url: overlays/tmt-id-live-overlay.yaml
+- type: Overlay
+  url: overlays/tmt-id-teleshield-overlay.yaml
+- type: Overlay
+  url: overlays/tmt-id-score-overlay.yaml
+- type: Overlay
+  url: overlays/tmt-id-authenticate-overlay.yaml
+- type: Overlay
+  url: overlays/tmt-id-network-biometrics-overlay.yaml
 - type: DeveloperPortal
   url: https://tmtid.com/developers/
 - type: WellKnown
