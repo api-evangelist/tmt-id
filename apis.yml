@@ -20,6 +20,18 @@ description: >-
   Gateway member, but it publishes no CAMARA-conformant API — its SIM-swap and
   network-authentication products ship under TMT ID's own proprietary schemas, which is
   the honest position of most of the identity-and-antifraud layer of this market.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Telecommunications
