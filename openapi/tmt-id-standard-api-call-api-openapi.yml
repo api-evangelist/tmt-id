@@ -1,0 +1,100 @@
+openapi: 3.2.0
+info:
+  title: TMT Verify API specs Standard API Call API
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/verify_logo_png.png
+    altText: TMT Verify
+  version: '1.0'
+servers:
+- url: https://api.tmtverify.com
+tags:
+- name: Standard API Call
+paths:
+  /v3/:
+    post:
+      tags:
+      - Standard API Call
+      summary: POST method
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: The API key (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: The API secret (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: application/json
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  description: The Phone Number with the country code.
+                  type: string
+                  example: 40721987086
+                dpoints:
+                  description: Enumeration of the requested data points, comma separated.
+                  type: string
+                  example: originnetwork,network,type,porteddate,subscriberstatus,roaminginfo
+        required: true
+      responses:
+        '200':
+          description: Successful response format
+          headers: {}
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    '40721987086':
+                      current_network:
+                        lrn: null
+                        mcc: 226
+                        mnc: 10
+                        name: Orange Romania
+                        spid: 4018740
+                      is_roaming: false
+                      number: 40721987086
+                      origin_network:
+                        mcc: 226
+                        mnc: 1
+                        name: Vodafone Romania
+                        spid: 4018720
+                      ported: true
+                      ported_date: '2016-12-30 15:15:19'
+                      ported_date_type: exact
+                      present: 'yes'
+                      status: 0
+                      status_message: Success
+                      type: mobile
+                      etype: 10
+                      query:
+                        datapoints: network,originnetwork,porteddate,roaminginfo,subscriberstatus,type
+x-tagGroups:
+- name: Introduction
+  tags:
+  - About TMT
+- name: Service Specifications
+  tags:
+  - Standard API Call
+  - Available data
+  - Specific Datapoint responses

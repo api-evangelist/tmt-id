@@ -1,0 +1,247 @@
+openapi: 3.2.0
+info:
+  title: TMT Teleshield API specs HTTP API v1.3 API
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/teleshield_logo_png.png
+    altText: TMT Teleshield
+  version: '1.0'
+servers:
+- url: https://api.tmtid.com
+tags:
+- name: HTTP API v1.3
+paths:
+  /teleshield/{number}:
+    post:
+      tags:
+      - HTTP API v1.3
+      summary: POST method Teleshield
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: The API key (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: The API secret (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format.
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                Successful response format:
+                  value:
+                    number: 376321407
+                    cc: AD
+                    ocic: 376500
+                    ocn: null
+                    itype: 1
+                    etype: 10
+                    mcc: 213
+                    omnc: 3
+                    original_network: Mobiland
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    error: 0
+                    trxid: d42wkyt
+                Invalid number response format:
+                  value:
+                    number: 9999721275636
+                    error: 1
+                    error_message: invalid number
+                Invalid number length response format:
+                  value:
+                    number: 4072127563699
+                    error: 2
+                    error_message: invalid number length
+                Invalid number range response format:
+                  value:
+                    number: 590691369999
+                    error: 3
+                    error_message: invalid number range
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  ocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  mcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  iprn_number:
+                    type: boolean
+                  iprn_wildcard:
+                    type: boolean
+                  msrn:
+                    type: boolean
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+  /e-teleshield/{number v1.3}:
+    post:
+      tags:
+      - HTTP API v1.3
+      summary: POST method E-Teleshield
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: The API key (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: The API secret (obtained from https://viteza.tmtid.com or from Support during customer on-boarding).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format.
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                Successful response format:
+                  value:
+                    number: 376321407
+                    cc: AD
+                    ocic: 376500
+                    ocn: null
+                    itype: 1
+                    etype: 10
+                    mcc: 213
+                    omnc: 3
+                    original_network: Mobiland
+                    ported: false
+                    cic: 376500
+                    mnc: 3
+                    network: Mobiland
+                    present: 'yes'
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    error: 0
+                    trxid: XryJIIw
+                Invalid number response format:
+                  value:
+                    number: 9999721275636
+                    error: 1
+                    error_message: invalid number
+                Invalid number length response format:
+                  value:
+                    number: 4072127563699
+                    error: 2
+                    error_message: invalid number length
+                Invalid number range response format:
+                  value:
+                    number: 590691369999
+                    error: 3
+                    error_message: invalid number range
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  ocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  mcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  ported:
+                    type: boolean
+                  cic:
+                    type: number
+                  mnc:
+                    type: string
+                  network:
+                    type: string
+                  present:
+                    type: string
+                  iprn_number:
+                    type: boolean
+                  iprn_wildcard:
+                    type: boolean
+                  msrn:
+                    type: boolean
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+x-tagGroups:
+- name: Introduction
+  tags:
+  - Version history
+  - About TMT
+- name: Service Specifications v2.0
+  tags:
+  - TMT TeleShield v2.0 Overview
+  - Data Dictionary v2.0
+  - HTTP API v2.0
+  - ENUM TeleShield Routing v2.0
+  - ENUM TeleShield Fraud v2.0
+  - ENUM TeleShield Enhanced Fraud v2.0
+- name: Service Specifications v1.3
+  tags:
+  - Data Dictionary v1.3
+  - HTTP API v1.3
+  - ENUM Services v1.3
+- name: Other Specifications
+  tags:
+  - SIP Redirect
+  - Batch Service – Portal access
+  - Operator files

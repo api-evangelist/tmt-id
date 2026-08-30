@@ -1,0 +1,3728 @@
+openapi: 3.2.0
+info:
+  title: ™ by TMT ID Network Biometrics API
+  version: 1.20.0
+  description: "TMT ID is the creator of Network Biometrics™. We make customer signups and transactions smoother while reducing exposure to fraud and related risks. With most online transactions now being made on mobile devices, an individual’s mobile number is often the best starting point for establishing their digital identity and managing their ongoing relationship with your organisation.  \n\nBecause of the close relationship between number, handset, and SIM, it is possible to identify and authenticate users without interrupting the customer journey quickly and transparently. However, there are many ways of compromising mobile numbers for fraud, including identity theft, account takeover and man-in-the-middle attacks.  \n\nNetwork Biometrics™ provides additional capabilities for your existing security and fraud detection systems. Through our APIs you can instantly validate the personal data that is being given to you, check for SIM swap or device change events and obtain other fraud indicators.\n\n---"
+  contact:
+    name: support@phronesis.net
+    email: support@phronesis.net
+    url: https://phronesis.net/contact/
+servers:
+- url: https://ea.api.phronesis.tech
+  description: early access
+- url: https://api.phronesis.tech
+  description: production
+security:
+- token: []
+  secret: []
+tags:
+- name: Network Biometrics
+paths:
+  /network-biometrics:
+    parameters: []
+    post:
+      summary: Network Biometrics™
+      operationId: post-network-biometrics
+      description: Network Biometrics™️ is for identifying, verifying and assuring customers. We make customer signups and transactions smoother while reducing exposure to fraud and related risks across the entire customer lifecycle.
+      parameters:
+      - in: header
+        name: Correlation-Id
+        schema:
+          type: string
+          maxLength: 64
+          readOnly: true
+        description: An optional user-generated string that will be returned in the response to allow the matching of request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NetworkBiometricProductRequest'
+            examples:
+              Discover request:
+                $ref: '#/components/examples/DiscoverRequest'
+              Number Recycle request:
+                $ref: '#/components/examples/NumberRecycleRequest'
+              UK Assure request:
+                $ref: '#/components/examples/AssureRequest'
+              Assure Device Info request:
+                $ref: '#/components/examples/AssureDeviceInfoRequest'
+              Protect request:
+                $ref: '#/components/examples/ProtectRequest'
+              UK - Protect Device Info - Request:
+                $ref: '#/components/examples/ProtectDeviceInfoRequest'
+              UK - Age Eligibility - Request:
+                $ref: '#/components/examples/AgeEligibilityRequest'
+              UK - All  Network Biometrics Services - Request:
+                $ref: '#/components/examples/AllServicesRequest'
+              France - Assure - Request:
+                $ref: '#/components/examples/AssureRequestFrance'
+        description: ''
+      responses:
+        '200':
+          description: "**200 - HTTP OK**  \nCheck `transaction.status.value` for further detail on the success of the request:\n\n| Code | Message                                          |\n|:----:|:------------------------------------------------:|\n| 0    | transaction successful                           |\n| 2    | transaction successful but partial data returned |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkBiometricProductResponse'
+              examples:
+                Discover - transaction successful - 0:
+                  $ref: '#/components/examples/DiscoverResponse'
+                UK - All Network Biometrics services - transaction successful - 0:
+                  $ref: '#/components/examples/AllProductSuccessResponse'
+                France - Assure - transaction successful - 0:
+                  $ref: '#/components/examples/AssureSuccessResponseFrance'
+                UK - Assure - transaction successful but partial data returned - 2:
+                  $ref: '#/components/examples/AssurePartialResponseUK'
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+        '202':
+          description: "**202 - HTTP Accepted**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                       |\n| ---- | -----------------------------:|\n| 300  | call Forward check failed     |\n| 301  | SIM swap check failed         |\n| 302  | country check failed          |\n| 303  | user information check failed |\n| 304  | vicinity check failed         |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                300 - call Forward check failed:
+                  value:
+                    transaction:
+                      status:
+                        value: 300
+                        message: call Forward check failed
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                301 - datasource temporarily not available:
+                  value:
+                    transaction:
+                      status:
+                        value: 301
+                        message: SIM swap check failed
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                302 - country check failed:
+                  value:
+                    transaction:
+                      status:
+                        value: 302
+                        message: country check failed
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                303 - user information check failed:
+                  value:
+                    transaction:
+                      status:
+                        value: 303
+                        message: user information check failed
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                304 - vicinity check failed:
+                  value:
+                    transaction:
+                      status:
+                        value: 304
+                        message: vicinity check failed
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+        '400':
+          description: "**400 - HTTP Bad Request**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                     |\n|:----:|:---------------------------:|\n| 103  | bad request                 |\n| 104  | invalid Content-Type header |\n| 207  | invalid parameters          |\n| 208  | invalid postcode parameter  |\n| 209  | invalid name parameter      |\n| 210  | invalid address parameter   |\n| 211  | invalid birthdate parameter |\n| 213  | invalid use case identifier |\n| 214  | invalid number parameter    |\n| 215  | invalid IMEI parameter      |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                103 - bad request:
+                  value:
+                    transaction:
+                      status:
+                        value: 103
+                        message: bad request
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                104 - invalid Content-Type header:
+                  value:
+                    transaction:
+                      status:
+                        value: 104
+                        message: invalid Content-Type header
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                207 - invalid parameters:
+                  value:
+                    transaction:
+                      status:
+                        value: 207
+                        message: invalid parameters
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                208 - invalid postcode parameter:
+                  value:
+                    transaction:
+                      status:
+                        value: 208
+                        message: invalid postcode parameter
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                209 - invalid name parameter:
+                  value:
+                    transaction:
+                      status:
+                        value: 209
+                        message: invalid name parameter
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                210 - invalid address parameter:
+                  value:
+                    transaction:
+                      status:
+                        value: 210
+                        message: invalid address parameter
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                211 - invalid birthdate parameter:
+                  value:
+                    transaction:
+                      status:
+                        value: 211
+                        message: invalid birthdate parameter
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                213 - invalid use case identifier:
+                  value:
+                    transaction:
+                      status:
+                        value: 213
+                        message: invalid use case identifier
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                214 - invalid number parameter:
+                  value:
+                    transaction:
+                      status:
+                        value: 214
+                        message: invalid number parameter
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                215 - invalid IMEI parameter:
+                  value:
+                    transaction:
+                      status:
+                        value: 215
+                        message: invalid IMEI parameter
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+        '401':
+          description: "**401 - HTTP Unauthorized**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                                         |\n| ---- | ----------------------------------------------- |\n| 100  | user account not found                          |\n| 101  | authentication failed                           |\n| 102  | user account suspended                          |\n| 106  | admin privileges required for this API          |\n| 200  | IP address not whitelisted                      |\n| 204  | product not provisioned for your account        | \n| 206  | product availability suspended for your account |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                100 - user account not found:
+                  value:
+                    transaction:
+                      status:
+                        value: 100
+                        message: user account not found
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                101 - authentication failed:
+                  value:
+                    transaction:
+                      status:
+                        value: 101
+                        message: authentication failed
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                102 - user account suspended:
+                  value:
+                    transaction:
+                      status:
+                        value: 102
+                        message: user account suspended
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                106 - admin privileges required for this API:
+                  value:
+                    transaction:
+                      status:
+                        value: 106
+                        message: admin privileges required for this API
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                200 - IP address not whitelisted:
+                  value:
+                    transaction:
+                      status:
+                        value: 200
+                        message: IP address not whitelisted
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                204 - product not provisioned for your account:
+                  value:
+                    transaction:
+                      status:
+                        value: 204
+                        message: product not provisioned for your account
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                206 - product availability suspended for your account:
+                  value:
+                    transaction:
+                      status:
+                        value: 206
+                        message: product availability suspended for your account
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+        '403':
+          description: "**403 - HTTP Forbidden**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                              |\n| ---- | ------------------------------------ |\n| 212  | MNO access not authorised            |\n| 802  | datasource temporarily not available |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                212 - MNO access not authorised:
+                  value:
+                    transaction:
+                      status:
+                        value: 212
+                        message: MNO access not authorised
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                802 - datasource temporarily not available:
+                  value:
+                    transaction:
+                      status:
+                        value: 802
+                        message: datasource temporarily not available
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+        '404':
+          description: "**404 - HTTP Not Found**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                                       |\n| ---- | --------------------------------------------- |\n| 306  | unknown subscriber, data may be incomplete    |\n| 307  | no coverage for country                       |\n| 404  | subscriber opted out of service               |\n| 405  | invalid number                                |\n| 406  | subscriber is unregistered prepay             |\n| 407  | unknown routing information                   |\n| 408  | unknown number range                          |\n| 409  | device or brand not supported                 |\n| 804  | resource not found                            |\n| 807  | subscriber data unavailable                   |\n| 817  | datasource data not found                     |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                306 - unknown subscriber, data may be incomplete:
+                  value:
+                    transaction:
+                      status:
+                        value: 306
+                        message: unknown subscriber, data may be incomplete
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                307 - no coverage for country:
+                  value:
+                    transaction:
+                      status:
+                        value: 307
+                        message: no coverage for country
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                404 - subscriber opted out of service:
+                  value:
+                    transaction:
+                      status:
+                        value: 404
+                        message: subscriber opted out of service
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                405 - invalid number:
+                  value:
+                    transaction:
+                      status:
+                        value: 405
+                        message: invalid number
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                406 - subscriber is unregistered prepay:
+                  value:
+                    transaction:
+                      status:
+                        value: 406
+                        message: subscriber is unregistered prepay
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                407 - unknown routing information:
+                  value:
+                    transaction:
+                      status:
+                        value: 407
+                        message: unknown routing information
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                408 - unknown number range:
+                  value:
+                    transaction:
+                      status:
+                        value: 408
+                        message: unknown number range
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                804 - resource not found:
+                  value:
+                    transaction:
+                      status:
+                        value: 804
+                        message: resource not found
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                807 - subscriber data unavailable:
+                  value:
+                    transaction:
+                      status:
+                        value: 807
+                        message: subscriber data unavailable
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                817 - datasource data not found:
+                  value:
+                    transaction:
+                      status:
+                        value: 817
+                        message: datasource data not found
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+        '405':
+          description: "**405 - HTTP Method Not Allowed**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message              |\n| ---- | -------------------- |\n| 105  | method not allowed   |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                105 - method not allowed:
+                  value:
+                    transaction:
+                      status:
+                        value: 105
+                        message: method not allowed
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+        '408':
+          description: "**408 - HTTP Request Timeout**  \nMay be returned without a body\n\n---\n"
+        '500':
+          description: "**500 - HTTP Internal Server Error**  \nMay be returned without a body\n\n---"
+        '502':
+          description: "**502 - HTTP Bad Gateway**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                                 |\n| ---- | --------------------------------------- |\n| 803  | datasource query failed                 |\n| 805  | database subsystem error                |\n| 812  | datasource returned unexpected response |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                803 - datasource query failed:
+                  value:
+                    transaction:
+                      status:
+                        value: 803
+                        message: datasource query failed
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                805 - database subsystem error:
+                  value:
+                    transaction:
+                      status:
+                        value: 805
+                        message: database subsystem error
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                812 - datasource returned unexpected response:
+                  value:
+                    transaction:
+                      status:
+                        value: 812
+                        message: datasource returned unexpected response
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+        '503':
+          description: "**503 - HTTP Service Unavailable**  \nCheck `transaction.status.value` for possible reasons such as:\n\n| Code | Message                                                     |\n| ---- | ----------------------------------------------------------- |\n| 201  | request was throttled. submission per second limit exceeded |\n| 202  | request was throttled. submission per day limit exceeded    |\n| 203  | request was throttled. submission per month limit exceeded  |\n| 800  | database subsystem unavailable                              |\n| 801  | datasource permanently unavailable                          |\n| 806  | datasource connection error                                 |\n| 808  | service not available for MNO or MVNO                       |\n| 809  | datasource capacity exceeded                                |\n| 810  | internal server error                                       |\n| 811  | datasource called too early                                 |\n| 813  | datasource quota exceeded                                   |\n| 814  | problem connecting to datasource                            |\n| 815  | datasource requires further data                            |\n| 816  | datasource query error                                      |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+              examples:
+                201 - request was throttled. submission per second limit exceeded:
+                  value:
+                    transaction:
+                      status:
+                        value: 201
+                        message: request was throttled. submission per second limit exceeded
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                202 - request was throttled. submission per day limit exceeded:
+                  value:
+                    transaction:
+                      status:
+                        value: 202
+                        message: request was throttled. submission per day limit exceeded
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                203 - request was throttled. submission per month limit exceeded:
+                  value:
+                    transaction:
+                      status:
+                        value: 203
+                        message: request was throttled. submission per month limit exceeded
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                800 - database subsystem unavailable:
+                  value:
+                    transaction:
+                      status:
+                        value: 800
+                        message: database subsystem unavailable
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                801 - datasource permanently unavailable:
+                  value:
+                    transaction:
+                      status:
+                        value: 801
+                        message: datasource permanently unavailable
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                806 - datasource permanently unavailable:
+                  value:
+                    transaction:
+                      status:
+                        value: 806
+                        message: datasource connection error
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                808 - service not available for MNO or MVNO:
+                  value:
+                    transaction:
+                      status:
+                        value: 808
+                        message: service not available for MNO or MVNO
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                809 - datasource capacity exceeded:
+                  value:
+                    transaction:
+                      status:
+                        value: 809
+                        message: datasource capacity exceeded
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                810 - internal server error:
+                  value:
+                    transaction:
+                      status:
+                        value: 810
+                        message: internal server error
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                811 - datasource called too early:
+                  value:
+                    transaction:
+                      status:
+                        value: 811
+                        message: datasource called too early
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                813 - datasource quota exceeded:
+                  value:
+                    transaction:
+                      status:
+                        value: 813
+                        message: datasource quota exceeded
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                814 - problem connecting to datasource:
+                  value:
+                    transaction:
+                      status:
+                        value: 814
+                        message: problem connecting to datasource
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                815 - datasource requires further data:
+                  value:
+                    transaction:
+                      status:
+                        value: 815
+                        message: datasource requires further data
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+                816 - datasource configuration error:
+                  value:
+                    transaction:
+                      status:
+                        value: 816
+                        message: datasource configuration error
+                      reference: https://developer.api.v3.phronesis.tech/
+                      id: 600005e8-bb33-4a42-bb23-65aa70c3ec6e
+          headers:
+            Correlation-Id:
+              $ref: '#/components/headers/Correlation-Id'
+      tags:
+      - Network Biometrics
+components:
+  schemas:
+    NetworkBiometricProductResponse:
+      type: object
+      example:
+        discover:
+          number:
+            is: '447700900501'
+            isCorrectFormat: true
+            isValid: true
+            country:
+              name: United Kingdom of Great Britain and Northern Ireland
+              code: GB
+              dialCode: '44'
+            onNetwork:
+              MCC: '001'
+              MNC: '04'
+              networkName: Phronesis (H3G UK)
+            isPorted: false
+          hasNumberBeenRecycled:
+            isRecycled: false
+            changedInTimePeriod: false
+            lastChange: null
+          hasMVNOInfo:
+            isMVNO: true
+            brand: iD mobile
+            isDataAvailable: true
+          hasHomeNetworkInfo:
+            isRoaming: true
+            isDataAvailable: true
+          device:
+            IMEI:
+              is: '969455279101647'
+            serialNo:
+              value: DX3ZJ7LRKXK7
+              isDataAvailable: true
+            model:
+              brand: Apple
+              name: iPhone XR
+              code: iPhone XR (A2105)
+              isDataAvailable: true
+            activation:
+              isActivated: true
+              isDataAvailable: true
+            blacklist:
+              status: true
+              isDataAvailable: true
+              addEvent:
+                date: '2023-01-24 08:32:08'
+                by: Hutchison 3G UK
+                reason: Stolen Or Lost
+              removeEvent:
+                date: '2023-01-24 15:32:08'
+                by: Hutchison 3G UK
+                reason: Found
+              history:
+                blacklistedCount: 30
+                removedCount: 29
+                operators: 2
+            retail:
+              currency: USD
+              prices:
+              - '1247'
+              - '1366'
+              - '1604'
+              - '1842'
+              storageOptions:
+              - 128 GB
+              - 256 GB
+              - 512 GB
+              - 1 TB
+              releaseDate: '2021-09-01'
+              isDataAvailable: true
+        assure:
+          matchingName:
+            firstName:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            lastName:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            fullName:
+              isMatched: true
+              isDataAvailable: true
+              matchConfidence: 100
+            email:
+              isMatched: true
+              isDataAvailable: true
+              matchConfidence: 100
+          matchingAddress:
+            fullAddress:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            houseNameOrNumber:
+              isDataAvailable: false
+              isMatched: false
+              matchConfidence: 100
+            postcode:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+          matchingBirthDate:
+            isDataAvailable: true
+            isMatched: true
+            matchConfidence: 100
+          matchingAge:
+            isDataAvailable: true
+            isMatched: true
+          hasServiceRestriction:
+            adultContent:
+              isUnlocked: true
+              isDataAvailable: true
+          matchingDeviceInfo:
+            IMEI:
+              isMatched: true
+              checked: '353090101175010'
+          matchingAccountInfo:
+            account:
+              isActive: true
+              isDataAvailable: true
+            contractType:
+              is: PAYM
+              isDataAvailable: true
+            lostOrStolen:
+              isReportedLostOrStolen: false
+              isDataAvailable: true
+        protect:
+          hasSimChanged:
+            changedInTimePeriod: true
+            lastChange: '2022-10-20T11:36:26+00:00'
+          hasDeviceChanged:
+            changedInTimePeriod: false
+            lastChange: '2020-02-19T17:42:14+00:00'
+          hasCallForwarding:
+            unconditional: false
+          hasAccountTenure:
+            longerThanPeriod: false
+            isDataAvailable: true
+          hasContractInfo:
+            startDate: '2021-03-15'
+            isDataAvailable: true
+          hasActiveCall:
+            isDataAvailable: true
+            isOnCallNow: true
+            callDuration:
+              isDataAvailable: true
+              seconds: 1234
+              started: '2022-01-01T10:57:57'
+              exceedsDuration: true
+            callDirection:
+              isReceived: true
+              isDataAvailable: true
+            callingNumber:
+              isWithheld: true
+              isDataAvailable: true
+          hasDeviceInfo:
+            IMEI:
+              value: '353090101175010'
+              isDataAvailable: true
+            serialNo:
+              value: DX3ZJ7LRKXK7
+              isDataAvailable: true
+            model:
+              brand: Apple
+              name: iPhone XR
+              code: iPhone XR (A2105)
+              isDataAvailable: true
+            activation:
+              isActivated: true
+              isDataAvailable: true
+          wasReportedLostOrStolen:
+            inPeriod: true
+            isDataAvailable: true
+            isLostOrStolen: true
+            lostOrStolenDate: '2023-02-12T17:42:14+00:00'
+          wasBlacklisted:
+            inPeriod: true
+            blacklistStatus: true
+            isDataAvailable: true
+            blacklistEvent:
+              date: '2023-01-24 08:32:08'
+              by: Hutchison 3G UK
+              reason: Stolen Or Lost
+            removeEvent:
+              date: '2023-01-24 15:32:08'
+              by: Hutchison 3G UK
+              reason: Found
+            history:
+              blacklistedCount: 30
+              removedCount: 29
+              operators: 2
+        transaction:
+          status:
+            value: 0
+            message: transaction successful
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+      description: Schema for a successful Network Biometrics request
+      additionalProperties: false
+      required:
+      - discover
+      - transaction
+      properties:
+        discover:
+          $ref: '#/components/schemas/DiscoverProductResponse/properties/discover'
+        assure:
+          $ref: '#/components/schemas/AssureProductResponse/properties/assure'
+        protect:
+          $ref: '#/components/schemas/ProtectProductResponse/properties/protect'
+        transaction:
+          $ref: '#/components/schemas/TransactionResponse/properties/transaction'
+    TransactionResponse:
+      title: Transaction Response
+      example:
+        transaction:
+          status:
+            value: 0
+            message: transaction successful
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+      properties:
+        transaction:
+          type: object
+          required:
+          - status
+          - reference
+          - id
+          properties:
+            status:
+              required:
+              - value
+              - message
+              properties:
+                value:
+                  type: integer
+                  description: Outcome of the request, 0 on success or an error code
+                  example: 808
+                message:
+                  type: string
+                  description: A textual representation of the transaction status.
+                  example: service not available for MNO or MVNO
+            reference:
+              type: string
+              description: Link to documentation about this API
+              example: https://developer.api.v3.phronesis.tech/
+            id:
+              type: string
+              description: A unique transaction identifier to track the request and response in UUID V4 format
+              example: dacb3020-495f-41ae-9303-72d43c817e3a
+      description: Provides validation of the request process
+    ProtectProductRequest:
+      title: Protect Product Request
+      type: object
+      description: None of the features are required, but at least one must be present in the body to make a successful Protect call
+      properties:
+        protect:
+          type: object
+          description: To make a call to Protect you will need at least one of the product features below in the body
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            hasSimChanged:
+              oneOf:
+              - additionalProperties: false
+                title: inSeconds
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inSeconds:
+                    type: integer
+                    example: 120
+                    description: set look-back period in past seconds
+                required:
+                - inSeconds
+              - additionalProperties: false
+                title: inMinutes
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inMinutes:
+                    type: integer
+                    example: 40
+                    description: set look-back period in past minutes
+                required:
+                - inMinutes
+              - additionalProperties: false
+                title: inHours
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inHours:
+                    type: integer
+                    example: 12
+                    description: set look-back period in past hours
+                required:
+                - inHours
+              - additionalProperties: false
+                title: inDays
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inDays:
+                    type: integer
+                    example: 30
+                    description: set look-back period in past days
+                required:
+                - inDays
+              - additionalProperties: false
+                title: inDate
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inDate:
+                    type: string
+                    format: date
+                    example: '2021-03-01'
+                    description: set look-back period to a fixed date
+                required:
+                - inDate
+              type: object
+            hasDeviceChanged:
+              oneOf:
+              - additionalProperties: false
+                title: inSeconds
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inSeconds:
+                    type: integer
+                    example: 120
+                    description: set look-back period in past seconds
+                required:
+                - inSeconds
+              - additionalProperties: false
+                title: inMinutes
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inMinutes:
+                    type: integer
+                    example: 40
+                    description: set look-back period in past minutes
+                required:
+                - inMinutes
+              - additionalProperties: false
+                title: inHours
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inHours:
+                    type: integer
+                    example: 12
+                    description: set look-back period in past hours
+                required:
+                - inHours
+              - additionalProperties: false
+                title: inDays
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inDays:
+                    type: integer
+                    example: 30
+                    description: set look-back period in past days
+                required:
+                - inDays
+              - additionalProperties: false
+                title: inDate
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inDate:
+                    type: string
+                    format: date
+                    example: '2021-03-01'
+                    description: set look-back period to a fixed date
+                required:
+                - inDate
+              type: object
+            wasReportedLostOrStolen:
+              oneOf:
+              - additionalProperties: false
+                title: inSeconds
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inSeconds:
+                    type: integer
+                    example: 120
+                    description: set look-back period in past seconds
+                required:
+                - inSeconds
+              - additionalProperties: false
+                title: inMinutes
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inMinutes:
+                    type: integer
+                    example: 40
+                    description: set look-back period in past minutes
+                required:
+                - inMinutes
+              - additionalProperties: false
+                title: inHours
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inHours:
+                    type: integer
+                    example: 12
+                    description: set look-back period in past hours
+                required:
+                - inHours
+              - additionalProperties: false
+                title: inDays
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inDays:
+                    type: integer
+                    example: 30
+                    description: set look-back period in past days
+                required:
+                - inDays
+              - additionalProperties: false
+                title: inDate
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inDate:
+                    type: string
+                    format: date
+                    example: '2021-03-01'
+                    description: set look-back period to a fixed date
+                required:
+                - inDate
+              type: object
+            hasAccountTenure:
+              oneOf:
+              - additionalProperties: false
+                title: greaterThanDays
+                description: Determine if a customer or a third party has held an account on network within the specified time period
+                properties:
+                  greaterThanDays:
+                    type: integer
+                    example: 30
+                    description: Period of time in days
+                required:
+                - greaterThanDays
+              - additionalProperties: false
+                title: greaterThanMonths
+                description: Determine if a customer or a third party has held an account on network within the specified time period
+                properties:
+                  greaterThanMonths:
+                    type: integer
+                    example: 1
+                    description: Period of time in months
+                required:
+                - greaterThanMonths
+              - additionalProperties: false
+                title: greaterThanYears
+                description: Determine if a customer or a third party has held an account on network within the specified time period
+                properties:
+                  greaterThanYears:
+                    type: integer
+                    example: 1
+                    description: Period of time in years
+                required:
+                - greaterThanYears
+              - additionalProperties: false
+                title: greaterThanDate
+                description: Determine if a customer or a third party has held an account on network within the specified time period
+                properties:
+                  greaterThanDate:
+                    type: string
+                    example: '2021-03-10'
+                    description: Period of time given with an date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations)
+                required:
+                - greaterThanDate
+              type: object
+            hasContractInfo:
+              description: Retrieve additional information about the account contract
+              type: object
+              properties:
+                for:
+                  type: array
+                  minItems: 1
+                  example:
+                  - startDate
+                  default:
+                  - startDate
+                  items:
+                    type: string
+                    enum:
+                    - startDate
+              required:
+              - for
+            hasCallForwarding:
+              type: object
+              description: Verify if call diverts are set
+              properties:
+                for:
+                  type: string
+                  enum:
+                  - unconditional
+                  example: unconditional
+                  default: unconditional
+                  description: Type of call forwarding
+              required:
+              - for
+            hasActiveCall:
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              description: Determine if the subscriber is in an active call and further detail about that call
+              properties:
+                withMinimumDuration:
+                  oneOf:
+                  - additionalProperties: false
+                    title: inSeconds
+                    properties:
+                      inSeconds:
+                        type: integer
+                        example: 120
+                        description: set look-back period in past seconds
+                    required:
+                    - inSeconds
+                  - additionalProperties: false
+                    title: inMinutes
+                    properties:
+                      inMinutes:
+                        type: integer
+                        example: 40
+                        description: set look-back period in past minutes
+                    required:
+                    - inMinutes
+                  - additionalProperties: false
+                    title: inHours
+                    properties:
+                      inHours:
+                        type: integer
+                        example: 12
+                        description: set look-back period in past hours
+                    required:
+                    - inHours
+                  - additionalProperties: false
+                    title: inDays
+                    properties:
+                      inDays:
+                        type: integer
+                        example: 30
+                        description: set look-back period in past days
+                    required:
+                    - inDays
+                  - additionalProperties: false
+                    title: inDate
+                    properties:
+                      inDate:
+                        type: string
+                        format: date
+                        example: '2021-03-01'
+                        description: set look-back period to a fixed date
+                  type: object
+                with:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  description: Optional additional datapoints to request
+                  items:
+                    type: string
+                    enum:
+                    - callDirection
+                    - callDuration
+                    - callingNumberWithheld
+            hasDeviceInfo:
+              type: object
+              description: Retrieve additional information about the currently connected device
+              properties:
+                for:
+                  type: array
+                  minItems: 1
+                  example:
+                  - IMEI
+                  - serialNo
+                  - model
+                  - activation
+                  - purchaseDate
+                  default:
+                  - IMEI
+                  description: list of device information to lookup e.g. IMEI
+                  items:
+                    type: string
+                    enum:
+                    - IMEI
+                    - serialNo
+                    - model
+                    - activation
+                    - purchaseDate
+              required:
+              - for
+            wasBlacklisted:
+              oneOf:
+              - additionalProperties: false
+                title: inSeconds
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inSeconds:
+                    type: integer
+                    example: 120
+                    description: set look-back period in past seconds
+                required:
+                - inSeconds
+              - additionalProperties: false
+                title: inMinutes
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inMinutes:
+                    type: integer
+                    example: 40
+                    description: set look-back period in past minutes
+                required:
+                - inMinutes
+              - additionalProperties: false
+                title: inHours
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inHours:
+                    type: integer
+                    example: 12
+                    description: set look-back period in past hours
+                required:
+                - inHours
+              - additionalProperties: false
+                title: inDays
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inDays:
+                    type: integer
+                    example: 30
+                    description: set look-back period in past days
+                required:
+                - inDays
+              - additionalProperties: false
+                title: inDate
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inDate:
+                    type: string
+                    format: date
+                    example: '2021-03-01'
+                    description: set look-back period to a fixed date
+                required:
+                - inDate
+              type: object
+      required:
+      - protect
+    ProtectProductResponse:
+      title: Protect Product Response
+      type: object
+      description: 'All the features are stand-alone and require the correct access to be used.
+
+        Note: the protect.wasBlacklisted syntax has subtle differences from discover.device.blacklist, these are distinct products with different use cases.'
+      additionalProperties: false
+      properties:
+        protect:
+          type: object
+          minProperties: 1
+          properties:
+            hasSimChanged:
+              oneOf:
+              - additionalProperties: false
+                title: Successful hasSimChanged response
+                properties:
+                  changedInTimePeriod:
+                    type: boolean
+                    example: true
+                    description: Has a change taken place in the specified time
+                  lastChange:
+                    type:
+                    - string
+                    - 'null'
+                    example: '2022-10-19T10:44:35+00:00'
+                    format: date-time
+                    description: The time of last known sim change in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations) format if within specified time
+                required:
+                - changedInTimePeriod
+                - lastChange
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasDeviceChanged:
+              oneOf:
+              - additionalProperties: false
+                title: Successful hasDeviceChanged response
+                properties:
+                  changedInTimePeriod:
+                    type: boolean
+                    example: false
+                    description: Has a change taken place in the specified time
+                  lastChange:
+                    type:
+                    - string
+                    - 'null'
+                    example: null
+                    format: date-time
+                    description: The time of last known device change in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations) format if within specified time
+                required:
+                - changedInTimePeriod
+                - lastChange
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            wasReportedLostOrStolen:
+              oneOf:
+              - additionalProperties: false
+                title: Successful wasReportedLostOrStolen response
+                properties:
+                  inPeriod:
+                    type:
+                    - boolean
+                    - 'null'
+                    example: true
+                    description: Has been reported for lost or stolen in the specified time
+                  isDataAvailable:
+                    type: boolean
+                    example: true
+                  isLostOrStolen:
+                    type:
+                    - boolean
+                    - 'null'
+                    example: true
+                  lostOrStolenDate:
+                    type:
+                    - string
+                    - 'null'
+                    format: date-time
+                    example: '2023-02-12T17:42:14+00:00'
+                    description: some description
+                required:
+                - inPeriod
+                - isDataAvailable
+                - isLostOrStolen
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasAccountTenure:
+              oneOf:
+              - additionalProperties: false
+                title: Successful hasAccountTenure response
+                properties:
+                  longerThanPeriod:
+                    type:
+                    - boolean
+                    - 'null'
+                    example: false
+                    description: Has the account been associated with the current subscriber for the specified time or longer
+                  isDataAvailable:
+                    type: boolean
+                    example: true
+                required:
+                - longerThanPeriod
+                - isDataAvailable
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasContractInfo:
+              oneOf:
+              - additionalProperties: false
+                title: Successful hasContractInfo response
+                properties:
+                  startDate:
+                    type:
+                    - string
+                    - 'null'
+                    format: date
+                    example: '2021-03-15'
+                    description: The date of the account creation in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations) format
+                  isDataAvailable:
+                    type: boolean
+                    example: true
+                required:
+                - startDate
+                - isDataAvailable
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasCallForwarding:
+              oneOf:
+              - additionalProperties: false
+                title: Successful hasCallForwarding response
+                minProperties: 1
+                properties:
+                  unconditional:
+                    type: boolean
+                    example: false
+                    description: Indicates if the subscriber has unconditional call forwarding enabled
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasActiveCall:
+              oneOf:
+              - properties:
+                  isDataAvailable:
+                    type: boolean
+                  isOnCallNow:
+                    type:
+                    - boolean
+                    - 'null'
+                    description: the subscriber is currently on a call
+                  callDuration:
+                    type: object
+                    additionalProperties: false
+                    description: duration of the active call, if any
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                      seconds:
+                        type:
+                        - integer
+                        - 'null'
+                        example: 1234
+                        minimum: 0
+                        description: call duration is seconds
+                      started:
+                        type: string
+                        format: date-time
+                        example: '2022-01-01T10:57:57'
+                        description: approximate time call started, if available
+                      exceedsDuration:
+                        type:
+                        - boolean
+                        - 'null'
+                        description: the call exceeds the specified duration
+                    required:
+                    - isDataAvailable
+                    - seconds
+                  callDirection:
+                    type: object
+                    additionalProperties: false
+                    description: direction of the originating call
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                      isReceived:
+                        type:
+                        - boolean
+                        - 'null'
+                        description: the call was received
+                    required:
+                    - isDataAvailable
+                    - isReceived
+                  callingNumber:
+                    type: object
+                    additionalProperties: false
+                    description: 'about the calling number '
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                      isWithheld:
+                        type:
+                        - boolean
+                        - 'null'
+                        description: the calling number was withheld
+                    required:
+                    - isDataAvailable
+                    - isWithheld
+                required:
+                - isDataAvailable
+                - isOnCallNow
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasDeviceInfo:
+              oneOf:
+              - additionalProperties: false
+                minProperties: 1
+                title: Successful hasDeviceInfo response
+                properties:
+                  IMEI:
+                    type: object
+                    properties:
+                      value:
+                        type:
+                        - string
+                        - 'null'
+                        example: '545720379182608'
+                        minLength: 15
+                        maxLength: 15
+                        pattern: ^\d{15}$
+                        description: A unique 15-digit code that identifies a device
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - value
+                    - isDataAvailable
+                  serialNo:
+                    type: object
+                    properties:
+                      value:
+                        type:
+                        - string
+                        - 'null'
+                        example: 12A34BCD
+                        description: A unique code assigned by the manufacturer to help identify an individual device
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - value
+                    - isDataAvailable
+                  model:
+                    type: object
+                    properties:
+                      code:
+                        type:
+                        - string
+                        - 'null'
+                        example: iPhone XR (A2105)
+                        description: Technical model name given by the manufacturer
+                      name:
+                        type:
+                        - string
+                        - 'null'
+                        example: iPhone XR
+                        description: Consumer model name given by the manufacturer
+                      brand:
+                        type:
+                        - string
+                        - 'null'
+                        example: Apple
+                        description: Name of the manufacturer / companies
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - code
+                    - name
+                    - brand
+                    - isDataAvailable
+                  activation:
+                    type: object
+                    properties:
+                      isActivated:
+                        type:
+                        - boolean
+                        - 'null'
+                        example: true
+                        description: Indicates if the phone has been activated
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      date:
+                        type:
+                        - string
+                        - 'null'
+                        format: date-time
+                        example: '2022-07-11T20:08:04+00:00'
+                        description: The date that the device was activated, if known
+                    required:
+                    - isActivated
+                    - isDataAvailable
+                    - date
+                  estimatedPurchase:
+                    type: object
+                    required:
+                    - date
+                    - isDataAvailable
+                    properties:
+                      date:
+                        type:
+                        - string
+                        - 'null'
+                        format: date
+                        example: '2021-03-15'
+                        description: The estimated date of purchase in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Calendar_dates) format
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            wasBlacklisted:
+              oneOf:
+              - additionalProperties: false
+                title: Successful wasBlacklisted response
+                properties:
+                  inPeriod:
+                    type: boolean
+                    example: true
+                    description: Has been blacklisted in the specified time
+                  blacklistStatus:
+                    type:
+                    - boolean
+                    - 'null'
+                    example: true
+                    description: Indicates if the device is currently blacklisted
+                  isDataAvailable:
+                    type: boolean
+                    example: true
+                  blacklistEvent:
+                    type:
+                    - object
+                    - 'null'
+                    required:
+                    - date
+                    - by
+                    - reason
+                    properties:
+                      date:
+                        type:
+                        - string
+                        - 'null'
+                        example: '2023-01-24 08:32:08'
+                        description: The most recent date the device was reported blacklisted in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations) format if within specified time
+                      by:
+                        type:
+                        - string
+                        - 'null'
+                        example: Hutchison 3G UK
+                        description: The operator or other party who last updated blacklist status
+                      reason:
+                        type:
+                        - string
+                        - 'null'
+                        example: stolen or lost
+                        description: The reason given for the blacklist event
+                  removeEvent:
+                    type:
+                    - object
+                    - 'null'
+                    required:
+                    - date
+                    - by
+                    - reason
+                    properties:
+                      date:
+                        type:
+                        - string
+                        - 'null'
+                        example: '2023-01-24 08:32:08'
+                        description: The most recent date the device was remove from the blacklisted in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations) format if within specified time
+                      by:
+                        type:
+                        - string
+                        - 'null'
+                        example: Hutchison 3G UK
+                        description: The operator or other party who last requested the removal from the blacklist
+                      reason:
+                        type:
+                        - string
+                        - 'null'
+                        example: found
+                        description: The reason given for the removal from the blacklist
+                  history:
+                    type:
+                    - object
+                    - 'null'
+                    required:
+                    - blacklistedCount
+                    - removedCount
+                    - operators
+                    properties:
+                      blacklistedCount:
+                        type:
+                        - integer
+                        - 'null'
+                        example: 10
+                        description: Number of times device has been blacklisted
+                      removedCount:
+                        type:
+                        - integer
+                        - 'null'
+                        example: 2
+                        description: Number of times the device has been removed from the GSMA blacklist
+                      operators:
+                        type:
+                        - integer
+                        - 'null'
+                        example: 2
+                        description: Number of unique operators or other parties who have blacklisted the device
+                required:
+                - inPeriod
+                - blacklistStatus
+                - isDataAvailable
+                - blacklistEvent
+                - removeEvent
+                - history
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+      required:
+      - protect
+    DiscoverProductResponse:
+      title: Discover Product Response
+      type: object
+      description: 'Schema of a successful response for Discover features.
+
+        Note: the discover.device.blacklist syntax has subtle differences from protect.wasBlacklisted, these are distinct products with different use cases."'
+      additionalProperties: false
+      example:
+        discover:
+          number:
+            is: '447700900501'
+            isCorrectFormat: true
+            isValid: true
+            country:
+              name: United Kingdom of Great Britain and Northern Ireland
+              code: GB
+              dialCode: '44'
+            onNetwork:
+              MCC: '001'
+              MNC: '04'
+              networkName: Phronesis (H3G UK)
+            isPorted: false
+          hasNumberBeenRecycled:
+            isRecycled: true
+            changedInTimePeriod: true
+            lastChange: '2022-10-20T11:36:26+00:00'
+          hasMVNOInfo:
+            isMVNO: true
+            brand: iD mobile
+            isDataAvailable: true
+          hasHomeNetworkInfo:
+            isRoaming: true
+            isDataAvailable: true
+          device:
+            IMEI:
+              is: '969455279101647'
+            serialNo:
+              value: DX3ZJ7LRKXK7
+              isDataAvailable: true
+            model:
+              brand: Apple
+              name: iPhone XR
+              code: iPhone XR (A2105)
+              isDataAvailable: true
+            activation:
+              isActivated: true
+              isDataAvailable: true
+              date: null
+            estimatedPurchase:
+              date: '2020-01-28'
+              isDataAvailable: true
+            blacklist:
+              status: true
+              isDataAvailable: true
+              addEvent:
+                date: '2023-01-24 08:32:08'
+                by: Hutchison 3G UK
+                reason: Stolen Or Lost
+              removeEvent:
+                date: '2023-01-24 15:32:08'
+                by: Hutchison 3G UK
+                reason: Found
+              history:
+                blacklistedCount: 30
+                removedCount: 29
+                operators: 2
+            retail:
+              currency: USD
+              prices:
+              - '1247'
+              - '1366'
+              - '1604'
+              - '1842'
+              storageOptions:
+              - 128 GB
+              - 256 GB
+              - 512 GB
+              - 1 TB
+              releaseDate: '2021-09-01'
+              isDataAvailable: true
+        transaction:
+          status:
+            value: 0
+            message: transaction successful
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+      properties:
+        discover:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            number:
+              type: object
+              additionalProperties: false
+              properties:
+                is:
+                  type: string
+                  example: '447700900501'
+                  description: Echoes the input number in [E.164](https://en.wikipedia.org/wiki/E.164) format
+                isCorrectFormat:
+                  type: boolean
+                  description: Indicates if the subscriber's number is in correct format (true) or not (false)
+                  example: true
+                isValid:
+                  type: boolean
+                  description: Indicates if the subscriber's number is valid (true) or not (false)
+                  example: true
+                country:
+                  type: object
+                  description: Country the subscriber is registered in
+                  additionalProperties: false
+                  properties:
+                    name:
+                      type: string
+                      description: Name of the country the subscriber is registered in
+                      example: United Kingdom of Great Britain and Northern Ireland
+                    code:
+                      type: string
+                      description: '[ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) code for the country the subscriber is registered in'
+                      example: GB
+                    dialCode:
+                      type: string
+                      description: Dial code for the country of registration
+                      example: '44'
+                  required:
+                  - name
+                  - code
+                  - dialCode
+                onNetwork:
+                  type: object
+                  description: Subscriber network information
+                  additionalProperties: false
+                  properties:
+                    MCC:
+                      type: string
+                      description: The subscriber's [mobile country code](https://en.wikipedia.org/wiki/Mobile_country_code)
+                      example: '234'
+                    MNC:
+                      type: string
+                      description: The subscriber's [mobile network code](https://en.wikipedia.org/wiki/Mobile_country_code)
+                      example: '30'
+                    networkName:
+                      type: string
+                      description: The current network operator for the subscriber
+                      example: EE UK
+                  required:
+                  - MCC
+                  - MNC
+                  - networkName
+                isPorted:
+                  type: boolean
+                  description: "A true value indicates that a number is no longer served by the original number range owner or   \nhas been ported since this allocation where data is available to determine this from the mobile operators"
+                  example: true
+                wasOnNetwork:
+                  type: object
+                  description: Previous network, if ported
+                  additionalProperties: false
+                  properties:
+                    MCC:
+                      type: string
+                      description: The prior [mobile country code](https://en.wikipedia.org/wiki/Mobile_country_code) of the MSISDN
+                      example: '234'
+                    MNC:
+                      type: string
+                      description: The prior [mobile network code](https://en.wikipedia.org/wiki/Mobile_country_code)
+                      example: '15'
+                    networkName:
+                      type: string
+                      description: The prior network operator of the MSISDN
+                      example: Vodafone UK
+                  required:
+                  - MCC
+                  - MNC
+                  - networkName
+            hasNumberBeenRecycled:
+              oneOf:
+              - additionalProperties: false
+                title: Successful hasNumberBeenRecycled response
+                properties:
+                  isRecycled:
+                    type: boolean
+                    description: Indicates if the number been recycled
+                    example: true
+                  changedInTimePeriod:
+                    type: boolean
+                    description: Indicates if the state has changed in the requested time period
+                    example: false
+                  lastChange:
+                    type:
+                    - string
+                    - 'null'
+                    description: Date of last change, if known
+                    example: '2020-03-28T13:07:12Z'
+                    format: date-time
+                required:
+                - isRecycled
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasMVNOInfo:
+              oneOf:
+              - additionalProperties: false
+                title: Successful hasMVNOInfo response
+                properties:
+                  isMVNO:
+                    type:
+                    - boolean
+                    - 'null'
+                    description: Indicates if the number is allocated to a virtual mobile network (MVNO) or not
+                    example: true
+                  brand:
+                    type:
+                    - string
+                    - 'null'
+                    description: The (virtual) network brand, if available
+                    example: iD mobile
+                  isDataAvailable:
+                    type: boolean
+                    example: true
+                required:
+                - isMVNO
+                - brand
+                - isDataAvailable
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasHomeNetworkInfo:
+              oneOf:
+              - type: object
+                additionalProperties: false
+                properties:
+                  isRoaming:
+                    type: boolean
+                    description: TRUE if the device is known to be in a roaming state
+                  isDataAvailable:
+                    type: boolean
+                required:
+                - isDataAvailable
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+            device:
+              oneOf:
+              - additionalProperties: false
+                title: Successful discover.device response
+                properties:
+                  IMEI:
+                    type: object
+                    required:
+                    - is
+                    properties:
+                      is:
+                        type: string
+                        example: '969455279101641'
+                        description: Echoes the input IMEI
+                  serialNo:
+                    type: object
+                    properties:
+                      value:
+                        type:
+                        - string
+                        - 'null'
+                        example: 12A34BCD
+                        description: A unique code assigned by the manufacturer to help identify an individual device
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - value
+                    - isDataAvailable
+                  model:
+                    type: object
+                    properties:
+                      code:
+                        type:
+                        - string
+                        - 'null'
+                        example: iPhone XR (A2105)
+                        description: Technical model name given by the manufacturer
+                      name:
+                        type:
+                        - string
+                        - 'null'
+                        example: iPhone XR
+                        description: Consumer model name given by the manufacturer
+                      brand:
+                        type:
+                        - string
+                        - 'null'
+                        example: Apple
+                        description: Name of the manufacturer / companies
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - code
+                    - name
+                    - brand
+                    - isDataAvailable
+                  activation:
+                    type: object
+                    properties:
+                      isActivated:
+                        type:
+                        - boolean
+                        - 'null'
+                        example: true
+                        description: Indicates if the phone has been activated
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      date:
+                        type:
+                        - string
+                        - 'null'
+                        format: date-time
+                        example: '2022-07-11T20:08:04+00:00'
+                        description: The date that the device was activated, if known
+                    required:
+                    - isActivated
+                    - isDataAvailable
+                    - date
+                  estimatedPurchase:
+                    type: object
+                    required:
+                    - date
+                    - isDataAvailable
+                    properties:
+                      date:
+                        type:
+                        - string
+                        - 'null'
+                        format: date
+                        example: '2021-03-15'
+                        description: The estimated date of purchase in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Calendar_dates) format
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                  blacklist:
+                    type: object
+                    properties:
+                      status:
+                        type:
+                        - boolean
+                        - 'null'
+                        example: true
+                        description: Indicates if the device is currently blacklisted
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      addEvent:
+                        type:
+                        - object
+                        - 'null'
+                        required:
+                        - date
+                        - by
+                        - reason
+                        properties:
+                          date:
+                            type:
+                            - string
+                            - 'null'
+                            example: '2023-01-24 08:32:08'
+                            description: The most recent date the device was reported blacklisted in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations) format if within specified time
+                          by:
+                            type:
+                            - string
+                            - 'null'
+                            example: Hutchison 3G UK
+                            description: The operator or other party who last updated blacklist status
+                          reason:
+                            type:
+                            - string
+                            - 'null'
+                            example: stolen or lost
+                            description: The reason given for the blacklist event
+                      removeEvent:
+                        type:
+                        - object
+                        - 'null'
+                        required:
+                        - date
+                        - by
+                        - reason
+                        properties:
+                          date:
+                            type:
+                            - string
+                            - 'null'
+                            example: '2023-01-24 08:32:08'
+                            description: The most recent date the device was remove from the blacklisted in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations) format if within specified time
+                          by:
+                            type:
+                            - string
+                            - 'null'
+                            example: Hutchison 3G UK
+                            description: The operator or other party who last requested the removal from the blacklist
+                          reason:
+                            type:
+                            - string
+                            - 'null'
+                            example: found
+                            description: The reason given for the removal from the blacklist
+                      history:
+                        type:
+                        - object
+                        - 'null'
+                        required:
+                        - blacklistedCount
+                        - removedCount
+                        - operators
+                        properties:
+                          blacklistedCount:
+                            type:
+                            - integer
+                            - 'null'
+                            example: 10
+                            description: Number of times device has been blacklisted
+                          removedCount:
+                            type:
+                            - integer
+                            - 'null'
+                            example: 2
+                            description: Number of times the device has been removed from the GSMA blacklist
+                          operators:
+                            type:
+                            - integer
+                            - 'null'
+                            example: 2
+                            description: Number of unique operators or other parties who have blacklisted the device
+                    required:
+                    - status
+                    - isDataAvailable
+                    - addEvent
+                    - removeEvent
+                    - history
+                  retail:
+                    type: object
+                    properties:
+                      currency:
+                        type:
+                        - string
+                        - 'null'
+                        example: USD
+                        description: Indicates the currency used for the retail price
+                      prices:
+                        type: array
+                        example:
+                        - '1247'
+                        - '1366'
+                        - '1604'
+                        - '1842'
+                        description: Array containing the various retail prices for device model releases
+                      storageOptions:
+                        type: array
+                        example:
+                        - 128 GB
+                        - 256 GB
+                        - 512 GB
+                        - 1 TB
+                        description: Array containing the device model variants
+                      releaseDate:
+                        type:
+                        - string
+                        - 'null'
+                        example: '2021-09-01'
+                        description: The release date for the device model
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - isDataAvailable
+                required:
+                - IMEI
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+      required:
+      - discover
+    AssureProductRequest:
+      title: Assure Product Request
+      type: object
+      description: "The following is the schema of a call to all Assure products on a mobile number  \nAssure comes with matchingName, matchingAddress, and matchingBirthDate. matchingAge and matchingDeviceInfo are additional features that require specific access  \nNone of the features are required, but at least one must be present in the body to make a successful Assure call  \nNote: KYC matching in Spain requires a positive match response for matchingIdentityDocument"
+      properties:
+        assure:
+          type: object
+          description: To make a call to Assure you will need at least one of the product features below in the body
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            matchingName:
+              type: object
+              description: Verify the first and last name of the subscriber
+              properties:
+                firstName:
+                  type: string
+                  description: First name
+                  example: Katharine
+                lastName:
+                  type: string
+                  description: Last name
+                  example: Parsons
+                email:
+                  type: string
+                  pattern: ^\S+@\S+$
+                  minLength: 3
+                  maxLength: 320
+                  description: Email
+              required:
+              - firstName
+              - lastName
+            matchingIdentityDocument:
+              description: Verify the national identity number for the subscriber - required for KYC matching in Spain
+              type: object
+              minProperties: 1
+              properties:
+                nationalIdentity:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                      description: National identity document number
+                      example: 99999999R
+                  required:
+                  - reference
+            matchingAddress:
+              description: Verify the address data of the subscriber. Address feature availability is on a per country basis, see [here](https://developer.api.v3.phronesis.tech/docs/network-biometrics/igp7apeu9g4tk-calling-network-biometrics#assure) for details.
+              type: object
+              minProperties: 1
+              properties:
+                houseNumber:
+                  type: string
+                  description: House number without street name
+                  example: '20'
+                houseName:
+                  type: string
+                  description: House name
+                  example: Michael Faraday House
+                streetAddress:
+                  type: string
+                  description: Street address including house name/number
+                  example: 20 Michael Faraday House
+                postcode:
+                  type: string
+                  example: SG1 2AY
+                  description: Postal code
+                locality:
+                  type: string
+                  example: Paris
+                  description: Town/City
+                province:
+                  type: string
+                  example: Minnesota
+                  description: State/region name
+                country:
+                  type: string
+                  example: England
+                  description: country name in [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
+            matchingBirthDate:
+              type: object
+              description: Verify the birthdate of the subscriber
+              minProperties: 1
+              properties:
+                dateOfBirth:
+                  type: string
+                  example: '1859-01-01'
+                  format: date
+                  pattern: ^([1|2]{1}[0-9]{3})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])$
+                  description: Date of birth as yyyy-mm-dd
+              required:
+              - dateOfBirth
+            matchingAge:
+              type: object
+              description: Verify the age of the subscriber
+              minProperties: 1
+              properties:
+                greaterThanYears:
+                  type: integer
+                  example: 18
+                  minimum: 18
+                  maximum: 18
+                  default: 18
+                  description: Fixed value of 18.
+              required:
+              - greaterThanYears
+            hasServiceRestriction:
+              type: object
+              description: Check subscriber restriction settings e.g. Content Lock
+              properties:
+                for:
+                  type: array
+                  minItems: 1
+                  example:
+                  - adultContent
+                  items:
+                    type: string
+                    enum:
+                    - adultContent
+              required:
+              - for
+            matchingDeviceInfo:
+              type: object
+              description: Confirm the connected device is as expected
+              minProperties: 1
+              properties:
+                IMEI:
+                  type: string
+                  example: '969455279101647'
+                  minLength: 14
+                  maxLength: 15
+                  description: 15-digit code that identifies a device
+                  pattern: ^\d{14,15}$
+                calculateCheckDigit:
+                  type: boolean
+                  x-stoplight:
+                    id: 67cfyeta5o5q9
+                  default: false
+                  description: calculate check digit for 14-digit IMEI
+              required:
+              - IMEI
+            matchingAccountInfo:
+              type: object
+              description: Retrieve additional information about the subscriber account
+              properties:
+                for:
+                  type: array
+                  minItems: 1
+                  example:
+                  - isActive
+                  - contractType
+                  - lostOrStolen
+                  items:
+                    type: string
+                    enum:
+                    - isActive
+                    - contractType
+                    - lostOrStolen
+              required:
+              - for
+      required:
+      - assure
+    NetworkBiometricProductRequest:
+      type: object
+      example:
+        discover:
+          number: '447700900604'
+          hasNumberBeenRecycled:
+            inSeconds: 900
+          hasMVNOInfo:
+            filterMVNO: true
+          device:
+            IMEI: '351490789456123'
+            for:
+            - serialNo
+            - model
+            - activation
+            - blacklist
+          hasHomeNetworkInfo:
+            for:
+            - roaming
+        assure:
+          matchingName:
+            firstName: William
+            lastName: Herschel
+          matchingAddress:
+            houseNumber: '10'
+            houseName: Herschel Museum of Astronomy
+            postcode: BA1 2BL
+          matchingBirthDate:
+            dateOfBirth: '1738-11-15'
+          matchingAge:
+            greaterThanYears: 18
+          hasServiceRestriction:
+            for:
+            - adultContent
+          matchingDeviceInfo:
+            IMEI: '306772992380426'
+          matchingAccountInfo:
+            for:
+            - isActive
+            - contractType
+            - lostOrStolen
+        protect:
+          hasSimChanged:
+            inSeconds: 900
+          hasDeviceChanged:
+            inSeconds: 900
+          hasAccountTenure:
+            greaterThanDate: '2020-03-21'
+          hasContractInfo:
+            for:
+            - startDate
+          hasCallForwarding:
+            for: unconditional
+          hasActiveCall:
+            withMinimumDuration:
+              inSeconds: 120
+            with:
+            - callDirection
+            - callDuration
+            - callingNumberWithheld
+          hasDeviceInfo:
+            for:
+            - IMEI
+            - serialNo
+            - model
+            - activation
+          wasReportedLostOrStolen:
+            inDate: '2020-03-03'
+          wasBlacklisted:
+            inDate: '2023-01-24'
+      description: The schema for the Network Biometrics request
+      additionalProperties: false
+      required:
+      - discover
+      properties:
+        discover:
+          $ref: '#/components/schemas/DiscoverProductRequest/properties/discover'
+        assure:
+          $ref: '#/components/schemas/AssureProductRequest/properties/assure'
+        protect:
+          $ref: '#/components/schemas/ProtectProductRequest/properties/protect'
+    AssureProductResponse:
+      title: Assure Product Response
+      type: object
+      example:
+        assure:
+          matchingName:
+            firstName:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            lastName:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            fullName:
+              isMatched: true
+              isDataAvailable: true
+              matchConfidence: 100
+            email:
+              isMatched: true
+              isDataAvailable: true
+              matchConfidence: 100
+          matchingAddress:
+            fullAddress:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            houseNameOrNumber:
+              isDataAvailable: false
+              isMatched: false
+              matchConfidence: 100
+            postcode:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+          matchingBirthDate:
+            isDataAvailable: true
+            isMatched: true
+            matchConfidence: 100
+          matchingAge:
+            isDataAvailable: true
+            isMatched: true
+          matchingDeviceInfo:
+            IMEI:
+              isMatched: true
+              checked: '353090101175010'
+          matchingAccountInfo:
+            account:
+              isActive: true
+              isDataAvailable: true
+            contractType:
+              is: PAYM
+              isDataAvailable: true
+            lostOrStolen:
+              isReportedLostOrStolen: false
+              isDataAvailable: true
+          hasServiceRestriction:
+            adultContent:
+              isUnlocked: true
+              isDataAvailable: true
+      description: assure product response data
+      properties:
+        assure:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            matchingName:
+              oneOf:
+              - additionalProperties: false
+                title: Successful matchingName response
+                properties:
+                  firstName:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: measure of similarity, the higher the value, the more similar the strings are. The score is normalized so that 0 represents no similarities, and 100 is an exact match
+                  lastName:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                  email:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: "Integer between 0-100 representing a percentage score of how similar the request data matches with user data  \n***For date-of-birth matching, only a 100% match will trigger the isMatched flag to become true***"
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                  fullName:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                required:
+                - firstName
+                - lastName
+                - fullName
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            matchingIdentityDocument:
+              oneOf:
+              - additionalProperties: false
+                title: Successful matchingIdentityDocument response
+                minProperties: 1
+                properties:
+                  nationalIdentity:
+                    type: object
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            matchingAddress:
+              oneOf:
+              - additionalProperties: false
+                title: Successful matchingAddress response
+                required:
+                - fullAddress
+                minProperties: 2
+                properties:
+                  fullAddress:
+                    type: object
+                    additionalProperties: false
+                    description: 'Aggregated from all available address data, e.g. house name/number and postcode in the UK or street, locality and postcode for France
+
+                      and **locality**, **streetAddress**, **postcode** for French lookup'
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                  houseNameOrNumber:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                  locality:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                  streetAddress:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                  province:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                  country:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                  postcode:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - isDataAvailable
+                    - isMatched
+                    - matchConfidence
+                    properties:
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                      isMatched:
+                        type: boolean
+                        example: true
+                      matchConfidence:
+                        type: integer
+                        example: 100
+                        description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            matchingBirthDate:
+              oneOf:
+              - additionalProperties: false
+                title: Successful matchingBirthDate response
+                properties:
+                  isDataAvailable:
+                    type: boolean
+                    example: true
+                  isMatched:
+                    type: boolean
+                    example: true
+                  matchConfidence:
+                    type: integer
+                    example: 100
+                    description: Integer between 0-100 representing a percentage score of how similar the request data matches with user data
+                required:
+                - isDataAvailable
+                - isMatched
+                - matchConfidence
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            matchingAge:
+              description: '***matchingAge aka age eligibility is a stand-alone feature of Assure and requires specific access to be used***'
+              oneOf:
+              - additionalProperties: false
+                title: Successful matchingAge response
+                properties:
+                  isDataAvailable:
+                    type: boolean
+                    example: true
+                  isMatched:
+                    type: boolean
+                    description: Indicates that the data provider agrees that the subscriber is of adult age
+                    example: true
+                required:
+                - isDataAvailable
+                - isMatched
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            matchingDeviceInfo:
+              oneOf:
+              - additionalProperties: false
+                title: Successful matchingDeviceInfo response
+                properties:
+                  IMEI:
+                    type: object
+                    required:
+                    - isMatched
+                    - checked
+                    properties:
+                      isMatched:
+                        type: boolean
+                        example: true
+                        description: Whether the provided IMEI of the device is correct
+                      checked:
+                        type: string
+                        x-stoplight:
+                          id: y1s88b8c2cblo
+                        minLength: 15
+                        maxLength: 15
+                        pattern: ^\d{15}$
+                        description: confirmation of the IMEI that was checked
+                required:
+                - IMEI
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            matchingAccountInfo:
+              oneOf:
+              - additionalProperties: false
+                title: Successful matchingAccountInfo response
+                properties:
+                  account:
+                    type: object
+                    properties:
+                      isActive:
+                        type: boolean
+                        example: true
+                        description: Operator recognises subscription as live or active, false meaning account is suspended or deactivated
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - isActive
+                    - isDataAvailable
+                  contractType:
+                    type: object
+                    properties:
+                      is:
+                        type:
+                        - string
+                        - 'null'
+                        example: PAYM
+                        enum:
+                        - PAYG
+                        - PAYM
+                        - Business
+                        - Consumer
+                        description: The subscriber account type or billing segment
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - is
+                    - isDataAvailable
+                  lostOrStolen:
+                    type: object
+                    properties:
+                      isReportedLostOrStolen:
+                        type: boolean
+                        example: false
+                        description: Indicates if the subscriber account has been reported compromised with the device and/or SIM either lost or stolen
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - isReportedLostOrStolen
+                    - isDataAvailable
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+            hasServiceRestriction:
+              oneOf:
+              - additionalProperties: false
+                title: Successful hasServiceRestriction response
+                properties:
+                  adultContent:
+                    type: object
+                    description: Subscriber content lock status
+                    properties:
+                      isUnlocked:
+                        type: boolean
+                        example: true
+                        description: Subscriber has opted in to enable adult content on their device
+                      isDataAvailable:
+                        type: boolean
+                        example: true
+                    required:
+                    - isUnlocked
+                    - isDataAvailable
+              - additionalProperties: false
+                title: Feature error status
+                properties:
+                  status:
+                    $ref: '#/components/schemas/TransactionResponse/properties/transaction/properties/status'
+                required:
+                - status
+              type: object
+    DiscoverProductRequest:
+      title: Discover Product Request
+      type: object
+      description: 'The following is the schema of a call to all Discover products for a mobile number and/or device IMEI number.
+
+        To request more information about a mobile number, include the Discover product''s optional features. These are subject to an additional charge and require specific access.'
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        discover:
+          oneOf:
+          - additionalProperties: false
+            title: number
+            properties:
+              number:
+                type: string
+                pattern: ^\+?[1-9]\d{1,14}$
+                minLength: 5
+                maxLength: 15
+                example: '447700900704'
+                description: Phone number (MSISDN) to be validated, including country code per [E.164](https://en.wikipedia.org/wiki/E.164) standard
+              hasMVNOInfo:
+                description: Retrieve additional information about a virtual mobile network (MVNO) if available
+                type: object
+                properties:
+                  filterMVNO:
+                    type: boolean
+                    example: true
+                    description: Apply MVNO pre-filtering on Assure and Protect features where they are likely to fail
+                required:
+                - filterMVNO
+              hasNumberBeenRecycled:
+                description: Determine if the number has been recycled within the specified time period
+                type: object
+                oneOf:
+                - additionalProperties: false
+                  title: inSeconds
+                  properties:
+                    inSeconds:
+                      type: integer
+                      example: 120
+                      description: set look-back period in past seconds
+                - additionalProperties: false
+                  title: inMinutes
+                  properties:
+                    inMinutes:
+                      type: integer
+                      example: 40
+                      description: set look-back period in past minutes
+                - additionalProperties: false
+                  title: inHours
+                  properties:
+                    inHours:
+                      type: integer
+                      example: 12
+                      description: set look-back period in past hours
+                - additionalProperties: false
+                  title: inDays
+                  properties:
+                    inDays:
+                      type: integer
+                      example: 30
+                      description: set look-back period in past days
+                - additionalProperties: false
+                  title: inDate
+                  properties:
+                    inDate:
+                      type: string
+                      format: date
+                      example: '2021-03-01'
+                      description: set look-back period to a fixed date
+              hasHomeNetworkInfo:
+                description: 'Retrieve additional information about the home network
+
+                  '
+                type: object
+                properties:
+                  for:
+                    type: array
+                    description: list of home network information to lookup
+                    items:
+                      type: string
+                      example: roaming
+                required:
+                - for
+              device:
+                description: Retrieve additional information about a device using IMEI
+                type: object
+                properties:
+                  IMEI:
+                    type: string
+                    pattern: ^\d{14,15}$
+                    example: '969455279101647'
+                    minLength: 14
+                    maxLength: 15
+                    description: 15-digit code that identifies a device
+                  calculateCheckDigit:
+                    type: boolean
+                    x-stoplight:
+                      id: irc102lzvjhhi
+                    description: calculate check digit for 14-digit IMEI
+                    default: false
+                  for:
+                    type: array
+                    minItems: 1
+                    example:
+                    - serialNo
+                    - model
+                    - activation
+                    - blacklist
+                    - purchaseDate
+                    - retail
+                    description: list of device information to lookup
+                    items:
+                      type: string
+                      enum:
+                      - serialNo
+                      - model
+                      - activation
+                      - blacklist
+                      - purchaseDate
+                      - retail
+                required:
+                - IMEI
+                - for
+            required:
+            - number
+          - additionalProperties: false
+            title: device
+            properties:
+              device:
+                description: Retrieve additional information about a device using IMEI number lookup
+                type: object
+                required:
+                - IMEI
+                - for
+                properties:
+                  IMEI:
+                    type: string
+                    pattern: ^\d{14,15}$
+                    example: '969455279101647'
+                    minLength: 14
+                    maxLength: 15
+                    description: 15-digit code that identifies a device
+                  calculateCheckDigit:
+                    type: boolean
+                    x-stoplight:
+                      id: 8og6ptuh25aim
+                    default: false
+                    description: calculate check digit for 14-digit IMEI
+                  for:
+                    type: array
+                    minItems: 1
+                    example:
+                    - serialNo
+                    - model
+                    - activation
+                    - blacklist
+                    - purchaseDate
+                    - retail
+                    description: list of device information to lookup
+                    items:
+                      type: string
+                      enum:
+                      - serialNo
+                      - model
+                      - activation
+                      - blacklist
+                      - purchaseDate
+                      - retail
+            required:
+            - device
+          type: object
+  examples:
+    AgeEligibilityRequest:
+      description: "### Age Eligibility  \nUse the Age Eligibility feature to validate if a mobile subscriber is known to be at least 18 years of age and help control access to age-restricted products and services.  \n> In using this feature, please note that some datasource restrictions might apply, including:  \n  > - the number must be associated with an active subscription on a supported mobile network (**MVNOs excluded**),\n  > - the number must belong to the subscription holder and bill-payer,\n  > - the subscription must be a pay monthly contract (**PAYM**)."
+      value:
+        discover:
+          number: '447700900704'
+        assure:
+          matchingAge:
+            greaterThanYears: 18
+          hasServiceRestriction:
+            for:
+            - adultContent
+    ProtectRequest:
+      description: "## Protect\nBe certain that the information your customer is providing is true and that they aren't currently being impersonated.  \nIdentify **SIM** or **Device** swap events and detect **Account Takeover**."
+      value:
+        discover:
+          number: '447700900602'
+        protect:
+          hasSimChanged:
+            inSeconds: 900
+          hasDeviceChanged:
+            inSeconds: 900
+          hasCallForwarding:
+            for: unconditional
+          hasAccountTenure:
+            greaterThanDate: '2020-03-21'
+          hasActiveCall:
+            withMinimumDuration:
+              inSeconds: 120
+            with:
+            - callDirection
+            - callDuration
+            - callingNumberWithheld
+    AssurePartialResponseUK:
+      value:
+        discover:
+          number:
+            is: '447700900501'
+            isCorrectFormat: true
+            isValid: true
+            country:
+              name: United Kingdom of Great Britain and Northern Ireland
+              code: GB
+              dialCode: '44'
+            onNetwork:
+              MCC: '001'
+              MNC: '04'
+              networkName: Phronesis (H3G UK)
+            isPorted: true
+            wasOnNetwork:
+              MCC: '001'
+              MNC: '02'
+              networkName: Phronesis (EE UK)
+        assure:
+          matchingName:
+            status:
+              value: 808
+              message: service not available for MNO or MVNO
+          matchingAddress:
+            status:
+              value: 808
+              message: service not available for MNO or MVNO
+          matchingBirthDate:
+            status:
+              value: 808
+              message: service not available for MNO or MVNO
+        transaction:
+          status:
+            value: 2
+            message: transaction successful but partial data returned
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+    AssureRequestFrance:
+      description: "## Assure France\nStep up the protection and verify the mobile number a user is providing to assert their identity is registered to them and does not carry any suspicious activity flags.  \nAdd confidence with Know Your Customer (**KYC**) matching. \n> Be aware of the differences on the properties supplied for `matchingAddress` and that email validation is available consistently across the French market"
+      value:
+        discover:
+          number: '33609666039'
+        assure:
+          matchingName:
+            firstName: Jean-Yves
+            lastName: Lafesse
+            email: jy.lafess@humour.com
+          matchingAddress:
+            streetAddress: 64 Le Grand Détournement
+            locality: Pontivy
+            postcode: '56300'
+            country: France
+          matchingBirthDate:
+            dateOfBirth: '1957-03-13'
+    DiscoverResponse:
+      value:
+        discover:
+          number:
+            is: '447700900501'
+            isCorrectFormat: true
+            isValid: true
+            country:
+              name: United Kingdom of Great Britain and Northern Ireland
+              code: GB
+              dialCode: '44'
+            onNetwork:
+              MCC: '001'
+              MNC: '04'
+              networkName: Phronesis (H3G UK)
+            isPorted: false
+          hasNumberBeenRecycled:
+            isRecycled: true
+            changedInTimePeriod: true
+            lastChange: '2022-10-20T11:36:26+00:00'
+          hasMVNOInfo:
+            isMVNO: true
+            brand: iD mobile
+            isDataAvailable: true
+          hasHomeNetworkInfo:
+            isRoaming: true
+            isDataAvailable: true
+          device:
+            IMEI:
+              is: '969455279101647'
+            serialNo:
+              value: DX3ZJ7LRKXK7
+              isDataAvailable: true
+            model:
+              brand: Apple
+              name: iPhone XR
+              code: iPhone XR (A2105)
+              isDataAvailable: true
+            activation:
+              isActivated: true
+              isDataAvailable: true
+              date: null
+            estimatedPurchase:
+              date: '2020-01-28'
+              isDataAvailable: true
+            blacklist:
+              status: true
+              isDataAvailable: true
+              addEvent:
+                date: '2023-01-24 08:32:08'
+                by: Hutchison 3G UK
+                reason: Stolen Or Lost
+              removeEvent:
+                date: '2023-01-24 15:32:08'
+                by: Hutchison 3G UK
+                reason: Found
+              history:
+                blacklistedCount: 30
+                removedCount: 29
+                operators: 2
+            retail:
+              currency: USD
+              prices:
+              - '1247'
+              - '1366'
+              - '1604'
+              - '1842'
+              storageOptions:
+              - 128 GB
+              - 256 GB
+              - 512 GB
+              - 1 TB
+              releaseDate: '2021-09-01'
+              isDataAvailable: true
+        transaction:
+          status:
+            value: 0
+            message: transaction successful
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+    AssureRequest:
+      description: "## Assure\nStep up the protection and verify the mobile number a user is providing to assert their identity is registered to them and does not carry any suspicious activity flags.  \nAdd confidence with Know Your Customer (**KYC**) matching."
+      value:
+        discover:
+          number: '447700900704'
+        assure:
+          matchingName:
+            firstName: Katharine
+            lastName: Parsons
+          matchingAddress:
+            houseNumber: '10'
+            houseName: Michael Faraday House
+            postcode: SG1 2AY
+          matchingBirthDate:
+            dateOfBirth: '1859-01-01'
+    ProtectDeviceInfoRequest:
+      description: '## Protect Device Information
+
+        Return details about the device currently connected to the supplied mobile number'
+      value:
+        discover:
+          number: '447700900600'
+        protect:
+          hasDeviceInfo:
+            for:
+            - IMEI
+            - serialNo
+            - model
+            - activation
+            - purchaseDate
+    DiscoverRequest:
+      description: '## Discover
+
+        Supports input of a mobile phone number and/or a device IMEI number.
+
+        When supplied with a mobile phone number, it validates the number is correctly formatted, genuine, and reachable.
+
+        Similarly, the IMEI is validated and is used to retrieve the requested device information.
+
+        > The `discover` product is **required in every request** but additional products such as `assure` or `protect` can be added to the request object - the ordering is not significant (***see examples***).'
+      value:
+        discover:
+          number: '447700900702'
+          hasMVNOInfo:
+            filterMVNO: true
+          hasHomeNetworkInfo:
+            for:
+            - roaming
+          device:
+            IMEI: '351498789456123'
+            for:
+            - serialNo
+            - model
+            - activation
+            - purchaseDate
+            - blacklist
+            - retail
+    AllServicesRequest:
+      description: '## All available service
+
+        Summery of all Network Biometrics™ services'
+      value:
+        discover:
+          number: '447700900604'
+          hasNumberBeenRecycled:
+            inSeconds: 900
+          hasMVNOInfo:
+            filterMVNO: true
+          device:
+            IMEI: '351490789456123'
+            for:
+            - serialNo
+            - model
+            - activation
+            - blacklist
+          hasHomeNetworkInfo:
+            for:
+            - roaming
+        assure:
+          matchingName:
+            firstName: William
+            lastName: Herschel
+          matchingAddress:
+            houseNumber: '10'
+            houseName: Herschel Museum of Astronomy
+            postcode: BA1 2BL
+          matchingBirthDate:
+            dateOfBirth: '1738-11-15'
+          matchingAge:
+            greaterThanYears: 18
+          hasServiceRestriction:
+            for:
+            - adultContent
+          matchingDeviceInfo:
+            IMEI: '306772992380426'
+          matchingAccountInfo:
+            for:
+            - isActive
+            - contractType
+            - lostOrStolen
+        protect:
+          hasSimChanged:
+            inSeconds: 900
+          hasDeviceChanged:
+            inSeconds: 900
+          hasAccountTenure:
+            greaterThanDate: '2020-03-21'
+          hasContractInfo:
+            for:
+            - startDate
+          hasCallForwarding:
+            for: unconditional
+          hasActiveCall:
+            withMinimumDuration:
+              inSeconds: 120
+            with:
+            - callDirection
+            - callDuration
+            - callingNumberWithheld
+          hasDeviceInfo:
+            for:
+            - IMEI
+            - serialNo
+            - model
+            - activation
+          wasReportedLostOrStolen:
+            inDate: '2020-03-03'
+          wasBlacklisted:
+            inDate: '2023-01-24'
+    NumberRecycleRequest:
+      description: "## Number recycle  \nUsed to confirm if a customer's mobile number is presently active and has not been recently deactivated or recycled, to prevent false number declarations."
+      value:
+        discover:
+          number: '447700900704'
+          hasNumberBeenRecycled:
+            inSeconds: 900
+    AssureDeviceInfoRequest:
+      description: '## Assure Device Information
+
+        Check that the device ID (i.e. IMEI) you''re expecting is the same one associated with the provided mobile number.'
+      value:
+        discover:
+          number: '447700900601'
+        assure:
+          matchingDeviceInfo:
+            IMEI: '306772992380426'
+    AssureSuccessResponseFrance:
+      value:
+        discover:
+          number:
+            is: '33609666039'
+            isCorrectFormat: true
+            isValid: true
+            country:
+              name: France
+              code: FR
+              dialCode: '33'
+            onNetwork:
+              MCC: '208'
+              MNC: '10'
+              networkName: SFR France
+            isPorted: false
+        assure:
+          matchingName:
+            firstName:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 40
+            lastName:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 0
+            fullName:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 20
+            email:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 59
+          matchingAddress:
+            fullAddress:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 0
+            streetAddress:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 66
+            locality:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 0
+            postcode:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 93
+            country:
+              isDataAvailable: false
+              isMatched: false
+              matchConfidence: 0
+          matchingBirthDate:
+            isDataAvailable: true
+            isMatched: false
+            matchConfidence: 74
+        transaction:
+          status:
+            value: 0
+            message: transaction successful
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+    AllProductSuccessResponse:
+      value:
+        discover:
+          number:
+            is: '447700900501'
+            isCorrectFormat: true
+            isValid: true
+            country:
+              name: United Kingdom of Great Britain and Northern Ireland
+              code: GB
+              dialCode: '44'
+            onNetwork:
+              MCC: '001'
+              MNC: '04'
+              networkName: Phronesis (H3G UK)
+            isPorted: false
+          hasNumberBeenRecycled:
+            isRecycled: false
+            changedInTimePeriod: false
+            lastChange: null
+          hasMVNOInfo:
+            isMVNO: true
+            brand: iD mobile
+            isDataAvailable: true
+          hasHomeNetworkInfo:
+            isRoaming: true
+            isDataAvailable: true
+          device:
+            IMEI:
+              is: '969455279101647'
+            serialNo:
+              value: DX3ZJ7LRKXK7
+              isDataAvailable: true
+            model:
+              brand: Apple
+              name: iPhone XR
+              code: iPhone XR (A2105)
+              isDataAvailable: true
+            activation:
+              isActivated: true
+              isDataAvailable: true
+            blacklist:
+              status: true
+              isDataAvailable: true
+              addEvent:
+                date: '2023-01-24 08:32:08'
+                by: Hutchison 3G UK
+                reason: Stolen Or Lost
+              removeEvent:
+                date: '2023-01-24 15:32:08'
+                by: Hutchison 3G UK
+                reason: Found
+              history:
+                blacklistedCount: 30
+                removedCount: 29
+                operators: 2
+            retail:
+              currency: USD
+              prices:
+              - '1247'
+              - '1366'
+              - '1604'
+              - '1842'
+              storageOptions:
+              - 128 GB
+              - 256 GB
+              - 512 GB
+              - 1 TB
+              releaseDate: '2021-09-01'
+              isDataAvailable: true
+        assure:
+          matchingName:
+            firstName:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            lastName:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            fullName:
+              isMatched: true
+              isDataAvailable: true
+              matchConfidence: 100
+            email:
+              isMatched: true
+              isDataAvailable: true
+              matchConfidence: 100
+          matchingAddress:
+            fullAddress:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            houseNameOrNumber:
+              isDataAvailable: false
+              isMatched: false
+              matchConfidence: 100
+            postcode:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+          matchingBirthDate:
+            isDataAvailable: true
+            isMatched: true
+            matchConfidence: 100
+          matchingAge:
+            isDataAvailable: true
+            isMatched: true
+          hasServiceRestriction:
+            adultContent:
+              isUnlocked: true
+              isDataAvailable: true
+          matchingDeviceInfo:
+            IMEI:
+              isMatched: true
+              checked: '353090101175010'
+          matchingAccountInfo:
+            account:
+              isActive: true
+              isDataAvailable: true
+            contractType:
+              is: PAYM
+              isDataAvailable: true
+            lostOrStolen:
+              isReportedLostOrStolen: false
+              isDataAvailable: true
+        protect:
+          hasSimChanged:
+            changedInTimePeriod: true
+            lastChange: '2022-10-20T11:36:26+00:00'
+          hasDeviceChanged:
+            changedInTimePeriod: false
+            lastChange: '2020-02-19T17:42:14+00:00'
+          hasCallForwarding:
+            unconditional: false
+          hasAccountTenure:
+            longerThanPeriod: false
+            isDataAvailable: true
+          hasContractInfo:
+            startDate: '2021-03-15'
+            isDataAvailable: true
+          hasActiveCall:
+            isDataAvailable: true
+            isOnCallNow: true
+            callDuration:
+              isDataAvailable: true
+              seconds: 1234
+              started: '2022-01-01T10:57:57'
+              exceedsDuration: true
+            callDirection:
+              isReceived: true
+              isDataAvailable: true
+            callingNumber:
+              isWithheld: true
+              isDataAvailable: true
+          hasDeviceInfo:
+            IMEI:
+              value: '353090101175010'
+              isDataAvailable: true
+            serialNo:
+              value: DX3ZJ7LRKXK7
+              isDataAvailable: true
+            model:
+              brand: Apple
+              name: iPhone XR
+              code: iPhone XR (A2105)
+              isDataAvailable: true
+            activation:
+              isActivated: true
+              isDataAvailable: true
+          wasReportedLostOrStolen:
+            inPeriod: true
+            isDataAvailable: true
+            isLostOrStolen: true
+            lostOrStolenDate: '2023-02-12T17:42:14+00:00'
+          wasBlacklisted:
+            inPeriod: true
+            blacklistStatus: true
+            isDataAvailable: true
+            blacklistEvent:
+              date: '2023-01-24 08:32:08'
+              by: Hutchison 3G UK
+              reason: Stolen Or Lost
+            removeEvent:
+              date: '2023-01-24 15:32:08'
+              by: Hutchison 3G UK
+              reason: Found
+            history:
+              blacklistedCount: 30
+              removedCount: 29
+              operators: 2
+        transaction:
+          status:
+            value: 0
+            message: transaction successful
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+  headers:
+    Correlation-Id:
+      schema:
+        type: string
+        example: 251250b0-05a5-44b1-9d6d-6d1c78e8d994
+        description: A user-generated string to aid in matching requests; this is echoed back in the response headers
+  securitySchemes:
+    token:
+      name: API-Token
+      type: apiKey
+      in: header
+      description: API Token provided to you during the onboarding process
+    secret:
+      name: API-Secret
+      type: apiKey
+      in: header
+      description: API Secret provided to you during the onboarding process

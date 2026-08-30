@@ -1,0 +1,475 @@
+openapi: 3.2.0
+info:
+  title: Tmt Id HTTP API
+  version: '1.0'
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged HTTP API across 3 of this provider''s published API definitions: tmt-id-live.yml, tmt-id-score.yml, tmt-id-velocity.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.tmtvelocity.com/live
+- url: https://api.tmtid.com
+- url: https://api.tmtvelocity.com
+schemes:
+- https
+tags:
+- name: HTTP API
+paths:
+  /{format}/{key}/{secret}/{number}:
+    get:
+      tags:
+      - HTTP API
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: Queried phone number
+                  cic:
+                    type: string
+                    description: Carrier Identification Code
+                  error:
+                    type: number
+                    description: 0 (zero) = ok. Other values than “0” are detailed in ERROR codes section
+                  imsi:
+                    type: string
+                    description: First 5 digits from the International Mobile Subscriber Identity code
+                  mcc:
+                    type: string
+                    description: Mobile Country Code of the current carrier
+                  mnc:
+                    type: string
+                    description: Mobile Network Code of the current carrier
+                  network:
+                    type: string
+                    description: Current carrier name
+                  ocn:
+                    type: string
+                    description: Operating Company Number (only for Canada & USA).
+                  ported:
+                    type: boolean
+                    description: Indicates if the queried phone number was ported.<br> <ul><li>True = number was ported</li> <li>False = number was not ported</li></ul>
+                  present:
+                    type: string
+                    description: Indicates if the subscriber is present in the network.<br> <ul><li>yes = present</li> <li>no = not present</li></ul>
+                  status:
+                    type: number
+                    description: <ul><li>0 = success – query success</li> <li>1 = invalid number – incomplete number/wrong format.</li> <li>2 = Service or destination not authorized – this message is received if the API credentials are wrong or for your API the destination is not authorized.</li> <li>3 = congestion – timeout threshold exceeded.</li></ul>
+                  status_message:
+                    type: string
+                    description: <ul><li>success – query success</li> <li>invalid number – incomplete number/wrong format.</li> <li>service or destination not authorized – wrong API credentials or your API has no access to the destination service or country.</li> <li>congestion – timeout threshold exceeded.</li></ul>
+                  type:
+                    type: string
+                    description: Queried phone number type:<br> <ul><li>mobile</li> <li>fixed (landline)</li></ul>
+                  trxid:
+                    type: string
+                    description: A unique transaction reference number to aid billing and technical support.
+                required:
+                - number
+              examples:
+                Successful response format:
+                  value:
+                    '40722570240':
+                      cic: '4018740'
+                      error: 0
+                      imsi: 22610XXXXXXXXXX
+                      mcc: '226'
+                      mnc: '10'
+                      network: Orange Romania
+                      number: 40722570240
+                      ported: true
+                      present: 'yes'
+                      status: 0
+                      status_message: Success
+                      type: mobile,
+                      trxid: XoMQ3dF
+                Response Example for Invalid Number:
+                  value:
+                    '40722570240999':
+                      number: 40722570240999
+                      status: 1
+                      status_message: Invalid Number
+                      error: 0
+                Error Code 191 Response Example:
+                  value:
+                    '2347010000044':
+                      cic: '234503'
+                      error: 191
+                      imsi: 62160XXXXXXXXXX
+                      mcc: '621'
+                      mnc: '60'
+                      network: 9Mobile(ETISALAT)
+                      number: 2347010000044
+                      ported: true
+                      present: na
+                      status: 0
+                      status_message: Success
+                      type: mobile
+                      trxid: viMn_p9
+                Error Code 192 Response Example:
+                  value:
+                    '923044078302':
+                      cic: '92500'
+                      error: 192
+                      imsi: 41001XXXXXXXXXX
+                      mcc: '410'
+                      mnc: '01'
+                      network: Jazz (Mobilink)
+                      number: 923044078302
+                      present: na
+                      status: 0
+                      status_message: Success
+                      type: mobile
+                      trxid: mA0O2Mw
+                Error Code 193 Response Example:
+                  value:
+                    '33387840133':
+                      cic: '33511'
+                      error: 193
+                      imsi: null
+                      cc: null
+                      mnc: null
+                      network: Orange
+                      number: 33387840133
+                      ported: false
+                      present: na
+                      status: 0
+                      status_message: Success
+                      type: fixed
+                      trxid: AD0uuKo
+          description: ''
+      summary: GET method
+      operationId: GET
+      description: ''
+      parameters:
+      - name: format
+        in: path
+        description: JSON
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: API credentials – delivered to you via email
+        required: true
+        schema:
+          type: string
+      - name: secret
+        in: path
+        description: API credentials – delivered to you via email
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        description: The number in E.164 format (includes the country code sufix)
+        required: true
+        schema:
+          type: string
+    servers:
+    - url: https://api.tmtvelocity.com/live
+  /score/{number}:
+    get:
+      parameters:
+      - name: number
+        in: path
+        description: The Phone Number in internationally recognized E.164 format with the country code.
+        required: true
+        schema:
+          type: string
+      tags:
+      - HTTP API
+      responses:
+        '200':
+          headers:
+            x-tmt-key:
+              description: The API key received from TMT
+              schema:
+                type: string
+            x-tmt-secret:
+              description: The API secret received from TMT
+              schema:
+                type: string
+          content:
+            JSON:
+              examples:
+                Successful query:
+                  value:
+                    number: 23470100000xx
+                    tmt_score: 60
+                    status: 0
+                    status_message: Success
+                    trxid: lT.zkhd
+                Invalid API key or secret:
+                  value:
+                    status: 2
+                    status_message: You are not authorized to access the service.
+                Invalid Number:
+                  value:
+                    number: 99999
+                    tmt_score: 0
+                    status: 1
+                    status_message: Invalid number
+                    trxid: Fc.NhwG
+                MSISDN is not valid:
+                  value:
+                    number: 0
+                    tmt_score: 0
+                    status: 1
+                    status_message: MSISDN format is not valid.
+                    trxid: jyvPUkn
+                Unauthorized Destination:
+                  value:
+                    number: 40722570240
+                    tmt_score: -1
+                    status: 3
+                    status_message: The service is not available for this country.
+                    trxid: 00fj3iA
+                Internal serval error:
+                  value:
+                    number: 40722570240
+                    tmt_score: -1
+                    status: 5
+                    status_message: An internal server error occurred.
+                    trxid: LnvUSjP
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: string
+                    description: 'input number = equals with the queried number.
+
+                      - 0 = If the input number is composed solely of letters, the service will return a value of 0 (zero)'
+                  tmt_score:
+                    type: integer
+                    description: '- [0...100] = the service will return a number ranging from 0 and 100 representing the trustworthiness of the given phone number. The higher the number higher the level of trust. A tmt_score value of 0 (zero) is the implicit value for invalid numbers.
+
+                      - -1 = indicated some type of authorization issue or internal server error (see status messages in the next row)'
+                  status:
+                    type: integer
+                    description: '- 0 = success (HTTP Status 200)
+
+                      - 1 = Invalid Number (HTTP Status 200) / MSISDN is not Valid (http status 400)
+
+                      - 2 = Unauthorized (HTTP Status 401)
+
+                      - 3 = Forbidden (HTTP Status 403)
+
+                      - 4 = Bad Request (HTTP Status 400)
+
+                      - 5 = Internal server error (HTTP Status 500)'
+                  status_message:
+                    type: string
+                    description: '- Success = The query was resolved successfully.
+
+                      - Invalid number = The input number is not valid due to an unknown country code or incorrect length/format.
+
+                      - MSISDN is not Valid = the inquired number consists only of letters.
+
+                      - You are not authorized to access the service = Invalid API key or secret.
+
+                      - The service is not available for this country = The target number belongs to a country where the TMT Score service is not available.
+
+                      - Key header missing = The key header is absent or incorrectly formatted.
+
+                      - Secret header missing = The secret header is absent or incorrectly formatted.
+
+                      - Key and Secret headers missing = The Key and Secret headers are absent or incorrectly formatted.
+
+                      - Invalid request. Please contact support = contact support@tmtid.com
+
+                      - Internal server error = contact support@tmtid.com'
+                  trxid:
+                    type: string
+                    description: Represents the transaction ID, which aids in identifying transactions for purposes including customer inquiry resolution and troubleshooting.
+          description: ''
+      summary: GET method
+      operationId: GET
+      description: ''
+    servers:
+    - url: https://api.tmtid.com
+  /standard/{format}/{key}/{secret}/{number}:
+    get:
+      parameters:
+      - name: format
+        in: path
+        description: JSON CSV
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: API credentials – delivered to you via email
+        required: true
+        schema:
+          type: string
+      - name: secret
+        in: path
+        description: API credentials – delivered to you via email
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        description: The number in E.164 format (includes the country code sufix)
+        required: true
+        schema:
+          type: string
+      tags:
+      - HTTP API
+      responses:
+        '200':
+          headers: {}
+          content:
+            JSON:
+              examples:
+                Successful response format:
+                  value:
+                    number: 40721275636
+                    current_carrier:
+                      lrn: null
+                      mcc: 226
+                      mnc: 3
+                      name: Telekom Romania Mobile (Cosmote)
+                      spid: 4018760
+                    ocn: null
+                    original_carrier:
+                      mcc: 226
+                      mnc: 1
+                      name: Vodafone Romania
+                      spid: 4018720
+                      ocn: null
+                    ported: true
+                    status: 0
+                    status_message: Success
+                    type: mobile
+                Unsuccessful response format:
+                  value:
+                    number: 40721275699999
+                    status_message: Invalid Number
+                    status: 1
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The queried number
+                  current_carrier:
+                    type: object
+                    decription: Information related to the current carrier / network operator.
+                  original_carrier:
+                    type: object
+                    decription: Information related to the original carrier / network operator.
+                  lrn:
+                    type: number
+                    description: Local Routing Number - a LRN number is returned only if a USA/Canada number was ported. Otherwise, the value will be Null.
+                  mcc:
+                    type: number
+                    description: Mobile Country Code
+                  mnc:
+                    type: number
+                    description: Mobile Network Code
+                  name:
+                    type: string
+                    description: Carriers’ short name
+                  spid:
+                    type: number
+                    description: Unique Network ID - assigned by TMTANALYSYS.
+                  ocn:
+                    type: string
+                    description: Operating Company Name = Company Code for US, Canada.
+                  ported:
+                    type: string
+                    description: Indicates if the queried phone number was ported. - True = number was ported - False = number was not ported
+                  status:
+                    type: number
+                    description: Query status - 0 = success - query success - 1 = invalid number - incomplete number/wrong number format. - 2 = Service or destination not authorized - this message is received if the API credentials are wrong or for your API the destination is not authorized.
+                  status_message:
+                    type: string
+                    description: Query status message - success - query success - invalid number - incomplete number/wrong format. - Service or destination not authorized. - this message is received if the API credentials are wrong or for your API the destination is not authorized.
+                  type:
+                    type: number
+                    description: Queried phone number type - mobile - fixed (landline)
+                required:
+                - number
+            CSV:
+              examples:
+                Successful response format:
+                  value: '155166633xx;0;Success;152049;6529;T-Mobile US-SVR-10X/2;310;260;9739789917;1;no;152049;6529;T-Mobile US-SVR-10X/2;310;260
+
+                    CSV Response format
+
+                    number;status;status_message;current_carrier_spid;current_carrier_name;current_carrier_mcc;current_carrier_mnc;lrn;type;ported_status;ocn;original_carrier_name;original_carrier_mcc;original_carrier_mnc'
+                Unsuccessful response format:
+                  value: 40766610060999;1;Invalid Number
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The queried number
+                  current_carrier:
+                    type: object
+                    decription: Information related to the current carrier / network operator.
+                  original_carrier:
+                    type: object
+                    decription: Information related to the original carrier / network operator.
+                  lrn:
+                    type: number
+                    description: Local Routing Number - a LRN number is returned only if a USA/Canada number was ported. Otherwise, the value will be Null.
+                  mcc:
+                    type: number
+                    description: Mobile Country Code
+                  mnc:
+                    type: number
+                    description: Mobile Network Code
+                  name:
+                    type: string
+                    description: Carriers’ short name
+                  spid:
+                    type: number
+                    description: Unique Network ID - assigned by TMTANALYSYS.
+                  ocn:
+                    type: string
+                    description: Operating Company Name = Company Code for US, Canada.
+                  ported:
+                    type: string
+                    description: Indicates if the queried phone number was ported. - True = number was ported - False = number was not ported
+                  status:
+                    type: number
+                    description: Query status - 0 = success - query success - 1 = invalid number - incomplete number/wrong number format. - 2 = Service or destination not authorized - this message is received if the API credentials are wrong or for your API the destination is not authorized.
+                  status_message:
+                    type: string
+                    description: Query status message - success - query success - invalid number - incomplete number/wrong format. - Service or destination not authorized. - this message is received if the API credentials are wrong or for your API the destination is not authorized.
+                  type:
+                    type: number
+                    description: Queried phone number type - mobile - fixed (landline)
+                required:
+                - number
+          description: ''
+      summary: GET method
+      operationId: GET
+      description: ''
+    servers:
+    - url: https://api.tmtvelocity.com
+x-refined-from:
+- tmt-id-live.yml
+- tmt-id-score.yml
+- tmt-id-velocity.yml
+x-tagGroups:
+- name: Introduction
+  tags:
+  - About TMT
+- name: Service Specifications
+  tags:
+  - Authenticate
+  - Service

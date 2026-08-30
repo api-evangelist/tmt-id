@@ -1,0 +1,516 @@
+openapi: 3.2.0
+info:
+  title: Network Biometrics™ by TMT ID v2 (deprecated) API
+  version: 1.20.0
+  description: "TMT ID is the creator of Network Biometrics™. We make customer signups and transactions smoother while reducing exposure to fraud and related risks. With most online transactions now being made on mobile devices, an individual’s mobile number is often the best starting point for establishing their digital identity and managing their ongoing relationship with your organisation.  \n\nBecause of the close relationship between number, handset, and SIM, it is possible to identify and authenticate users without interrupting the customer journey quickly and transparently. However, there are many ways of compromising mobile numbers for fraud, including identity theft, account takeover and man-in-the-middle attacks.  \n\nNetwork Biometrics™ provides additional capabilities for your existing security and fraud detection systems. Through our APIs you can instantly validate the personal data that is being given to you, check for SIM swap or device change events and obtain other fraud indicators.\n\n---"
+  contact:
+    name: support@phronesis.net
+    email: support@phronesis.net
+    url: https://phronesis.net/contact/
+servers:
+- url: https://ea.api.phronesis.tech
+  description: early access
+- url: https://api.phronesis.tech
+  description: production
+security:
+- token: []
+  secret: []
+tags:
+- name: v2 (deprecated)
+paths:
+  /core/v2/NumberAssurance/AssuredRegistration:
+    post:
+      deprecated: true
+      summary: Assured Registration
+      operationId: post-assured-registration
+      description: Validate that the mobile phone number provided by a customer at the point of account registration / creation is associated with the same person’s mobile network billing identity.
+      tags:
+      - v2 (deprecated)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssuredRegistrationRequest'
+      responses:
+        '200':
+          description: "**200 - HTTP OK**  \nCheck `status` and `status_message` for further details on the success of the request:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 0    | transaction successful                                          |\n| 305  | subscriber absent, data may be incomplete                       |\n| 306  | unknown subscriber, data may be incomplete                      |\n| 308  | teleservice not provisioned for subscriber                      |\n| 309  | call or SMS facility barred for subscriber                      |\n| 310  | call or SMS facility not currently supported in serving network |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+        '202':
+          description: "**202 - HTTP Accepted**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 300  | call Forward check failed                                       |\n| 301  | SIM swap check failed                                           |\n| 302  | country check failed                                            |\n| 303  | user information check failed                                   |\n| 304  | vicinity check failed                                           |\n| 307  | no coverage for country                                         |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 300
+                status_message: call Forward check failed
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 202
+        '400':
+          description: "**400 - HTTP Bad Request**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 103  | bad request                                                     |\n| 104  | invalid Content-Type header                                     |\n| 207  | invalid parameters                                              |\n| 208  | invalid postcode parameter                                      |\n| 209  | invalid name parameter                                          |\n| 210  | invalid address parameter                                       |\n| 211  | invalid birthdate parameter                                     |\n| 213  | invalid use case identifier                                     |\n| 214  | invalid number parameter                                        |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 103
+                status_message: bad request
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 400
+        '401':
+          description: "**401 - HTTP Unauthorized**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 100  | user account not found                                          |\n| 101  | authentication failed                                           |\n| 102  | user account suspended                                          |\n| 106  | admin privileges required for this API                          |\n| 200  | IP address not whitelisted                                      |\n| 204  | product not provisioned for your account                        |\n| 206  | product availability suspended for your account                 |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 100
+                status_message: user account not found
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 401
+        '403':
+          description: "**403 - HTTP Forbidden**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 212  | MNO access not authorised                                       |\n| 802  | datasource temporarily not available                            |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 212
+                status_message: MNO access not authorised
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 403
+        '404':
+          description: "**404 - HTTP Not Found**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 404  | subscriber opted out of service                                 |\n| 405  | invalid number                                                  |\n| 804  | resource not found                                              |\n| 807  | subscriber data unavailable                                      |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 404
+                status_message: subscriber opted out of service
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 404
+        '405':
+          description: "**405 - HTTP Method Not Allowed**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 105  | method not allowed                                              |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 105
+                status_message: method not allowed
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 405
+        '408':
+          description: "**408 - HTTP Request Timeout**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 806  | datasource query time out                                       |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 806
+                status_message: datasource query time out
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 408
+        '502':
+          description: "**502 - HTTP Bad Gateway**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 803  | datasource query failed                                         |\n| 805  | database subsystem error                                        |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 803
+                status_message: datasource query failed
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 502
+        '503':
+          description: "**503 - HTTP Service Unavailable**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 201  | request was throttled. submission limits exceeded               |\n| 202  | request was throttled. submission limits exceeded               |\n| 203  | request was throttled. submission limits exceeded               |\n| 800  | database subsystem unavailable                                  |\n| 801  | datasource permanently unavailable                              |\n| 808  | service not available for MVNO                                  |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 800
+                status_message: database subsystem unavailable
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 503
+      security:
+      - {}
+  /core/v2/NumberAssurance/AssuredAge:
+    post:
+      deprecated: true
+      summary: Assured Age
+      operationId: post-assured-age
+      description: Verify that the mobile phone number provided by a customer is registered to them and they meet certain age requirements.
+      tags:
+      - v2 (deprecated)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssuredAgeRequest'
+      responses:
+        '200':
+          description: "**200 - HTTP OK**  \nCheck `status` and `status_message` for further details on the success of the request:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 0    | transaction successful                                          |\n| 305  | subscriber absent, data may be incomplete                       |\n| 306  | unknown subscriber, data may be incomplete                      |\n| 308  | teleservice not provisioned for subscriber                      |\n| 309  | call or SMS facility barred for subscriber                      |\n| 310  | call or SMS facility not currently supported in serving network |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+        '202':
+          description: "**202 - HTTP Accepted**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 300  | call Forward check failed                                       |\n| 301  | SIM swap check failed                                           |\n| 302  | country check failed                                            |\n| 303  | user information check failed                                   |\n| 304  | vicinity check failed                                           |\n| 307  | no coverage for country                                         |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 300
+                status_message: call Forward check failed
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 202
+        '400':
+          description: "**400 - HTTP Bad Request**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 103  | bad request                                                     |\n| 104  | invalid Content-Type header                                     |\n| 207  | invalid parameters                                              |\n| 208  | invalid postcode parameter                                      |\n| 209  | invalid name parameter                                          |\n| 210  | invalid address parameter                                       |\n| 211  | invalid birthdate parameter                                     |\n| 213  | invalid use case identifier                                     |\n| 214  | invalid number parameter                                        |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 103
+                status_message: bad request
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 400
+        '401':
+          description: "**401 - HTTP Unauthorized**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 100  | user account not found                                          |\n| 101  | authentication failed                                           |\n| 102  | user account suspended                                          |\n| 106  | admin privileges required for this API                          |\n| 200  | IP address not whitelisted                                      |\n| 204  | product not provisioned for your account                        |\n| 206  | product availability suspended for your account                 |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 100
+                status_message: user account not found
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 401
+        '403':
+          description: "**403 - HTTP Forbidden**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 212  | MNO access not authorised                                       |\n| 802  | datasource temporarily not available                            |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 212
+                status_message: MNO access not authorised
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 403
+        '404':
+          description: "**404 - HTTP Not Found**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 404  | subscriber opted out of service                                 |\n| 405  | invalid number                                                  |\n| 804  | resource not found                                              |\n| 807  | subscriber data unavailable                                      |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 404
+                status_message: subscriber opted out of service
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 404
+        '405':
+          description: "**405 - HTTP Method Not Allowed**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 105  | method not allowed                                              |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 105
+                status_message: method not allowed
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 405
+        '408':
+          description: "**408 - HTTP Request Timeout**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 806  | datasource query time out                                       |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 806
+                status_message: datasource query time out
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 408
+        '502':
+          description: "**502 - HTTP Bad Gateway**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 803  | datasource query failed                                         |\n| 805  | database subsystem error                                        |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 803
+                status_message: datasource query failed
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 502
+        '503':
+          description: "**503 - HTTP Service Unavailable**  \nCheck `status` and `status_message` for further details about why the request failed:\n\n| Code | Message                                                         |\n|:----:|:---------------------------------------------------------------:|\n| 201  | request was throttled. submission limits exceeded               |\n| 202  | request was throttled. submission limits exceeded               |\n| 203  | request was throttled. submission limits exceeded               |\n| 800  | database subsystem unavailable                                  |\n| 801  | datasource permanently unavailable                              |\n| 808  | service not available for MVNO                                  |\n\n---"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberAssuranceResponse'
+              example:
+                status: 800
+                status_message: database subsystem unavailable
+                transaction_id: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+                correlation_id: '1677155591'
+                HTTP_status: 503
+      security:
+      - {}
+components:
+  schemas:
+    AssuredAgeRequest:
+      title: Assured Age Request
+      description: Assured Age request
+      type: object
+      required:
+      - API_token
+      - API_secret
+      - number
+      - user_info
+      properties:
+        API_token:
+          type: string
+          description: Your API key
+          example: CLIENT
+        API_secret:
+          type: string
+          description: Your API secret
+          example: u07ta73b0a001e9038
+        correlation_id:
+          type: string
+          description: A correlation identifier provided by the customer and used to uniquely track the transactions end to end. The value provided will be echoed back in the responses.
+          example: '1677155591'
+        number:
+          type: string
+          description: A valid number in E.164 format
+          pattern: ^\+?[1-9]\d{1,14}$
+          minLength: 5
+          maxLength: 15
+          example: '447700900704'
+        user_info:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            first_name:
+              type: string
+              description: the subscriber's first name
+              example: Katharine
+            surname:
+              type: string
+              description: the subscriber's surname
+              example: Parsons
+            date_of_birth:
+              type: string
+              description: date of birth as dd-mm-yyyy
+              example: 01-01-1859
+              pattern: ^(3[01]|0[1-9]|[12][0-9])-(1[0-2]|0[1-9])-([1|2]{1}[0-9]{3})$
+            house_number:
+              type: string
+              description: the subscriber's house number
+              example: '20'
+            house_name:
+              type: string
+              description: the subscriber's house name (if house number is not available)
+              example: Michael Faraday House
+            postcode:
+              type: string
+              description: the subscriber's postcode
+              example: SG1 2AY
+    AssuredRegistrationRequest:
+      title: Assured Registration Request
+      description: Assured Registration request
+      type: object
+      required:
+      - API_token
+      - API_secret
+      - number
+      - user_info
+      properties:
+        API_token:
+          type: string
+          description: Your API key
+          example: CLIENT
+        API_secret:
+          type: string
+          description: Your API secret
+          example: u07ta73b0a001e9038
+        correlation_id:
+          type: string
+          description: A correlation identifier provided by the customer and used to uniquely track the transactions end to end. The value provided will be echoed back in the responses.
+          example: '1677155591'
+        number:
+          type: string
+          description: A valid number in E.164 format
+          pattern: ^\+?[1-9]\d{1,14}$
+          minLength: 5
+          maxLength: 15
+          example: '447700900704'
+        user_info:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            first_name:
+              type: string
+              description: the subscriber's first name
+              example: Katharine
+            surname:
+              type: string
+              description: the subscriber's surname
+              example: Parsons
+            house_number:
+              type: string
+              description: the subscriber's house number
+              example: '20'
+            house_name:
+              type: string
+              description: the subscriber's house name (if house number is not available)
+              example: Michael Faraday House
+            postcode:
+              type: string
+              description: the subscriber's postcode
+              example: SG1 2AY
+    NumberAssuranceResponse:
+      title: Number Assurance Response
+      type: object
+      description: V2 Number Assurance response
+      additionalProperties: false
+      required:
+      - status
+      - status_message
+      - transaction_id
+      - HTTP_status
+      properties:
+        status:
+          type: integer
+          description: outcome of the request, 0 on success or an error code
+          example: 0
+        user_info_match:
+          type: object
+          description: user_info_match object will only be returned if transaction is successful (status = 0)
+          additionalProperties: true
+          properties:
+            first_name_match:
+              type: boolean
+              description: whether the first name of the subscriber is correct (true) or not (false)
+              example: true
+            first_name_data_available:
+              type: boolean
+              description: whether the first name of the subscriber is available to match (true) or not (false)
+              example: true
+            last_name_match:
+              type: boolean
+              description: whether the last name of the subscriber is correct (true) or not (false)
+              example: false
+            last_name_data_available:
+              type: boolean
+              description: whether the last name of the subscriber is available to match (true) or not (false)
+              example: true
+            name_match:
+              type: boolean
+              description: whether the name of the subscriber is correct (true) or not (false)
+              example: false
+            name_data_available:
+              type: boolean
+              description: whether the name of the subscriber is available to match (true) or not (false)
+              example: true
+            house_number_or_house_name_match:
+              type:
+              - boolean
+              - 'null'
+              description: whether the house number or name of the subscriber is correct (true) or not (false)
+              example: false
+            house_number_or_house_name_data_available:
+              type: boolean
+              description: whether the house number or name of the subscriber is available to match (true) or not (false)
+              example: true
+            postcode_match:
+              type: boolean
+              description: whether the postcode of the subscriber is correct (true) or not (false)
+              example: true
+            postcode_data_available:
+              type: boolean
+              description: whether the postcode of the subscriber is available to match (true) or not (false)
+              example: true
+            address_match:
+              type: boolean
+              description: whether the address of the subscriber is correct (true) or not (false)
+              example: false
+            address_data_available:
+              type: boolean
+              description: whether the address of the subscriber is available to match (true) or not (false)
+              example: true
+            birthdate_match:
+              type: boolean
+              description: whether the date of birth of the subscriber is correct (true) or not (false)
+              example: false
+            birthdate_data_available:
+              type: boolean
+              description: whether the date of birth of the subscriber is available to match (true) or not (false)
+              example: false
+            contract_type:
+              type: string
+              description: the contract type of the subscriber
+              example: PAYM
+              enum:
+              - PAYG
+              - PAYM
+              - Business
+        is_lost_or_stolen:
+          type: boolean
+          description: indicates if the subscriber number is lost or stolen (true) or not (false)
+          example: false
+        is_active:
+          type: boolean
+          description: indicates if the subscriber is on the network (true) or not (false)
+          example: true
+        status_message:
+          type: string
+          description: a textual representation of the transaction status
+          example: transaction successful
+        transaction_id:
+          type: string
+          description: A unique transaction identifier to track the request and response in UUID V4 format
+          example: 24163639-0b81-4101-9bfe-e5e5fe7d5064
+        correlation_id:
+          type: string
+          description: echo of the user-generated string if provided in the request to correlate request with response
+          example: '1677155591'
+        HTTP_status:
+          type: integer
+          description: HTTP response status code to indicate whether the request has been successfully completed
+          example: 200
+  securitySchemes:
+    token:
+      name: API-Token
+      type: apiKey
+      in: header
+      description: API Token provided to you during the onboarding process
+    secret:
+      name: API-Secret
+      type: apiKey
+      in: header
+      description: API Secret provided to you during the onboarding process

@@ -1,0 +1,208 @@
+openapi: 3.2.0
+info:
+  title: TMT Authenticate API specs Service API
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/authenticate_logo_png.png
+    altText: TMT Authenticate
+  version: 1.1.2
+  description: Service endpoints
+servers:
+- url: https://auth-staging-api.tmtid.dev/v1
+  description: Pre-Production
+- url: https://auth-api.tmtanalysis.com/v1
+  description: Production Server
+schemes:
+- https
+tags:
+- name: Service
+  description: Service endpoints
+paths:
+  /authenticate:
+    get:
+      tags:
+      - Service
+      summary: Authenticate with Silent Network Authentication method
+      description: 'Authenticate with Silent Network Authentication method
+
+
+        The authenticate endpoint will execute the Silent Authentication against the Operator wherever this is supported.'
+      operationId: authenticateUserWithMNO
+      parameters:
+      - name: id_token
+        in: query
+        description: Provided in the get_config request
+        required: true
+        schema:
+          type: string
+        example: v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w...
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallBackResponse'
+        '302':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                Ok:
+                  description: Response with RedirectUri
+                  value: https://example.com/callback?code=f3c75c82-9f85-42ab-be67-36f9dceb891e&correlation_id=123456789
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Bad request:
+                  description: The value for the required field is missing or it is invalid.
+                  value:
+                    error: invalid_request
+                    error_description: The required field is missing or it is invalid.
+                Invalid Scope:
+                  description: Session token does not contain authenticate scope
+                  value:
+                    error: invalid_scope
+                    error_description: The requested scope is invalid, unknown or malformed.
+                Invalid Token:
+                  description: Session token does not contain redirect_uri claim.
+                  value:
+                    error: invalid_request
+                    error_description: The provided token is invalid.
+  /authenticate/otp:
+    get:
+      tags:
+      - Service
+      summary: Authenticate with  One-Time Password method
+      description: 'Authenticate with  One-Time Password method
+
+
+        This specific endpoint will be triggered by the Customer and in case of success a special form where the user needs to input the OTP code needs to be displayed in the Customer APP.'
+      operationId: authenticateUserWithOtp
+      parameters:
+      - name: id_token
+        in: query
+        description: Provided in the get_config request
+        required: true
+        schema:
+          type: string
+        example: v4.public.eyJuZXR3b3JrIjoiVk9EQUZPTkUiLCJ1c2VyX2lkIjoiZDFmYTA2ZDQtOTM1My0xMWVkLTgzZWQtNGY4ZGVjMDc1ZWM4IiwibmJmIjoiMjAyMy0w...
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallBackResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Bad Request:
+                  description: Maximum number of times a user can request the OTP was exceeded!
+                  value:
+                    error: invalid_request
+                    error_description: The required field is missing or it is invalid.
+                Exceeded Attempts:
+                  description: Maximum number of times a user can request the OTP was exceeded
+                  value:
+                    error: invalid_request
+                    error_description: Exceeded maximum number of retry attempts.
+                Invalid Code:
+                  description: Error parsing the payload received
+                  value:
+                    error: invalid_code
+                    error_description: The requested code is invalid, unknown or malformed.
+                Invalid Scope:
+                  description: 'Session token does not contain ''otp'' scope.
+
+
+                    Session token does not cointain ''authenticate'' scope.'
+                  value:
+                    error: invalid_scope
+                    error_description: The requested scope is invalid, unknown or malformed.
+                Invalid Status:
+                  description: Session token was used to authenticate and otp in less than 5 seconds.
+                  value:
+                    error: invalid scope
+                    error_description: OTP requested before Authenticate
+                Invalid Token:
+                  description: 'Session token does not contain claims.
+
+
+                    Vendor name is missing from the token
+
+
+                    Vendor name could not be parsed from the token
+
+
+                    '
+                  value:
+                    error: invalid_request
+                    error_description: The provided token is invalid
+                Retry Attempt:
+                  description: Session token was used to authenticate and otp in less than {} seconds
+                  value:
+                    error: invalid_request
+                    error_description: You have to wait a few second before trying to get otp sms again
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Service Unavailable:
+                  description: Sending OTP code failed
+                  value:
+                    error: temporarily_unavailable
+                    error_description: Service is unavailable
+components:
+  schemas:
+    CallBackResponse:
+      type: object
+      required:
+      - session_id
+      properties:
+        session_id:
+          type: string
+          description: A session_id of the current user.
+          example: pYXQiOiIyMDIyLTEyLTEyVDEyOjI4Oj
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - error_description
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+  securitySchemes:
+    basic:
+      type: http
+      scheme: basic
+    paseto_token:
+      type: http
+      scheme: bearer
+x-tagGroups:
+- name: Introduction
+  tags:
+  - About TMT
+- name: Service Specifications
+  tags:
+  - Authenticate
+  - Service

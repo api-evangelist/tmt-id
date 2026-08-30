@@ -1,0 +1,467 @@
+openapi: 3.2.0
+info:
+  title: TMT Teleshield API specs HTTP API v2.0 API
+  termsOfService: https://viteza.tmtid.com/download-terms-and-conditions
+  contact:
+    name: TMT Support
+    email: support@tmtid.com
+    url: https://www.tmtid.com
+  x-logo:
+    url: https://www.tmtid.com/developer/teleshield_logo_png.png
+    altText: TMT Teleshield
+  version: '1.0'
+servers:
+- url: https://api.tmtid.com
+tags:
+- name: HTTP API v2.0
+paths:
+  /r-teleshield/{number}:
+    post:
+      tags:
+      - HTTP API v2.0
+      summary: TeleShield Routing
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: Your apikey (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: Your apisecret (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format (includes the country code sufix).
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                TeleShield Routing Successful Command and Response Example:
+                  value:
+                    number: 40766610060
+                    cc: RO
+                    ocic: 4018760
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '226'
+                    omnc: '03'
+                    original_network: Telekom Romania Mobile (Cosmote)
+                    error: 0
+                    trxid: Pp2dxrl
+                TeleShield Routing Status Message for Invalid Credentials input (apikey/apisecret):
+                  value:
+                    number: 40721275636
+                    status_message: Service or destination not authorized
+                    status: 2
+                TeleShield Routing Error response for a number that belongs to a Denied Destination:
+                  value:
+                    number: 40721275636
+                    error: 254
+                    error_message: no auth
+                Input number has no Country Code match:
+                  value:
+                    number: 999999
+                    error: 1
+                    error_message: invalid number
+                Input number has the wrong length:
+                  value:
+                    number: 407225702400
+                    error: 2
+                    error_message: invalid number length
+                Input number is not part of an allocated range from the regulator:
+                  value:
+                    number: 40999123233
+                    error: 3
+                    error_message: invalid number range
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  oocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  omcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+  /f-teleshield/{number}:
+    post:
+      tags:
+      - HTTP API v2.0
+      summary: TeleShield Fraud
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: Your apikey (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: Your apisecret (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format (includes the country code sufix).
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                TeleShield Fraud Successful Command and Response Example:
+                  value:
+                    number: 247490XX
+                    cc: AC,
+                    ocic: 247501
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '658'
+                    omnc: '01'
+                    original_network: Sure South Atlantic
+                    iprn_number: true
+                    iprn_number_first_seen: '2023-02-07'
+                    iprn_number_last_seen: '2023-02-07'
+                    iprn_wildcard: true
+                    iprn_wildcard_first_seen: '2023-02-07'
+                    iprn_wildcard_last_seen: '2023-06-20'
+                    msrn: true
+                    msrn_first_seen: '2023-02-07'
+                    msrn_last_seen: '2023-02-07'
+                    ts: 25
+                    tl: M
+                    error: 0
+                    trxid: u621Kb3
+                TeleShield Fraud Status message for Invalid Credentials (apikey/apisecret):
+                  value:
+                    number: 40722570240
+                    status_message: Service or destination not authorized
+                    status: 2
+                TeleShield Fraud Error response for a number that belongs to a Denied Destination:
+                  value:
+                    number: 40722570240
+                    error: 254
+                    error_message: no auth
+                Input number has no Country Code match:
+                  value:
+                    number: 999999
+                    ts: 100
+                    tl: H
+                    error: 1
+                    error_message: invalid number
+                Input number has the wrong length:
+                  value:
+                    number: 4077
+                    ts: 100
+                    tl: H
+                    error: 2
+                    error_message: invalid number length
+                Input number is not part of an allocated range from the regulator:
+                  value:
+                    number: 40999123233
+                    ts: 100
+                    tl: H
+                    error: 3
+                    error_message: invalid number range
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  oocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  omcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  iprn_number:
+                    type: boolean
+                  iprn_number_first_seen:
+                    type: date
+                  iprn_number_last_seen:
+                    type: date
+                  iprn_wildcard:
+                    type: boolean
+                  iprn_wildcard_first_seen:
+                    type: date
+                  iprn_wildcard_last_seen:
+                    type: date
+                  msrn:
+                    type: boolean
+                  msrn_first_seen:
+                    type: date
+                  msrn_last_seen:
+                    type: date
+                  ts:
+                    type: number
+                  tl:
+                    type: string
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+  /e-teleshield/{number v2.0}:
+    post:
+      tags:
+      - HTTP API v2.0
+      summary: TeleShield Enhanced Fraud
+      operationId: POST
+      description: ''
+      parameters:
+      - name: X-API-Key
+        in: header
+        description: Your apikey (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: X-API-Secret
+        in: header
+        description: Your apisecret (delivered via email).
+        required: true
+        schema:
+          type: string
+      - name: number
+        in: path
+        required: true
+        description: The number in E.164 format (includes the country code sufix).
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          content:
+            application/json:
+              examples:
+                TeleShield Fraud Successful Command and Response Example:
+                  value:
+                    number: 40766610060
+                    cc: RO
+                    ocic: 4018760
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '226'
+                    omnc: '03'
+                    original_network: Telekom Romania Mobile (Cosmote)
+                    ported: false
+                    ported_date: '2017-11-23'
+                    cic: 4018760
+                    ocn: ''
+                    mcc: 226
+                    mnc: 3
+                    network: Telekom Romania Mobile (Cosmote)
+                    present: 'yes'
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    ts: 0
+                    tl: L
+                    error: 0
+                    trxid: Q4iRYrT
+                TeleShield Enhanced Fraud Status message for Invalid Credentials (apikey/apisecret):
+                  value:
+                    number: 40722570240
+                    status_message: Service or destination not authorized
+                    status: 2
+                TeleShield Enhanced Fraud Error response for a number that belongs to a Denied Destination:
+                  value:
+                    number: 40722570240
+                    error: 254
+                    error_message: no auth
+                Input number has no Country Code match:
+                  value:
+                    number: 999999
+                    ts: 100
+                    tl: H
+                    error: 1
+                    error_message: invalid number
+                Input number has the wrong length:
+                  value:
+                    number: 4077
+                    ts: 100
+                    tl: H
+                    error: 2
+                    error_message: invalid number length
+                Input number is not part of an allocated range from the regulator:
+                  value:
+                    number: 40999123233
+                    ts: 100
+                    tl: H
+                    error: 3
+                    error_message: invalid number range
+                Available Number Portability (np) / Unavailable Presence:
+                  value:
+                    number: 23470100000xx
+                    cc: NG
+                    ocic: 234500
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '621'
+                    omnc: '20'
+                    original_network: Airtel
+                    ported: true
+                    ported_date: '2020-10-11'
+                    cic: 234503
+                    ocn: null
+                    mcc: 621
+                    mnc: 60
+                    network: 9Mobile (ETISALAT/Emerging Markets)
+                    present: na
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    ts: 5
+                    tl: L
+                    error: 4
+                    error_message: presence not available
+                    trxid: BiiN7LJ
+                Unavailable Number Portability (np) / Unavailable Presence:
+                  value:
+                    number: 9230440783xx
+                    cc: PK
+                    ocic: 92500
+                    oocn: null
+                    itype: 1
+                    etype: 10
+                    omcc: '410'
+                    omnc: '01'
+                    original_network: Jazz (Mobilink)
+                    cic: 92500
+                    ocn: null
+                    mcc: 410
+                    mnc: 1
+                    network: Jazz (Mobilink)
+                    present: na
+                    iprn_number: false
+                    iprn_wildcard: false
+                    msrn: false
+                    ts: 0
+                    tl: L
+                    error: 5
+                    error_message: presence not available
+                    trxid: pximuMp
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: number
+                    description: The telephone number queried
+                  cc:
+                    type: string
+                  ocic:
+                    type: number
+                  oocn:
+                    type: string
+                  itype:
+                    type: number
+                  etype:
+                    type: number
+                  omcc:
+                    type: number
+                  omnc:
+                    type: number
+                  original_network:
+                    type: string
+                  ported:
+                    type: boolean
+                  ported_date:
+                    type: date
+                  cic:
+                    type: number
+                  ocn:
+                    type: string
+                  mcc:
+                    type: number
+                  mnc:
+                    type: number
+                  network:
+                    type: string
+                  present:
+                    type: string
+                  iprn_number:
+                    type: boolean
+                  iprn_wildcard:
+                    type: boolean
+                  msrn:
+                    type: boolean
+                  ts:
+                    type: number
+                  tl:
+                    type: string
+                  error:
+                    type: number
+                  trxid:
+                    type: string
+          description: ''
+x-tagGroups:
+- name: Introduction
+  tags:
+  - Version history
+  - About TMT
+- name: Service Specifications v2.0
+  tags:
+  - TMT TeleShield v2.0 Overview
+  - Data Dictionary v2.0
+  - HTTP API v2.0
+  - ENUM TeleShield Routing v2.0
+  - ENUM TeleShield Fraud v2.0
+  - ENUM TeleShield Enhanced Fraud v2.0
+- name: Service Specifications v1.3
+  tags:
+  - Data Dictionary v1.3
+  - HTTP API v1.3
+  - ENUM Services v1.3
+- name: Other Specifications
+  tags:
+  - SIP Redirect
+  - Batch Service – Portal access
+  - Operator files
