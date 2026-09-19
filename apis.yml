@@ -260,6 +260,8 @@ apis:
   humanURL: https://tmtid.com/developer/tmt_verify_v1.html
   baseURL: https://api.tmtverify.com
   tags:
+  - Services
+  tags_raw:
   - Service
   properties:
   - type: OpenAPI
