@@ -83,8 +83,8 @@ paths:
     get:
       tags:
       - Service
-      summary: Authenticate with  One-Time Password method
-      description: 'Authenticate with  One-Time Password method
+      summary: Authenticate with One-Time Password method
+      description: 'Authenticate with One-Time Password method
 
 
         This specific endpoint will be triggered by the Customer and in case of success a special form where the user needs to input the OTP code needs to be displayed in the Customer APP.'

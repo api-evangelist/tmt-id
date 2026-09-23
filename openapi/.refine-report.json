@@ -1,0 +1,55 @@
+{
+  "provider": "tmt-id",
+  "sources": [
+    "_original/tmt-id-authenticate.yml",
+    "_original/tmt-id-live.yml",
+    "_original/tmt-id-network-biometrics.yml",
+    "_original/tmt-id-score.yml",
+    "_original/tmt-id-teleshield.yml",
+    "_original/tmt-id-velocity.yml",
+    "_original/tmt-id-verify.yml"
+  ],
+  "outputs": [
+    "tmt-id-authenticate-api-openapi.yml",
+    "tmt-id-service-api-openapi.yml",
+    "tmt-id-http-api-api-openapi.yml",
+    "tmt-id-network-biometrics-api-openapi.yml",
+    "tmt-id-v2-deprecated-api-openapi.yml",
+    "tmt-id-http-api-v1-3-api-openapi.yml",
+    "tmt-id-http-api-v2-0-api-openapi.yml",
+    "tmt-id-standard-api-call-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (7 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "tmt-id-authenticate.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "tmt-id-live.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "tmt-id-live.yml: declared missing tag: HTTP API",
+    "tmt-id-network-biometrics.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "tmt-id-network-biometrics.yml: tagged paths POST /network-biometrics -> Network Biometrics",
+    "tmt-id-network-biometrics.yml: declared missing tag: Network Biometrics",
+    "tmt-id-score.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "tmt-id-score.yml: declared missing tag: HTTP API",
+    "tmt-id-teleshield.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "tmt-id-teleshield.yml: declared missing tag: HTTP API v1.3",
+    "tmt-id-teleshield.yml: declared missing tag: HTTP API v2.0",
+    "tmt-id-velocity.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "tmt-id-velocity.yml: declared missing tag: HTTP API",
+    "tmt-id-verify.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "tmt-id-verify.yml: declared missing tag: Standard API Call",
+    "tag 'HTTP API' spans 3 source specs (tmt-id-live.yml, tmt-id-score.yml, tmt-id-velocity.yml): per-path servers applied",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "tmt-id-authenticate-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tmt-id-http-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tmt-id-http-api-v1-3-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tmt-id-http-api-v2-0-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tmt-id-network-biometrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tmt-id-service-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tmt-id-standard-api-call-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tmt-id-v2-deprecated-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

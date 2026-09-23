@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: ™ by TMT ID Network Biometrics API
   version: 1.20.0
-  description: "TMT ID is the creator of Network Biometrics™. We make customer signups and transactions smoother while reducing exposure to fraud and related risks. With most online transactions now being made on mobile devices, an individual’s mobile number is often the best starting point for establishing their digital identity and managing their ongoing relationship with your organisation.  \n\nBecause of the close relationship between number, handset, and SIM, it is possible to identify and authenticate users without interrupting the customer journey quickly and transparently. However, there are many ways of compromising mobile numbers for fraud, including identity theft, account takeover and man-in-the-middle attacks.  \n\nNetwork Biometrics™ provides additional capabilities for your existing security and fraud detection systems. Through our APIs you can instantly validate the personal data that is being given to you, check for SIM swap or device change events and obtain other fraud indicators.\n\n---"
+  description: TMT ID is the creator of Network Biometrics™.
   contact:
     name: support@phronesis.net
     email: support@phronesis.net
@@ -580,659 +580,6 @@ paths:
       - Network Biometrics
 components:
   schemas:
-    NetworkBiometricProductResponse:
-      type: object
-      example:
-        discover:
-          number:
-            is: '447700900501'
-            isCorrectFormat: true
-            isValid: true
-            country:
-              name: United Kingdom of Great Britain and Northern Ireland
-              code: GB
-              dialCode: '44'
-            onNetwork:
-              MCC: '001'
-              MNC: '04'
-              networkName: Phronesis (H3G UK)
-            isPorted: false
-          hasNumberBeenRecycled:
-            isRecycled: false
-            changedInTimePeriod: false
-            lastChange: null
-          hasMVNOInfo:
-            isMVNO: true
-            brand: iD mobile
-            isDataAvailable: true
-          hasHomeNetworkInfo:
-            isRoaming: true
-            isDataAvailable: true
-          device:
-            IMEI:
-              is: '969455279101647'
-            serialNo:
-              value: DX3ZJ7LRKXK7
-              isDataAvailable: true
-            model:
-              brand: Apple
-              name: iPhone XR
-              code: iPhone XR (A2105)
-              isDataAvailable: true
-            activation:
-              isActivated: true
-              isDataAvailable: true
-            blacklist:
-              status: true
-              isDataAvailable: true
-              addEvent:
-                date: '2023-01-24 08:32:08'
-                by: Hutchison 3G UK
-                reason: Stolen Or Lost
-              removeEvent:
-                date: '2023-01-24 15:32:08'
-                by: Hutchison 3G UK
-                reason: Found
-              history:
-                blacklistedCount: 30
-                removedCount: 29
-                operators: 2
-            retail:
-              currency: USD
-              prices:
-              - '1247'
-              - '1366'
-              - '1604'
-              - '1842'
-              storageOptions:
-              - 128 GB
-              - 256 GB
-              - 512 GB
-              - 1 TB
-              releaseDate: '2021-09-01'
-              isDataAvailable: true
-        assure:
-          matchingName:
-            firstName:
-              isDataAvailable: true
-              isMatched: true
-              matchConfidence: 100
-            lastName:
-              isDataAvailable: true
-              isMatched: true
-              matchConfidence: 100
-            fullName:
-              isMatched: true
-              isDataAvailable: true
-              matchConfidence: 100
-            email:
-              isMatched: true
-              isDataAvailable: true
-              matchConfidence: 100
-          matchingAddress:
-            fullAddress:
-              isDataAvailable: true
-              isMatched: true
-              matchConfidence: 100
-            houseNameOrNumber:
-              isDataAvailable: false
-              isMatched: false
-              matchConfidence: 100
-            postcode:
-              isDataAvailable: true
-              isMatched: true
-              matchConfidence: 100
-          matchingBirthDate:
-            isDataAvailable: true
-            isMatched: true
-            matchConfidence: 100
-          matchingAge:
-            isDataAvailable: true
-            isMatched: true
-          hasServiceRestriction:
-            adultContent:
-              isUnlocked: true
-              isDataAvailable: true
-          matchingDeviceInfo:
-            IMEI:
-              isMatched: true
-              checked: '353090101175010'
-          matchingAccountInfo:
-            account:
-              isActive: true
-              isDataAvailable: true
-            contractType:
-              is: PAYM
-              isDataAvailable: true
-            lostOrStolen:
-              isReportedLostOrStolen: false
-              isDataAvailable: true
-        protect:
-          hasSimChanged:
-            changedInTimePeriod: true
-            lastChange: '2022-10-20T11:36:26+00:00'
-          hasDeviceChanged:
-            changedInTimePeriod: false
-            lastChange: '2020-02-19T17:42:14+00:00'
-          hasCallForwarding:
-            unconditional: false
-          hasAccountTenure:
-            longerThanPeriod: false
-            isDataAvailable: true
-          hasContractInfo:
-            startDate: '2021-03-15'
-            isDataAvailable: true
-          hasActiveCall:
-            isDataAvailable: true
-            isOnCallNow: true
-            callDuration:
-              isDataAvailable: true
-              seconds: 1234
-              started: '2022-01-01T10:57:57'
-              exceedsDuration: true
-            callDirection:
-              isReceived: true
-              isDataAvailable: true
-            callingNumber:
-              isWithheld: true
-              isDataAvailable: true
-          hasDeviceInfo:
-            IMEI:
-              value: '353090101175010'
-              isDataAvailable: true
-            serialNo:
-              value: DX3ZJ7LRKXK7
-              isDataAvailable: true
-            model:
-              brand: Apple
-              name: iPhone XR
-              code: iPhone XR (A2105)
-              isDataAvailable: true
-            activation:
-              isActivated: true
-              isDataAvailable: true
-          wasReportedLostOrStolen:
-            inPeriod: true
-            isDataAvailable: true
-            isLostOrStolen: true
-            lostOrStolenDate: '2023-02-12T17:42:14+00:00'
-          wasBlacklisted:
-            inPeriod: true
-            blacklistStatus: true
-            isDataAvailable: true
-            blacklistEvent:
-              date: '2023-01-24 08:32:08'
-              by: Hutchison 3G UK
-              reason: Stolen Or Lost
-            removeEvent:
-              date: '2023-01-24 15:32:08'
-              by: Hutchison 3G UK
-              reason: Found
-            history:
-              blacklistedCount: 30
-              removedCount: 29
-              operators: 2
-        transaction:
-          status:
-            value: 0
-            message: transaction successful
-          reference: https://developer.api.v3.phronesis.tech/
-          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
-      description: Schema for a successful Network Biometrics request
-      additionalProperties: false
-      required:
-      - discover
-      - transaction
-      properties:
-        discover:
-          $ref: '#/components/schemas/DiscoverProductResponse/properties/discover'
-        assure:
-          $ref: '#/components/schemas/AssureProductResponse/properties/assure'
-        protect:
-          $ref: '#/components/schemas/ProtectProductResponse/properties/protect'
-        transaction:
-          $ref: '#/components/schemas/TransactionResponse/properties/transaction'
-    TransactionResponse:
-      title: Transaction Response
-      example:
-        transaction:
-          status:
-            value: 0
-            message: transaction successful
-          reference: https://developer.api.v3.phronesis.tech/
-          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
-      properties:
-        transaction:
-          type: object
-          required:
-          - status
-          - reference
-          - id
-          properties:
-            status:
-              required:
-              - value
-              - message
-              properties:
-                value:
-                  type: integer
-                  description: Outcome of the request, 0 on success or an error code
-                  example: 808
-                message:
-                  type: string
-                  description: A textual representation of the transaction status.
-                  example: service not available for MNO or MVNO
-            reference:
-              type: string
-              description: Link to documentation about this API
-              example: https://developer.api.v3.phronesis.tech/
-            id:
-              type: string
-              description: A unique transaction identifier to track the request and response in UUID V4 format
-              example: dacb3020-495f-41ae-9303-72d43c817e3a
-      description: Provides validation of the request process
-    ProtectProductRequest:
-      title: Protect Product Request
-      type: object
-      description: None of the features are required, but at least one must be present in the body to make a successful Protect call
-      properties:
-        protect:
-          type: object
-          description: To make a call to Protect you will need at least one of the product features below in the body
-          additionalProperties: false
-          minProperties: 1
-          properties:
-            hasSimChanged:
-              oneOf:
-              - additionalProperties: false
-                title: inSeconds
-                description: Determine if a customer or third party has swapped SIM cards in the specified time period
-                properties:
-                  inSeconds:
-                    type: integer
-                    example: 120
-                    description: set look-back period in past seconds
-                required:
-                - inSeconds
-              - additionalProperties: false
-                title: inMinutes
-                description: Determine if a customer or third party has swapped SIM cards in the specified time period
-                properties:
-                  inMinutes:
-                    type: integer
-                    example: 40
-                    description: set look-back period in past minutes
-                required:
-                - inMinutes
-              - additionalProperties: false
-                title: inHours
-                description: Determine if a customer or third party has swapped SIM cards in the specified time period
-                properties:
-                  inHours:
-                    type: integer
-                    example: 12
-                    description: set look-back period in past hours
-                required:
-                - inHours
-              - additionalProperties: false
-                title: inDays
-                description: Determine if a customer or third party has swapped SIM cards in the specified time period
-                properties:
-                  inDays:
-                    type: integer
-                    example: 30
-                    description: set look-back period in past days
-                required:
-                - inDays
-              - additionalProperties: false
-                title: inDate
-                description: Determine if a customer or third party has swapped SIM cards in the specified time period
-                properties:
-                  inDate:
-                    type: string
-                    format: date
-                    example: '2021-03-01'
-                    description: set look-back period to a fixed date
-                required:
-                - inDate
-              type: object
-            hasDeviceChanged:
-              oneOf:
-              - additionalProperties: false
-                title: inSeconds
-                description: Determine if the customer or a third party has changed device within the specified time period
-                properties:
-                  inSeconds:
-                    type: integer
-                    example: 120
-                    description: set look-back period in past seconds
-                required:
-                - inSeconds
-              - additionalProperties: false
-                title: inMinutes
-                description: Determine if the customer or a third party has changed device within the specified time period
-                properties:
-                  inMinutes:
-                    type: integer
-                    example: 40
-                    description: set look-back period in past minutes
-                required:
-                - inMinutes
-              - additionalProperties: false
-                title: inHours
-                description: Determine if the customer or a third party has changed device within the specified time period
-                properties:
-                  inHours:
-                    type: integer
-                    example: 12
-                    description: set look-back period in past hours
-                required:
-                - inHours
-              - additionalProperties: false
-                title: inDays
-                description: Determine if the customer or a third party has changed device within the specified time period
-                properties:
-                  inDays:
-                    type: integer
-                    example: 30
-                    description: set look-back period in past days
-                required:
-                - inDays
-              - additionalProperties: false
-                title: inDate
-                description: Determine if the customer or a third party has changed device within the specified time period
-                properties:
-                  inDate:
-                    type: string
-                    format: date
-                    example: '2021-03-01'
-                    description: set look-back period to a fixed date
-                required:
-                - inDate
-              type: object
-            wasReportedLostOrStolen:
-              oneOf:
-              - additionalProperties: false
-                title: inSeconds
-                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
-                properties:
-                  inSeconds:
-                    type: integer
-                    example: 120
-                    description: set look-back period in past seconds
-                required:
-                - inSeconds
-              - additionalProperties: false
-                title: inMinutes
-                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
-                properties:
-                  inMinutes:
-                    type: integer
-                    example: 40
-                    description: set look-back period in past minutes
-                required:
-                - inMinutes
-              - additionalProperties: false
-                title: inHours
-                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
-                properties:
-                  inHours:
-                    type: integer
-                    example: 12
-                    description: set look-back period in past hours
-                required:
-                - inHours
-              - additionalProperties: false
-                title: inDays
-                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
-                properties:
-                  inDays:
-                    type: integer
-                    example: 30
-                    description: set look-back period in past days
-                required:
-                - inDays
-              - additionalProperties: false
-                title: inDate
-                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
-                properties:
-                  inDate:
-                    type: string
-                    format: date
-                    example: '2021-03-01'
-                    description: set look-back period to a fixed date
-                required:
-                - inDate
-              type: object
-            hasAccountTenure:
-              oneOf:
-              - additionalProperties: false
-                title: greaterThanDays
-                description: Determine if a customer or a third party has held an account on network within the specified time period
-                properties:
-                  greaterThanDays:
-                    type: integer
-                    example: 30
-                    description: Period of time in days
-                required:
-                - greaterThanDays
-              - additionalProperties: false
-                title: greaterThanMonths
-                description: Determine if a customer or a third party has held an account on network within the specified time period
-                properties:
-                  greaterThanMonths:
-                    type: integer
-                    example: 1
-                    description: Period of time in months
-                required:
-                - greaterThanMonths
-              - additionalProperties: false
-                title: greaterThanYears
-                description: Determine if a customer or a third party has held an account on network within the specified time period
-                properties:
-                  greaterThanYears:
-                    type: integer
-                    example: 1
-                    description: Period of time in years
-                required:
-                - greaterThanYears
-              - additionalProperties: false
-                title: greaterThanDate
-                description: Determine if a customer or a third party has held an account on network within the specified time period
-                properties:
-                  greaterThanDate:
-                    type: string
-                    example: '2021-03-10'
-                    description: Period of time given with an date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations)
-                required:
-                - greaterThanDate
-              type: object
-            hasContractInfo:
-              description: Retrieve additional information about the account contract
-              type: object
-              properties:
-                for:
-                  type: array
-                  minItems: 1
-                  example:
-                  - startDate
-                  default:
-                  - startDate
-                  items:
-                    type: string
-                    enum:
-                    - startDate
-              required:
-              - for
-            hasCallForwarding:
-              type: object
-              description: Verify if call diverts are set
-              properties:
-                for:
-                  type: string
-                  enum:
-                  - unconditional
-                  example: unconditional
-                  default: unconditional
-                  description: Type of call forwarding
-              required:
-              - for
-            hasActiveCall:
-              type: object
-              minProperties: 1
-              additionalProperties: false
-              description: Determine if the subscriber is in an active call and further detail about that call
-              properties:
-                withMinimumDuration:
-                  oneOf:
-                  - additionalProperties: false
-                    title: inSeconds
-                    properties:
-                      inSeconds:
-                        type: integer
-                        example: 120
-                        description: set look-back period in past seconds
-                    required:
-                    - inSeconds
-                  - additionalProperties: false
-                    title: inMinutes
-                    properties:
-                      inMinutes:
-                        type: integer
-                        example: 40
-                        description: set look-back period in past minutes
-                    required:
-                    - inMinutes
-                  - additionalProperties: false
-                    title: inHours
-                    properties:
-                      inHours:
-                        type: integer
-                        example: 12
-                        description: set look-back period in past hours
-                    required:
-                    - inHours
-                  - additionalProperties: false
-                    title: inDays
-                    properties:
-                      inDays:
-                        type: integer
-                        example: 30
-                        description: set look-back period in past days
-                    required:
-                    - inDays
-                  - additionalProperties: false
-                    title: inDate
-                    properties:
-                      inDate:
-                        type: string
-                        format: date
-                        example: '2021-03-01'
-                        description: set look-back period to a fixed date
-                  type: object
-                with:
-                  type: array
-                  uniqueItems: true
-                  minItems: 1
-                  description: Optional additional datapoints to request
-                  items:
-                    type: string
-                    enum:
-                    - callDirection
-                    - callDuration
-                    - callingNumberWithheld
-            hasDeviceInfo:
-              type: object
-              description: Retrieve additional information about the currently connected device
-              properties:
-                for:
-                  type: array
-                  minItems: 1
-                  example:
-                  - IMEI
-                  - serialNo
-                  - model
-                  - activation
-                  - purchaseDate
-                  default:
-                  - IMEI
-                  description: list of device information to lookup e.g. IMEI
-                  items:
-                    type: string
-                    enum:
-                    - IMEI
-                    - serialNo
-                    - model
-                    - activation
-                    - purchaseDate
-              required:
-              - for
-            wasBlacklisted:
-              oneOf:
-              - additionalProperties: false
-                title: inSeconds
-                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
-
-                  '
-                properties:
-                  inSeconds:
-                    type: integer
-                    example: 120
-                    description: set look-back period in past seconds
-                required:
-                - inSeconds
-              - additionalProperties: false
-                title: inMinutes
-                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
-
-                  '
-                properties:
-                  inMinutes:
-                    type: integer
-                    example: 40
-                    description: set look-back period in past minutes
-                required:
-                - inMinutes
-              - additionalProperties: false
-                title: inHours
-                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
-
-                  '
-                properties:
-                  inHours:
-                    type: integer
-                    example: 12
-                    description: set look-back period in past hours
-                required:
-                - inHours
-              - additionalProperties: false
-                title: inDays
-                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
-
-                  '
-                properties:
-                  inDays:
-                    type: integer
-                    example: 30
-                    description: set look-back period in past days
-                required:
-                - inDays
-              - additionalProperties: false
-                title: inDate
-                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
-
-                  '
-                properties:
-                  inDate:
-                    type: string
-                    format: date
-                    example: '2021-03-01'
-                    description: set look-back period to a fixed date
-                required:
-                - inDate
-              type: object
-      required:
-      - protect
     ProtectProductResponse:
       title: Protect Product Response
       type: object
@@ -1715,6 +1062,260 @@ components:
               type: object
       required:
       - protect
+    DiscoverProductRequest:
+      title: Discover Product Request
+      type: object
+      description: 'The following is the schema of a call to all Discover products for a mobile number and/or device IMEI number.
+
+        To request more information about a mobile number, include the Discover product''s optional features. These are subject to an additional charge and require specific access.'
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        discover:
+          oneOf:
+          - additionalProperties: false
+            title: number
+            properties:
+              number:
+                type: string
+                pattern: ^\+?[1-9]\d{1,14}$
+                minLength: 5
+                maxLength: 15
+                example: '447700900704'
+                description: Phone number (MSISDN) to be validated, including country code per [E.164](https://en.wikipedia.org/wiki/E.164) standard
+              hasMVNOInfo:
+                description: Retrieve additional information about a virtual mobile network (MVNO) if available
+                type: object
+                properties:
+                  filterMVNO:
+                    type: boolean
+                    example: true
+                    description: Apply MVNO pre-filtering on Assure and Protect features where they are likely to fail
+                required:
+                - filterMVNO
+              hasNumberBeenRecycled:
+                description: Determine if the number has been recycled within the specified time period
+                type: object
+                oneOf:
+                - additionalProperties: false
+                  title: inSeconds
+                  properties:
+                    inSeconds:
+                      type: integer
+                      example: 120
+                      description: set look-back period in past seconds
+                - additionalProperties: false
+                  title: inMinutes
+                  properties:
+                    inMinutes:
+                      type: integer
+                      example: 40
+                      description: set look-back period in past minutes
+                - additionalProperties: false
+                  title: inHours
+                  properties:
+                    inHours:
+                      type: integer
+                      example: 12
+                      description: set look-back period in past hours
+                - additionalProperties: false
+                  title: inDays
+                  properties:
+                    inDays:
+                      type: integer
+                      example: 30
+                      description: set look-back period in past days
+                - additionalProperties: false
+                  title: inDate
+                  properties:
+                    inDate:
+                      type: string
+                      format: date
+                      example: '2021-03-01'
+                      description: set look-back period to a fixed date
+              hasHomeNetworkInfo:
+                description: 'Retrieve additional information about the home network
+
+                  '
+                type: object
+                properties:
+                  for:
+                    type: array
+                    description: list of home network information to lookup
+                    items:
+                      type: string
+                      example: roaming
+                required:
+                - for
+              device:
+                description: Retrieve additional information about a device using IMEI
+                type: object
+                properties:
+                  IMEI:
+                    type: string
+                    pattern: ^\d{14,15}$
+                    example: '969455279101647'
+                    minLength: 14
+                    maxLength: 15
+                    description: 15-digit code that identifies a device
+                  calculateCheckDigit:
+                    type: boolean
+                    x-stoplight:
+                      id: irc102lzvjhhi
+                    description: calculate check digit for 14-digit IMEI
+                    default: false
+                  for:
+                    type: array
+                    minItems: 1
+                    example:
+                    - serialNo
+                    - model
+                    - activation
+                    - blacklist
+                    - purchaseDate
+                    - retail
+                    description: list of device information to lookup
+                    items:
+                      type: string
+                      enum:
+                      - serialNo
+                      - model
+                      - activation
+                      - blacklist
+                      - purchaseDate
+                      - retail
+                required:
+                - IMEI
+                - for
+            required:
+            - number
+          - additionalProperties: false
+            title: device
+            properties:
+              device:
+                description: Retrieve additional information about a device using IMEI number lookup
+                type: object
+                required:
+                - IMEI
+                - for
+                properties:
+                  IMEI:
+                    type: string
+                    pattern: ^\d{14,15}$
+                    example: '969455279101647'
+                    minLength: 14
+                    maxLength: 15
+                    description: 15-digit code that identifies a device
+                  calculateCheckDigit:
+                    type: boolean
+                    x-stoplight:
+                      id: 8og6ptuh25aim
+                    default: false
+                    description: calculate check digit for 14-digit IMEI
+                  for:
+                    type: array
+                    minItems: 1
+                    example:
+                    - serialNo
+                    - model
+                    - activation
+                    - blacklist
+                    - purchaseDate
+                    - retail
+                    description: list of device information to lookup
+                    items:
+                      type: string
+                      enum:
+                      - serialNo
+                      - model
+                      - activation
+                      - blacklist
+                      - purchaseDate
+                      - retail
+            required:
+            - device
+          type: object
+    NetworkBiometricProductRequest:
+      type: object
+      example:
+        discover:
+          number: '447700900604'
+          hasNumberBeenRecycled:
+            inSeconds: 900
+          hasMVNOInfo:
+            filterMVNO: true
+          device:
+            IMEI: '351490789456123'
+            for:
+            - serialNo
+            - model
+            - activation
+            - blacklist
+          hasHomeNetworkInfo:
+            for:
+            - roaming
+        assure:
+          matchingName:
+            firstName: William
+            lastName: Herschel
+          matchingAddress:
+            houseNumber: '10'
+            houseName: Herschel Museum of Astronomy
+            postcode: BA1 2BL
+          matchingBirthDate:
+            dateOfBirth: '1738-11-15'
+          matchingAge:
+            greaterThanYears: 18
+          hasServiceRestriction:
+            for:
+            - adultContent
+          matchingDeviceInfo:
+            IMEI: '306772992380426'
+          matchingAccountInfo:
+            for:
+            - isActive
+            - contractType
+            - lostOrStolen
+        protect:
+          hasSimChanged:
+            inSeconds: 900
+          hasDeviceChanged:
+            inSeconds: 900
+          hasAccountTenure:
+            greaterThanDate: '2020-03-21'
+          hasContractInfo:
+            for:
+            - startDate
+          hasCallForwarding:
+            for: unconditional
+          hasActiveCall:
+            withMinimumDuration:
+              inSeconds: 120
+            with:
+            - callDirection
+            - callDuration
+            - callingNumberWithheld
+          hasDeviceInfo:
+            for:
+            - IMEI
+            - serialNo
+            - model
+            - activation
+          wasReportedLostOrStolen:
+            inDate: '2020-03-03'
+          wasBlacklisted:
+            inDate: '2023-01-24'
+      description: The schema for the Network Biometrics request
+      additionalProperties: false
+      required:
+      - discover
+      properties:
+        discover:
+          $ref: '#/components/schemas/DiscoverProductRequest/properties/discover'
+        assure:
+          $ref: '#/components/schemas/AssureProductRequest/properties/assure'
+        protect:
+          $ref: '#/components/schemas/ProtectProductRequest/properties/protect'
     DiscoverProductResponse:
       title: Discover Product Response
       type: object
@@ -2215,6 +1816,45 @@ components:
               type: object
       required:
       - discover
+    TransactionResponse:
+      title: Transaction Response
+      example:
+        transaction:
+          status:
+            value: 0
+            message: transaction successful
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+      properties:
+        transaction:
+          type: object
+          required:
+          - status
+          - reference
+          - id
+          properties:
+            status:
+              required:
+              - value
+              - message
+              properties:
+                value:
+                  type: integer
+                  description: Outcome of the request, 0 on success or an error code
+                  example: 808
+                message:
+                  type: string
+                  description: A textual representation of the transaction status.
+                  example: service not available for MNO or MVNO
+            reference:
+              type: string
+              description: Link to documentation about this API
+              example: https://developer.api.v3.phronesis.tech/
+            id:
+              type: string
+              description: A unique transaction identifier to track the request and response in UUID V4 format
+              example: dacb3020-495f-41ae-9303-72d43c817e3a
+      description: Provides validation of the request process
     AssureProductRequest:
       title: Assure Product Request
       type: object
@@ -2377,87 +2017,6 @@ components:
               - for
       required:
       - assure
-    NetworkBiometricProductRequest:
-      type: object
-      example:
-        discover:
-          number: '447700900604'
-          hasNumberBeenRecycled:
-            inSeconds: 900
-          hasMVNOInfo:
-            filterMVNO: true
-          device:
-            IMEI: '351490789456123'
-            for:
-            - serialNo
-            - model
-            - activation
-            - blacklist
-          hasHomeNetworkInfo:
-            for:
-            - roaming
-        assure:
-          matchingName:
-            firstName: William
-            lastName: Herschel
-          matchingAddress:
-            houseNumber: '10'
-            houseName: Herschel Museum of Astronomy
-            postcode: BA1 2BL
-          matchingBirthDate:
-            dateOfBirth: '1738-11-15'
-          matchingAge:
-            greaterThanYears: 18
-          hasServiceRestriction:
-            for:
-            - adultContent
-          matchingDeviceInfo:
-            IMEI: '306772992380426'
-          matchingAccountInfo:
-            for:
-            - isActive
-            - contractType
-            - lostOrStolen
-        protect:
-          hasSimChanged:
-            inSeconds: 900
-          hasDeviceChanged:
-            inSeconds: 900
-          hasAccountTenure:
-            greaterThanDate: '2020-03-21'
-          hasContractInfo:
-            for:
-            - startDate
-          hasCallForwarding:
-            for: unconditional
-          hasActiveCall:
-            withMinimumDuration:
-              inSeconds: 120
-            with:
-            - callDirection
-            - callDuration
-            - callingNumberWithheld
-          hasDeviceInfo:
-            for:
-            - IMEI
-            - serialNo
-            - model
-            - activation
-          wasReportedLostOrStolen:
-            inDate: '2020-03-03'
-          wasBlacklisted:
-            inDate: '2023-01-24'
-      description: The schema for the Network Biometrics request
-      additionalProperties: false
-      required:
-      - discover
-      properties:
-        discover:
-          $ref: '#/components/schemas/DiscoverProductRequest/properties/discover'
-        assure:
-          $ref: '#/components/schemas/AssureProductRequest/properties/assure'
-        protect:
-          $ref: '#/components/schemas/ProtectProductRequest/properties/protect'
     AssureProductResponse:
       title: Assure Product Response
       type: object
@@ -2959,214 +2518,9 @@ components:
                 required:
                 - status
               type: object
-    DiscoverProductRequest:
-      title: Discover Product Request
+    NetworkBiometricProductResponse:
       type: object
-      description: 'The following is the schema of a call to all Discover products for a mobile number and/or device IMEI number.
-
-        To request more information about a mobile number, include the Discover product''s optional features. These are subject to an additional charge and require specific access.'
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        discover:
-          oneOf:
-          - additionalProperties: false
-            title: number
-            properties:
-              number:
-                type: string
-                pattern: ^\+?[1-9]\d{1,14}$
-                minLength: 5
-                maxLength: 15
-                example: '447700900704'
-                description: Phone number (MSISDN) to be validated, including country code per [E.164](https://en.wikipedia.org/wiki/E.164) standard
-              hasMVNOInfo:
-                description: Retrieve additional information about a virtual mobile network (MVNO) if available
-                type: object
-                properties:
-                  filterMVNO:
-                    type: boolean
-                    example: true
-                    description: Apply MVNO pre-filtering on Assure and Protect features where they are likely to fail
-                required:
-                - filterMVNO
-              hasNumberBeenRecycled:
-                description: Determine if the number has been recycled within the specified time period
-                type: object
-                oneOf:
-                - additionalProperties: false
-                  title: inSeconds
-                  properties:
-                    inSeconds:
-                      type: integer
-                      example: 120
-                      description: set look-back period in past seconds
-                - additionalProperties: false
-                  title: inMinutes
-                  properties:
-                    inMinutes:
-                      type: integer
-                      example: 40
-                      description: set look-back period in past minutes
-                - additionalProperties: false
-                  title: inHours
-                  properties:
-                    inHours:
-                      type: integer
-                      example: 12
-                      description: set look-back period in past hours
-                - additionalProperties: false
-                  title: inDays
-                  properties:
-                    inDays:
-                      type: integer
-                      example: 30
-                      description: set look-back period in past days
-                - additionalProperties: false
-                  title: inDate
-                  properties:
-                    inDate:
-                      type: string
-                      format: date
-                      example: '2021-03-01'
-                      description: set look-back period to a fixed date
-              hasHomeNetworkInfo:
-                description: 'Retrieve additional information about the home network
-
-                  '
-                type: object
-                properties:
-                  for:
-                    type: array
-                    description: list of home network information to lookup
-                    items:
-                      type: string
-                      example: roaming
-                required:
-                - for
-              device:
-                description: Retrieve additional information about a device using IMEI
-                type: object
-                properties:
-                  IMEI:
-                    type: string
-                    pattern: ^\d{14,15}$
-                    example: '969455279101647'
-                    minLength: 14
-                    maxLength: 15
-                    description: 15-digit code that identifies a device
-                  calculateCheckDigit:
-                    type: boolean
-                    x-stoplight:
-                      id: irc102lzvjhhi
-                    description: calculate check digit for 14-digit IMEI
-                    default: false
-                  for:
-                    type: array
-                    minItems: 1
-                    example:
-                    - serialNo
-                    - model
-                    - activation
-                    - blacklist
-                    - purchaseDate
-                    - retail
-                    description: list of device information to lookup
-                    items:
-                      type: string
-                      enum:
-                      - serialNo
-                      - model
-                      - activation
-                      - blacklist
-                      - purchaseDate
-                      - retail
-                required:
-                - IMEI
-                - for
-            required:
-            - number
-          - additionalProperties: false
-            title: device
-            properties:
-              device:
-                description: Retrieve additional information about a device using IMEI number lookup
-                type: object
-                required:
-                - IMEI
-                - for
-                properties:
-                  IMEI:
-                    type: string
-                    pattern: ^\d{14,15}$
-                    example: '969455279101647'
-                    minLength: 14
-                    maxLength: 15
-                    description: 15-digit code that identifies a device
-                  calculateCheckDigit:
-                    type: boolean
-                    x-stoplight:
-                      id: 8og6ptuh25aim
-                    default: false
-                    description: calculate check digit for 14-digit IMEI
-                  for:
-                    type: array
-                    minItems: 1
-                    example:
-                    - serialNo
-                    - model
-                    - activation
-                    - blacklist
-                    - purchaseDate
-                    - retail
-                    description: list of device information to lookup
-                    items:
-                      type: string
-                      enum:
-                      - serialNo
-                      - model
-                      - activation
-                      - blacklist
-                      - purchaseDate
-                      - retail
-            required:
-            - device
-          type: object
-  examples:
-    AgeEligibilityRequest:
-      description: "### Age Eligibility  \nUse the Age Eligibility feature to validate if a mobile subscriber is known to be at least 18 years of age and help control access to age-restricted products and services.  \n> In using this feature, please note that some datasource restrictions might apply, including:  \n  > - the number must be associated with an active subscription on a supported mobile network (**MVNOs excluded**),\n  > - the number must belong to the subscription holder and bill-payer,\n  > - the subscription must be a pay monthly contract (**PAYM**)."
-      value:
-        discover:
-          number: '447700900704'
-        assure:
-          matchingAge:
-            greaterThanYears: 18
-          hasServiceRestriction:
-            for:
-            - adultContent
-    ProtectRequest:
-      description: "## Protect\nBe certain that the information your customer is providing is true and that they aren't currently being impersonated.  \nIdentify **SIM** or **Device** swap events and detect **Account Takeover**."
-      value:
-        discover:
-          number: '447700900602'
-        protect:
-          hasSimChanged:
-            inSeconds: 900
-          hasDeviceChanged:
-            inSeconds: 900
-          hasCallForwarding:
-            for: unconditional
-          hasAccountTenure:
-            greaterThanDate: '2020-03-21'
-          hasActiveCall:
-            withMinimumDuration:
-              inSeconds: 120
-            with:
-            - callDirection
-            - callDuration
-            - callingNumberWithheld
-    AssurePartialResponseUK:
-      value:
+      example:
         discover:
           number:
             is: '447700900501'
@@ -3180,47 +2534,630 @@ components:
               MCC: '001'
               MNC: '04'
               networkName: Phronesis (H3G UK)
-            isPorted: true
-            wasOnNetwork:
-              MCC: '001'
-              MNC: '02'
-              networkName: Phronesis (EE UK)
+            isPorted: false
+          hasNumberBeenRecycled:
+            isRecycled: false
+            changedInTimePeriod: false
+            lastChange: null
+          hasMVNOInfo:
+            isMVNO: true
+            brand: iD mobile
+            isDataAvailable: true
+          hasHomeNetworkInfo:
+            isRoaming: true
+            isDataAvailable: true
+          device:
+            IMEI:
+              is: '969455279101647'
+            serialNo:
+              value: DX3ZJ7LRKXK7
+              isDataAvailable: true
+            model:
+              brand: Apple
+              name: iPhone XR
+              code: iPhone XR (A2105)
+              isDataAvailable: true
+            activation:
+              isActivated: true
+              isDataAvailable: true
+            blacklist:
+              status: true
+              isDataAvailable: true
+              addEvent:
+                date: '2023-01-24 08:32:08'
+                by: Hutchison 3G UK
+                reason: Stolen Or Lost
+              removeEvent:
+                date: '2023-01-24 15:32:08'
+                by: Hutchison 3G UK
+                reason: Found
+              history:
+                blacklistedCount: 30
+                removedCount: 29
+                operators: 2
+            retail:
+              currency: USD
+              prices:
+              - '1247'
+              - '1366'
+              - '1604'
+              - '1842'
+              storageOptions:
+              - 128 GB
+              - 256 GB
+              - 512 GB
+              - 1 TB
+              releaseDate: '2021-09-01'
+              isDataAvailable: true
         assure:
           matchingName:
-            status:
-              value: 808
-              message: service not available for MNO or MVNO
+            firstName:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            lastName:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            fullName:
+              isMatched: true
+              isDataAvailable: true
+              matchConfidence: 100
+            email:
+              isMatched: true
+              isDataAvailable: true
+              matchConfidence: 100
           matchingAddress:
-            status:
-              value: 808
-              message: service not available for MNO or MVNO
+            fullAddress:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
+            houseNameOrNumber:
+              isDataAvailable: false
+              isMatched: false
+              matchConfidence: 100
+            postcode:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 100
           matchingBirthDate:
-            status:
-              value: 808
-              message: service not available for MNO or MVNO
+            isDataAvailable: true
+            isMatched: true
+            matchConfidence: 100
+          matchingAge:
+            isDataAvailable: true
+            isMatched: true
+          hasServiceRestriction:
+            adultContent:
+              isUnlocked: true
+              isDataAvailable: true
+          matchingDeviceInfo:
+            IMEI:
+              isMatched: true
+              checked: '353090101175010'
+          matchingAccountInfo:
+            account:
+              isActive: true
+              isDataAvailable: true
+            contractType:
+              is: PAYM
+              isDataAvailable: true
+            lostOrStolen:
+              isReportedLostOrStolen: false
+              isDataAvailable: true
+        protect:
+          hasSimChanged:
+            changedInTimePeriod: true
+            lastChange: '2022-10-20T11:36:26+00:00'
+          hasDeviceChanged:
+            changedInTimePeriod: false
+            lastChange: '2020-02-19T17:42:14+00:00'
+          hasCallForwarding:
+            unconditional: false
+          hasAccountTenure:
+            longerThanPeriod: false
+            isDataAvailable: true
+          hasContractInfo:
+            startDate: '2021-03-15'
+            isDataAvailable: true
+          hasActiveCall:
+            isDataAvailable: true
+            isOnCallNow: true
+            callDuration:
+              isDataAvailable: true
+              seconds: 1234
+              started: '2022-01-01T10:57:57'
+              exceedsDuration: true
+            callDirection:
+              isReceived: true
+              isDataAvailable: true
+            callingNumber:
+              isWithheld: true
+              isDataAvailable: true
+          hasDeviceInfo:
+            IMEI:
+              value: '353090101175010'
+              isDataAvailable: true
+            serialNo:
+              value: DX3ZJ7LRKXK7
+              isDataAvailable: true
+            model:
+              brand: Apple
+              name: iPhone XR
+              code: iPhone XR (A2105)
+              isDataAvailable: true
+            activation:
+              isActivated: true
+              isDataAvailable: true
+          wasReportedLostOrStolen:
+            inPeriod: true
+            isDataAvailable: true
+            isLostOrStolen: true
+            lostOrStolenDate: '2023-02-12T17:42:14+00:00'
+          wasBlacklisted:
+            inPeriod: true
+            blacklistStatus: true
+            isDataAvailable: true
+            blacklistEvent:
+              date: '2023-01-24 08:32:08'
+              by: Hutchison 3G UK
+              reason: Stolen Or Lost
+            removeEvent:
+              date: '2023-01-24 15:32:08'
+              by: Hutchison 3G UK
+              reason: Found
+            history:
+              blacklistedCount: 30
+              removedCount: 29
+              operators: 2
         transaction:
           status:
-            value: 2
-            message: transaction successful but partial data returned
+            value: 0
+            message: transaction successful
           reference: https://developer.api.v3.phronesis.tech/
           id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
-    AssureRequestFrance:
-      description: "## Assure France\nStep up the protection and verify the mobile number a user is providing to assert their identity is registered to them and does not carry any suspicious activity flags.  \nAdd confidence with Know Your Customer (**KYC**) matching. \n> Be aware of the differences on the properties supplied for `matchingAddress` and that email validation is available consistently across the French market"
+      description: Schema for a successful Network Biometrics request
+      additionalProperties: false
+      required:
+      - discover
+      - transaction
+      properties:
+        discover:
+          $ref: '#/components/schemas/DiscoverProductResponse/properties/discover'
+        assure:
+          $ref: '#/components/schemas/AssureProductResponse/properties/assure'
+        protect:
+          $ref: '#/components/schemas/ProtectProductResponse/properties/protect'
+        transaction:
+          $ref: '#/components/schemas/TransactionResponse/properties/transaction'
+    ProtectProductRequest:
+      title: Protect Product Request
+      type: object
+      description: None of the features are required, but at least one must be present in the body to make a successful Protect call
+      properties:
+        protect:
+          type: object
+          description: To make a call to Protect you will need at least one of the product features below in the body
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            hasSimChanged:
+              oneOf:
+              - additionalProperties: false
+                title: inSeconds
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inSeconds:
+                    type: integer
+                    example: 120
+                    description: set look-back period in past seconds
+                required:
+                - inSeconds
+              - additionalProperties: false
+                title: inMinutes
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inMinutes:
+                    type: integer
+                    example: 40
+                    description: set look-back period in past minutes
+                required:
+                - inMinutes
+              - additionalProperties: false
+                title: inHours
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inHours:
+                    type: integer
+                    example: 12
+                    description: set look-back period in past hours
+                required:
+                - inHours
+              - additionalProperties: false
+                title: inDays
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inDays:
+                    type: integer
+                    example: 30
+                    description: set look-back period in past days
+                required:
+                - inDays
+              - additionalProperties: false
+                title: inDate
+                description: Determine if a customer or third party has swapped SIM cards in the specified time period
+                properties:
+                  inDate:
+                    type: string
+                    format: date
+                    example: '2021-03-01'
+                    description: set look-back period to a fixed date
+                required:
+                - inDate
+              type: object
+            hasDeviceChanged:
+              oneOf:
+              - additionalProperties: false
+                title: inSeconds
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inSeconds:
+                    type: integer
+                    example: 120
+                    description: set look-back period in past seconds
+                required:
+                - inSeconds
+              - additionalProperties: false
+                title: inMinutes
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inMinutes:
+                    type: integer
+                    example: 40
+                    description: set look-back period in past minutes
+                required:
+                - inMinutes
+              - additionalProperties: false
+                title: inHours
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inHours:
+                    type: integer
+                    example: 12
+                    description: set look-back period in past hours
+                required:
+                - inHours
+              - additionalProperties: false
+                title: inDays
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inDays:
+                    type: integer
+                    example: 30
+                    description: set look-back period in past days
+                required:
+                - inDays
+              - additionalProperties: false
+                title: inDate
+                description: Determine if the customer or a third party has changed device within the specified time period
+                properties:
+                  inDate:
+                    type: string
+                    format: date
+                    example: '2021-03-01'
+                    description: set look-back period to a fixed date
+                required:
+                - inDate
+              type: object
+            wasReportedLostOrStolen:
+              oneOf:
+              - additionalProperties: false
+                title: inSeconds
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inSeconds:
+                    type: integer
+                    example: 120
+                    description: set look-back period in past seconds
+                required:
+                - inSeconds
+              - additionalProperties: false
+                title: inMinutes
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inMinutes:
+                    type: integer
+                    example: 40
+                    description: set look-back period in past minutes
+                required:
+                - inMinutes
+              - additionalProperties: false
+                title: inHours
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inHours:
+                    type: integer
+                    example: 12
+                    description: set look-back period in past hours
+                required:
+                - inHours
+              - additionalProperties: false
+                title: inDays
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inDays:
+                    type: integer
+                    example: 30
+                    description: set look-back period in past days
+                required:
+                - inDays
+              - additionalProperties: false
+                title: inDate
+                description: Determine if the subscriber account had a device/SIM reported lost or stolen in the specified time period
+                properties:
+                  inDate:
+                    type: string
+                    format: date
+                    example: '2021-03-01'
+                    description: set look-back period to a fixed date
+                required:
+                - inDate
+              type: object
+            hasAccountTenure:
+              oneOf:
+              - additionalProperties: false
+                title: greaterThanDays
+                description: Determine if a customer or a third party has held an account on network within the specified time period
+                properties:
+                  greaterThanDays:
+                    type: integer
+                    example: 30
+                    description: Period of time in days
+                required:
+                - greaterThanDays
+              - additionalProperties: false
+                title: greaterThanMonths
+                description: Determine if a customer or a third party has held an account on network within the specified time period
+                properties:
+                  greaterThanMonths:
+                    type: integer
+                    example: 1
+                    description: Period of time in months
+                required:
+                - greaterThanMonths
+              - additionalProperties: false
+                title: greaterThanYears
+                description: Determine if a customer or a third party has held an account on network within the specified time period
+                properties:
+                  greaterThanYears:
+                    type: integer
+                    example: 1
+                    description: Period of time in years
+                required:
+                - greaterThanYears
+              - additionalProperties: false
+                title: greaterThanDate
+                description: Determine if a customer or a third party has held an account on network within the specified time period
+                properties:
+                  greaterThanDate:
+                    type: string
+                    example: '2021-03-10'
+                    description: Period of time given with an date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations)
+                required:
+                - greaterThanDate
+              type: object
+            hasContractInfo:
+              description: Retrieve additional information about the account contract
+              type: object
+              properties:
+                for:
+                  type: array
+                  minItems: 1
+                  example:
+                  - startDate
+                  default:
+                  - startDate
+                  items:
+                    type: string
+                    enum:
+                    - startDate
+              required:
+              - for
+            hasCallForwarding:
+              type: object
+              description: Verify if call diverts are set
+              properties:
+                for:
+                  type: string
+                  enum:
+                  - unconditional
+                  example: unconditional
+                  default: unconditional
+                  description: Type of call forwarding
+              required:
+              - for
+            hasActiveCall:
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              description: Determine if the subscriber is in an active call and further detail about that call
+              properties:
+                withMinimumDuration:
+                  oneOf:
+                  - additionalProperties: false
+                    title: inSeconds
+                    properties:
+                      inSeconds:
+                        type: integer
+                        example: 120
+                        description: set look-back period in past seconds
+                    required:
+                    - inSeconds
+                  - additionalProperties: false
+                    title: inMinutes
+                    properties:
+                      inMinutes:
+                        type: integer
+                        example: 40
+                        description: set look-back period in past minutes
+                    required:
+                    - inMinutes
+                  - additionalProperties: false
+                    title: inHours
+                    properties:
+                      inHours:
+                        type: integer
+                        example: 12
+                        description: set look-back period in past hours
+                    required:
+                    - inHours
+                  - additionalProperties: false
+                    title: inDays
+                    properties:
+                      inDays:
+                        type: integer
+                        example: 30
+                        description: set look-back period in past days
+                    required:
+                    - inDays
+                  - additionalProperties: false
+                    title: inDate
+                    properties:
+                      inDate:
+                        type: string
+                        format: date
+                        example: '2021-03-01'
+                        description: set look-back period to a fixed date
+                  type: object
+                with:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  description: Optional additional datapoints to request
+                  items:
+                    type: string
+                    enum:
+                    - callDirection
+                    - callDuration
+                    - callingNumberWithheld
+            hasDeviceInfo:
+              type: object
+              description: Retrieve additional information about the currently connected device
+              properties:
+                for:
+                  type: array
+                  minItems: 1
+                  example:
+                  - IMEI
+                  - serialNo
+                  - model
+                  - activation
+                  - purchaseDate
+                  default:
+                  - IMEI
+                  description: list of device information to lookup e.g. IMEI
+                  items:
+                    type: string
+                    enum:
+                    - IMEI
+                    - serialNo
+                    - model
+                    - activation
+                    - purchaseDate
+              required:
+              - for
+            wasBlacklisted:
+              oneOf:
+              - additionalProperties: false
+                title: inSeconds
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inSeconds:
+                    type: integer
+                    example: 120
+                    description: set look-back period in past seconds
+                required:
+                - inSeconds
+              - additionalProperties: false
+                title: inMinutes
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inMinutes:
+                    type: integer
+                    example: 40
+                    description: set look-back period in past minutes
+                required:
+                - inMinutes
+              - additionalProperties: false
+                title: inHours
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inHours:
+                    type: integer
+                    example: 12
+                    description: set look-back period in past hours
+                required:
+                - inHours
+              - additionalProperties: false
+                title: inDays
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inDays:
+                    type: integer
+                    example: 30
+                    description: set look-back period in past days
+                required:
+                - inDays
+              - additionalProperties: false
+                title: inDate
+                description: 'Determine if a device has been blacklisted by GSMA within the specified time period
+
+                  '
+                properties:
+                  inDate:
+                    type: string
+                    format: date
+                    example: '2021-03-01'
+                    description: set look-back period to a fixed date
+                required:
+                - inDate
+              type: object
+      required:
+      - protect
+  examples:
+    AssureDeviceInfoRequest:
+      description: '## Assure Device Information
+
+        Check that the device ID (i.e. IMEI) you''re expecting is the same one associated with the provided mobile number.'
       value:
         discover:
-          number: '33609666039'
+          number: '447700900601'
+        assure:
+          matchingDeviceInfo:
+            IMEI: '306772992380426'
+    AssureRequest:
+      description: "## Assure\nStep up the protection and verify the mobile number a user is providing to assert their identity is registered to them and does not carry any suspicious activity flags.  \nAdd confidence with Know Your Customer (**KYC**) matching."
+      value:
+        discover:
+          number: '447700900704'
         assure:
           matchingName:
-            firstName: Jean-Yves
-            lastName: Lafesse
-            email: jy.lafess@humour.com
+            firstName: Katharine
+            lastName: Parsons
           matchingAddress:
-            streetAddress: 64 Le Grand Détournement
-            locality: Pontivy
-            postcode: '56300'
-            country: France
+            houseNumber: '10'
+            houseName: Michael Faraday House
+            postcode: SG1 2AY
           matchingBirthDate:
-            dateOfBirth: '1957-03-13'
+            dateOfBirth: '1859-01-01'
     DiscoverResponse:
       value:
         discover:
@@ -3301,63 +3238,6 @@ components:
             message: transaction successful
           reference: https://developer.api.v3.phronesis.tech/
           id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
-    AssureRequest:
-      description: "## Assure\nStep up the protection and verify the mobile number a user is providing to assert their identity is registered to them and does not carry any suspicious activity flags.  \nAdd confidence with Know Your Customer (**KYC**) matching."
-      value:
-        discover:
-          number: '447700900704'
-        assure:
-          matchingName:
-            firstName: Katharine
-            lastName: Parsons
-          matchingAddress:
-            houseNumber: '10'
-            houseName: Michael Faraday House
-            postcode: SG1 2AY
-          matchingBirthDate:
-            dateOfBirth: '1859-01-01'
-    ProtectDeviceInfoRequest:
-      description: '## Protect Device Information
-
-        Return details about the device currently connected to the supplied mobile number'
-      value:
-        discover:
-          number: '447700900600'
-        protect:
-          hasDeviceInfo:
-            for:
-            - IMEI
-            - serialNo
-            - model
-            - activation
-            - purchaseDate
-    DiscoverRequest:
-      description: '## Discover
-
-        Supports input of a mobile phone number and/or a device IMEI number.
-
-        When supplied with a mobile phone number, it validates the number is correctly formatted, genuine, and reachable.
-
-        Similarly, the IMEI is validated and is used to retrieve the requested device information.
-
-        > The `discover` product is **required in every request** but additional products such as `assure` or `protect` can be added to the request object - the ordering is not significant (***see examples***).'
-      value:
-        discover:
-          number: '447700900702'
-          hasMVNOInfo:
-            filterMVNO: true
-          hasHomeNetworkInfo:
-            for:
-            - roaming
-          device:
-            IMEI: '351498789456123'
-            for:
-            - serialNo
-            - model
-            - activation
-            - purchaseDate
-            - blacklist
-            - retail
     AllServicesRequest:
       description: '## All available service
 
@@ -3430,88 +3310,6 @@ components:
             inDate: '2020-03-03'
           wasBlacklisted:
             inDate: '2023-01-24'
-    NumberRecycleRequest:
-      description: "## Number recycle  \nUsed to confirm if a customer's mobile number is presently active and has not been recently deactivated or recycled, to prevent false number declarations."
-      value:
-        discover:
-          number: '447700900704'
-          hasNumberBeenRecycled:
-            inSeconds: 900
-    AssureDeviceInfoRequest:
-      description: '## Assure Device Information
-
-        Check that the device ID (i.e. IMEI) you''re expecting is the same one associated with the provided mobile number.'
-      value:
-        discover:
-          number: '447700900601'
-        assure:
-          matchingDeviceInfo:
-            IMEI: '306772992380426'
-    AssureSuccessResponseFrance:
-      value:
-        discover:
-          number:
-            is: '33609666039'
-            isCorrectFormat: true
-            isValid: true
-            country:
-              name: France
-              code: FR
-              dialCode: '33'
-            onNetwork:
-              MCC: '208'
-              MNC: '10'
-              networkName: SFR France
-            isPorted: false
-        assure:
-          matchingName:
-            firstName:
-              isDataAvailable: true
-              isMatched: false
-              matchConfidence: 40
-            lastName:
-              isDataAvailable: true
-              isMatched: false
-              matchConfidence: 0
-            fullName:
-              isDataAvailable: true
-              isMatched: false
-              matchConfidence: 20
-            email:
-              isDataAvailable: true
-              isMatched: true
-              matchConfidence: 59
-          matchingAddress:
-            fullAddress:
-              isDataAvailable: true
-              isMatched: false
-              matchConfidence: 0
-            streetAddress:
-              isDataAvailable: true
-              isMatched: false
-              matchConfidence: 66
-            locality:
-              isDataAvailable: true
-              isMatched: false
-              matchConfidence: 0
-            postcode:
-              isDataAvailable: true
-              isMatched: true
-              matchConfidence: 93
-            country:
-              isDataAvailable: false
-              isMatched: false
-              matchConfidence: 0
-          matchingBirthDate:
-            isDataAvailable: true
-            isMatched: false
-            matchConfidence: 74
-        transaction:
-          status:
-            value: 0
-            message: transaction successful
-          reference: https://developer.api.v3.phronesis.tech/
-          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
     AllProductSuccessResponse:
       value:
         discover:
@@ -3703,6 +3501,208 @@ components:
               blacklistedCount: 30
               removedCount: 29
               operators: 2
+        transaction:
+          status:
+            value: 0
+            message: transaction successful
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+    AssurePartialResponseUK:
+      value:
+        discover:
+          number:
+            is: '447700900501'
+            isCorrectFormat: true
+            isValid: true
+            country:
+              name: United Kingdom of Great Britain and Northern Ireland
+              code: GB
+              dialCode: '44'
+            onNetwork:
+              MCC: '001'
+              MNC: '04'
+              networkName: Phronesis (H3G UK)
+            isPorted: true
+            wasOnNetwork:
+              MCC: '001'
+              MNC: '02'
+              networkName: Phronesis (EE UK)
+        assure:
+          matchingName:
+            status:
+              value: 808
+              message: service not available for MNO or MVNO
+          matchingAddress:
+            status:
+              value: 808
+              message: service not available for MNO or MVNO
+          matchingBirthDate:
+            status:
+              value: 808
+              message: service not available for MNO or MVNO
+        transaction:
+          status:
+            value: 2
+            message: transaction successful but partial data returned
+          reference: https://developer.api.v3.phronesis.tech/
+          id: b196fe72-49f7-4888-abc2-66bc14b5ca3f
+    DiscoverRequest:
+      description: '## Discover
+
+        Supports input of a mobile phone number and/or a device IMEI number.
+
+        When supplied with a mobile phone number, it validates the number is correctly formatted, genuine, and reachable.
+
+        Similarly, the IMEI is validated and is used to retrieve the requested device information.
+
+        > The `discover` product is **required in every request** but additional products such as `assure` or `protect` can be added to the request object - the ordering is not significant (***see examples***).'
+      value:
+        discover:
+          number: '447700900702'
+          hasMVNOInfo:
+            filterMVNO: true
+          hasHomeNetworkInfo:
+            for:
+            - roaming
+          device:
+            IMEI: '351498789456123'
+            for:
+            - serialNo
+            - model
+            - activation
+            - purchaseDate
+            - blacklist
+            - retail
+    AgeEligibilityRequest:
+      description: "### Age Eligibility  \nUse the Age Eligibility feature to validate if a mobile subscriber is known to be at least 18 years of age and help control access to age-restricted products and services.  \n> In using this feature, please note that some datasource restrictions might apply, including:  \n  > - the number must be associated with an active subscription on a supported mobile network (**MVNOs excluded**),\n  > - the number must belong to the subscription holder and bill-payer,\n  > - the subscription must be a pay monthly contract (**PAYM**)."
+      value:
+        discover:
+          number: '447700900704'
+        assure:
+          matchingAge:
+            greaterThanYears: 18
+          hasServiceRestriction:
+            for:
+            - adultContent
+    NumberRecycleRequest:
+      description: "## Number recycle  \nUsed to confirm if a customer's mobile number is presently active and has not been recently deactivated or recycled, to prevent false number declarations."
+      value:
+        discover:
+          number: '447700900704'
+          hasNumberBeenRecycled:
+            inSeconds: 900
+    ProtectRequest:
+      description: "## Protect\nBe certain that the information your customer is providing is true and that they aren't currently being impersonated.  \nIdentify **SIM** or **Device** swap events and detect **Account Takeover**."
+      value:
+        discover:
+          number: '447700900602'
+        protect:
+          hasSimChanged:
+            inSeconds: 900
+          hasDeviceChanged:
+            inSeconds: 900
+          hasCallForwarding:
+            for: unconditional
+          hasAccountTenure:
+            greaterThanDate: '2020-03-21'
+          hasActiveCall:
+            withMinimumDuration:
+              inSeconds: 120
+            with:
+            - callDirection
+            - callDuration
+            - callingNumberWithheld
+    ProtectDeviceInfoRequest:
+      description: '## Protect Device Information
+
+        Return details about the device currently connected to the supplied mobile number'
+      value:
+        discover:
+          number: '447700900600'
+        protect:
+          hasDeviceInfo:
+            for:
+            - IMEI
+            - serialNo
+            - model
+            - activation
+            - purchaseDate
+    AssureRequestFrance:
+      description: "## Assure France\nStep up the protection and verify the mobile number a user is providing to assert their identity is registered to them and does not carry any suspicious activity flags.  \nAdd confidence with Know Your Customer (**KYC**) matching. \n> Be aware of the differences on the properties supplied for `matchingAddress` and that email validation is available consistently across the French market"
+      value:
+        discover:
+          number: '33609666039'
+        assure:
+          matchingName:
+            firstName: Jean-Yves
+            lastName: Lafesse
+            email: jy.lafess@humour.com
+          matchingAddress:
+            streetAddress: 64 Le Grand Détournement
+            locality: Pontivy
+            postcode: '56300'
+            country: France
+          matchingBirthDate:
+            dateOfBirth: '1957-03-13'
+    AssureSuccessResponseFrance:
+      value:
+        discover:
+          number:
+            is: '33609666039'
+            isCorrectFormat: true
+            isValid: true
+            country:
+              name: France
+              code: FR
+              dialCode: '33'
+            onNetwork:
+              MCC: '208'
+              MNC: '10'
+              networkName: SFR France
+            isPorted: false
+        assure:
+          matchingName:
+            firstName:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 40
+            lastName:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 0
+            fullName:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 20
+            email:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 59
+          matchingAddress:
+            fullAddress:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 0
+            streetAddress:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 66
+            locality:
+              isDataAvailable: true
+              isMatched: false
+              matchConfidence: 0
+            postcode:
+              isDataAvailable: true
+              isMatched: true
+              matchConfidence: 93
+            country:
+              isDataAvailable: false
+              isMatched: false
+              matchConfidence: 0
+          matchingBirthDate:
+            isDataAvailable: true
+            isMatched: false
+            matchConfidence: 74
         transaction:
           status:
             value: 0

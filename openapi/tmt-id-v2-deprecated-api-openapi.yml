@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Network Biometrics™ by TMT ID v2 (deprecated) API
   version: 1.20.0
-  description: "TMT ID is the creator of Network Biometrics™. We make customer signups and transactions smoother while reducing exposure to fraud and related risks. With most online transactions now being made on mobile devices, an individual’s mobile number is often the best starting point for establishing their digital identity and managing their ongoing relationship with your organisation.  \n\nBecause of the close relationship between number, handset, and SIM, it is possible to identify and authenticate users without interrupting the customer journey quickly and transparently. However, there are many ways of compromising mobile numbers for fraud, including identity theft, account takeover and man-in-the-middle attacks.  \n\nNetwork Biometrics™ provides additional capabilities for your existing security and fraud detection systems. Through our APIs you can instantly validate the personal data that is being given to you, check for SIM swap or device change events and obtain other fraud indicators.\n\n---"
+  description: TMT ID is the creator of Network Biometrics™.
   contact:
     name: support@phronesis.net
     email: support@phronesis.net
