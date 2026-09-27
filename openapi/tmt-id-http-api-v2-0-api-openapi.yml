@@ -117,7 +117,7 @@ paths:
       tags:
       - HTTP API v2.0
       summary: TeleShield Fraud
-      operationId: POST
+      operationId: postFTeleshieldByNumber
       description: ''
       parameters:
       - name: X-API-Key
@@ -248,12 +248,14 @@ paths:
                   trxid:
                     type: string
           description: ''
+      x-operation-id-source: normalized
+      x-operation-id-original: POST
   /e-teleshield/{number v2.0}:
     post:
       tags:
       - HTTP API v2.0
       summary: TeleShield Enhanced Fraud
-      operationId: POST
+      operationId: postETeleshieldByNumber v20
       description: ''
       parameters:
       - name: X-API-Key
@@ -442,6 +444,8 @@ paths:
                   trxid:
                     type: string
           description: ''
+      x-operation-id-source: normalized
+      x-operation-id-original: POST
 x-tagGroups:
 - name: Introduction
   tags:

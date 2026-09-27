@@ -116,7 +116,7 @@ paths:
       tags:
       - HTTP API v1.3
       summary: POST method E-Teleshield
-      operationId: POST
+      operationId: postETeleshieldByNumber v13
       description: ''
       parameters:
       - name: X-API-Key
@@ -222,6 +222,8 @@ paths:
                   trxid:
                     type: string
           description: ''
+      x-operation-id-source: normalized
+      x-operation-id-original: POST
 x-tagGroups:
 - name: Introduction
   tags:

@@ -280,65 +280,6 @@ paths:
       - {}
 components:
   schemas:
-    AssuredAgeRequest:
-      title: Assured Age Request
-      description: Assured Age request
-      type: object
-      required:
-      - API_token
-      - API_secret
-      - number
-      - user_info
-      properties:
-        API_token:
-          type: string
-          description: Your API key
-          example: CLIENT
-        API_secret:
-          type: string
-          description: Your API secret
-          example: u07ta73b0a001e9038
-        correlation_id:
-          type: string
-          description: A correlation identifier provided by the customer and used to uniquely track the transactions end to end. The value provided will be echoed back in the responses.
-          example: '1677155591'
-        number:
-          type: string
-          description: A valid number in E.164 format
-          pattern: ^\+?[1-9]\d{1,14}$
-          minLength: 5
-          maxLength: 15
-          example: '447700900704'
-        user_info:
-          type: object
-          additionalProperties: false
-          minProperties: 1
-          properties:
-            first_name:
-              type: string
-              description: the subscriber's first name
-              example: Katharine
-            surname:
-              type: string
-              description: the subscriber's surname
-              example: Parsons
-            date_of_birth:
-              type: string
-              description: date of birth as dd-mm-yyyy
-              example: 01-01-1859
-              pattern: ^(3[01]|0[1-9]|[12][0-9])-(1[0-2]|0[1-9])-([1|2]{1}[0-9]{3})$
-            house_number:
-              type: string
-              description: the subscriber's house number
-              example: '20'
-            house_name:
-              type: string
-              description: the subscriber's house name (if house number is not available)
-              example: Michael Faraday House
-            postcode:
-              type: string
-              description: the subscriber's postcode
-              example: SG1 2AY
     AssuredRegistrationRequest:
       title: Assured Registration Request
       description: Assured Registration request
@@ -503,6 +444,65 @@ components:
           type: integer
           description: HTTP response status code to indicate whether the request has been successfully completed
           example: 200
+    AssuredAgeRequest:
+      title: Assured Age Request
+      description: Assured Age request
+      type: object
+      required:
+      - API_token
+      - API_secret
+      - number
+      - user_info
+      properties:
+        API_token:
+          type: string
+          description: Your API key
+          example: CLIENT
+        API_secret:
+          type: string
+          description: Your API secret
+          example: u07ta73b0a001e9038
+        correlation_id:
+          type: string
+          description: A correlation identifier provided by the customer and used to uniquely track the transactions end to end. The value provided will be echoed back in the responses.
+          example: '1677155591'
+        number:
+          type: string
+          description: A valid number in E.164 format
+          pattern: ^\+?[1-9]\d{1,14}$
+          minLength: 5
+          maxLength: 15
+          example: '447700900704'
+        user_info:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          properties:
+            first_name:
+              type: string
+              description: the subscriber's first name
+              example: Katharine
+            surname:
+              type: string
+              description: the subscriber's surname
+              example: Parsons
+            date_of_birth:
+              type: string
+              description: date of birth as dd-mm-yyyy
+              example: 01-01-1859
+              pattern: ^(3[01]|0[1-9]|[12][0-9])-(1[0-2]|0[1-9])-([1|2]{1}[0-9]{3})$
+            house_number:
+              type: string
+              description: the subscriber's house number
+              example: '20'
+            house_name:
+              type: string
+              description: the subscriber's house name (if house number is not available)
+              example: Michael Faraday House
+            postcode:
+              type: string
+              description: the subscriber's postcode
+              example: SG1 2AY
   securitySchemes:
     token:
       name: API-Token

@@ -293,8 +293,10 @@ paths:
                     description: Represents the transaction ID, which aids in identifying transactions for purposes including customer inquiry resolution and troubleshooting.
           description: ''
       summary: GET method
-      operationId: GET
+      operationId: getScoreByNumber
       description: ''
+      x-operation-id-source: normalized
+      x-operation-id-original: GET
     servers:
     - url: https://api.tmtid.com
   /standard/{format}/{key}/{secret}/{number}:
@@ -457,8 +459,10 @@ paths:
                 - number
           description: ''
       summary: GET method
-      operationId: GET
+      operationId: getStandardByFormatByKeyBySecretByNumber
       description: ''
+      x-operation-id-source: normalized
+      x-operation-id-original: GET
     servers:
     - url: https://api.tmtvelocity.com
 x-refined-from:

@@ -234,6 +234,115 @@ paths:
       - paseto_token: []
 components:
   schemas:
+    GetAuthUrl:
+      type: object
+      required:
+      - msisdn
+      - client_ip
+      properties:
+        client_ip:
+          type: string
+          description: The IP of the user needed to be authenticated. This is required by some MNO’s for validation.
+          example: 11.22.33.44
+        correlation_id:
+          type:
+          - string
+          - 'null'
+          description: It is used to correlate the transaction across all components(authenticate, validate). It must be unique to the instance of the transaction.
+          example: Noo7siol1Yj763XTRDidILTv96ly9kFS
+        msisdn:
+          type: string
+          description: The phone number that needs to be authenticated by our system in E.164 format.
+          example: '+44770123456'
+        redirect_uri:
+          type:
+          - string
+          - 'null'
+          description: Predefined callback url to be used in the session and send the request back to the client
+    AuthorizeRequestConfig:
+      oneOf:
+      - type: object
+        required:
+        - authorization_uri
+        - request_type
+        - ajax
+        properties:
+          ajax:
+            type: boolean
+            description: Flag  that confirm the request can be completed via ajax or not.
+            example: 'true'
+          authorization_uri:
+            type: string
+            description: The uri that needs to be called in order to identify the phone number.
+            example: http://example.com/session
+          request_config:
+            allOf:
+            - $ref: '#/components/schemas/VendorAuthorizationConfig'
+          request_type:
+            type: string
+            description: Provided in order to inform users how to configure the request with Mobile Network Operator.This can be GET or POST, the dafault is GET.
+            example: POST
+      - $ref: '#/components/schemas/ErrorResponse'
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - error_description
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    GetResult:
+      type: object
+      required:
+      - id_token
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+          description: Code obtained from the authenticate request on redirect_uri
+          example: 64a5b19-457a-4d30-a5c4-038c62dcssfg3
+        correlation_id:
+          type:
+          - string
+          - 'null'
+          description: The correlation_id submitted through the get_config request
+          example: Noo7siol1Yj763XTRDidILTv96ly9kFS
+        id_token:
+          type: string
+          description: Provided in the get_config request
+          example: v4.public.eyJ2ZW5kb3JfdHlwZSI6IkVFIiwianRp…
+        otp_code:
+          type:
+          - string
+          - 'null'
+          description: Provided only if we need to validate the user using the OTP service
+          example: '123456'
+        payload:
+          description: JSON Response obtained from the authenticate or otp request.
+    AuthResponse:
+      type: object
+      required:
+      - token_type
+      - access_token
+      - expires_in
+      properties:
+        access_token:
+          type: string
+          description: The access_token is a security token that contains Claims about the authenticated user and requested services.
+          example: v4.public.eyJzY29wZSI6ImF1dGgrb3RwIiwidXNlcl9pZ…
+        expires_in:
+          type: integer
+          format: int64
+          description: The time-to-live of the Access Token in seconds since the response was generated. The default value is 3600 (seconds)
+          example: '3600'
+          minimum: 0
+        token_type:
+          type: string
+          description: Always "Bearer"
+          example: Bearer
     AuthorizationUri:
       type: object
       required:
@@ -265,6 +374,35 @@ components:
           - 'null'
           description: The uri that needs to be called from a mobile device in order to initiate the OTP flow. This appears only if the configured scope contains otp and the device can call otp_authoization_uri if the Silent Authentication has not been completed (i.e. timed out).
           example: https://auth-staging-api.tmtanalysis.com/v1/authenticate/otp?id_token=v4.public.eyJqdGkiOiI3ODExNDc5YS1lZjY1LT
+    VendorAuthorizationConfig:
+      type: object
+      properties:
+        headers:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        parameters:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+    AuthRequest:
+      type: object
+      required:
+      - scope
+      - grant_type
+      properties:
+        grant_type:
+          type: string
+          description: The value must be “client_credentials”.By passing this value the service will return an access_token for direct access to the services.
+          example: client_credentials
+        scope:
+          type: string
+          description: Scope must contain the requested services. It can be authenticate and/or otp concatenated with a “+”.
+          example: authenticate+otp
     ValidateResponse:
       type: object
       required:
@@ -284,144 +422,6 @@ components:
           type: string
           description: Value authenticate or otp depending on the type of authentication mechanism used
           example: authenticate
-    GetResult:
-      type: object
-      required:
-      - id_token
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-          description: Code obtained from the authenticate request on redirect_uri
-          example: 64a5b19-457a-4d30-a5c4-038c62dcssfg3
-        correlation_id:
-          type:
-          - string
-          - 'null'
-          description: The correlation_id submitted through the get_config request
-          example: Noo7siol1Yj763XTRDidILTv96ly9kFS
-        id_token:
-          type: string
-          description: Provided in the get_config request
-          example: v4.public.eyJ2ZW5kb3JfdHlwZSI6IkVFIiwianRp…
-        otp_code:
-          type:
-          - string
-          - 'null'
-          description: Provided only if we need to validate the user using the OTP service
-          example: '123456'
-        payload:
-          description: JSON Response obtained from the authenticate or otp request.
-    VendorAuthorizationConfig:
-      type: object
-      properties:
-        headers:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-        parameters:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-    ErrorResponse:
-      type: object
-      required:
-      - error
-      - error_description
-      properties:
-        error:
-          type: string
-        error_description:
-          type: string
-    GetAuthUrl:
-      type: object
-      required:
-      - msisdn
-      - client_ip
-      properties:
-        client_ip:
-          type: string
-          description: The IP of the user needed to be authenticated. This is required by some MNO’s for validation.
-          example: 11.22.33.44
-        correlation_id:
-          type:
-          - string
-          - 'null'
-          description: It is used to correlate the transaction across all components(authenticate, validate). It must be unique to the instance of the transaction.
-          example: Noo7siol1Yj763XTRDidILTv96ly9kFS
-        msisdn:
-          type: string
-          description: The phone number that needs to be authenticated by our system in E.164 format.
-          example: '+44770123456'
-        redirect_uri:
-          type:
-          - string
-          - 'null'
-          description: Predefined callback url to be used in the session and send the request back to the client
-    AuthResponse:
-      type: object
-      required:
-      - token_type
-      - access_token
-      - expires_in
-      properties:
-        access_token:
-          type: string
-          description: The access_token is a security token that contains Claims about the authenticated user and requested services.
-          example: v4.public.eyJzY29wZSI6ImF1dGgrb3RwIiwidXNlcl9pZ…
-        expires_in:
-          type: integer
-          format: int64
-          description: The time-to-live of the Access Token in seconds since the response was generated. The default value is 3600 (seconds)
-          example: '3600'
-          minimum: 0
-        token_type:
-          type: string
-          description: Always "Bearer"
-          example: Bearer
-    AuthRequest:
-      type: object
-      required:
-      - scope
-      - grant_type
-      properties:
-        grant_type:
-          type: string
-          description: The value must be “client_credentials”.By passing this value the service will return an access_token for direct access to the services.
-          example: client_credentials
-        scope:
-          type: string
-          description: Scope must contain the requested services. It can be authenticate and/or otp concatenated with a “+”.
-          example: authenticate+otp
-    AuthorizeRequestConfig:
-      oneOf:
-      - type: object
-        required:
-        - authorization_uri
-        - request_type
-        - ajax
-        properties:
-          ajax:
-            type: boolean
-            description: Flag  that confirm the request can be completed via ajax or not.
-            example: 'true'
-          authorization_uri:
-            type: string
-            description: The uri that needs to be called in order to identify the phone number.
-            example: http://example.com/session
-          request_config:
-            allOf:
-            - $ref: '#/components/schemas/VendorAuthorizationConfig'
-          request_type:
-            type: string
-            description: Provided in order to inform users how to configure the request with Mobile Network Operator.This can be GET or POST, the dafault is GET.
-            example: POST
-      - $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     basic:
       type: http
