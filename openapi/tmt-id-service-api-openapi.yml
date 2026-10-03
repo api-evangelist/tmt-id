@@ -172,6 +172,15 @@ paths:
                     error_description: Service is unavailable
 components:
   schemas:
+    CallBackResponse:
+      type: object
+      required:
+      - session_id
+      properties:
+        session_id:
+          type: string
+          description: A session_id of the current user.
+          example: pYXQiOiIyMDIyLTEyLTEyVDEyOjI4Oj
     ErrorResponse:
       type: object
       required:
@@ -182,15 +191,6 @@ components:
           type: string
         error_description:
           type: string
-    CallBackResponse:
-      type: object
-      required:
-      - session_id
-      properties:
-        session_id:
-          type: string
-          description: A session_id of the current user.
-          example: pYXQiOiIyMDIyLTEyLTEyVDEyOjI4Oj
   securitySchemes:
     basic:
       type: http
