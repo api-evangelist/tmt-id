@@ -280,9 +280,9 @@ paths:
       - {}
 components:
   schemas:
-    AssuredRegistrationRequest:
-      title: Assured Registration Request
-      description: Assured Registration request
+    AssuredAgeRequest:
+      title: Assured Age Request
+      description: Assured Age request
       type: object
       required:
       - API_token
@@ -322,6 +322,11 @@ components:
               type: string
               description: the subscriber's surname
               example: Parsons
+            date_of_birth:
+              type: string
+              description: date of birth as dd-mm-yyyy
+              example: 01-01-1859
+              pattern: ^(3[01]|0[1-9]|[12][0-9])-(1[0-2]|0[1-9])-([1|2]{1}[0-9]{3})$
             house_number:
               type: string
               description: the subscriber's house number
@@ -444,9 +449,9 @@ components:
           type: integer
           description: HTTP response status code to indicate whether the request has been successfully completed
           example: 200
-    AssuredAgeRequest:
-      title: Assured Age Request
-      description: Assured Age request
+    AssuredRegistrationRequest:
+      title: Assured Registration Request
+      description: Assured Registration request
       type: object
       required:
       - API_token
@@ -486,11 +491,6 @@ components:
               type: string
               description: the subscriber's surname
               example: Parsons
-            date_of_birth:
-              type: string
-              description: date of birth as dd-mm-yyyy
-              example: 01-01-1859
-              pattern: ^(3[01]|0[1-9]|[12][0-9])-(1[0-2]|0[1-9])-([1|2]{1}[0-9]{3})$
             house_number:
               type: string
               description: the subscriber's house number
